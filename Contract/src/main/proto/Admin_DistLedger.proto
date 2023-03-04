@@ -20,12 +20,12 @@ message GossipResponse {}
 message getLedgerStateRequest {}
 
 message getLedgerStateResponse {
-  LedgerState ledgerState = 1;
+	LedgerState ledgerState = 1;
 }
 
 service AdminService {
-  rpc activate(ActivateRequest) returns (ActivateResponse);
-  rpc deactivate(DeactivateRequest) returns (DeactivateResponse);
-  rpc gossip(GossipRequest) returns (GossipResponse);
-  rpc getLedgerState(getLedgerStateRequest) returns (getLedgerStateResponse);
+	rpc activate(ActivateRequest) returns (ActivateResponse);
+	rpc deactivate(DeactivateRequest) returns (DeactivateResponse);
+	rpc gossip(GossipRequest) returns (GossipResponse);
+	rpc getLedgerState(getLedgerStateRequest) returns (getLedgerStateResponse);
 }
