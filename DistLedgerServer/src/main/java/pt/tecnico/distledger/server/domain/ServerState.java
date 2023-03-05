@@ -26,6 +26,10 @@ public class ServerState {
 		this.ledger = ledger;
 	}
 
+	public int getAccountBalance(String account) {
+		return this.accounts.get(account);
+	}
+
 	public void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
 	}
