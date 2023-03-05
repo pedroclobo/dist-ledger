@@ -1,5 +1,7 @@
 package pt.tecnico.distledger.server.domain.operation;
 
+import pt.tecnico.distledger.server.domain.ServerState;
+
 public class Operation {
 	private String account;
 
@@ -13,6 +15,9 @@ public class Operation {
 
 	public void setAccount(String account) {
 		this.account = account;
+	}
+
+	public void execute(ServerState state) {
 	}
 
 }
