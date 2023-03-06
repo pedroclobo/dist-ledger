@@ -66,4 +66,8 @@ public class UserService {
 
 		return "OK";
 	}
+
+	public void shutdown() {
+		channel.shutdown();
+	}
 }

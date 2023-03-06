@@ -40,4 +40,8 @@ public class AdminService {
 
 		return "OK%n" + response.toString();
 	}
+
+	public void shutdown() {
+		channel.shutdown();
+	}
 }
