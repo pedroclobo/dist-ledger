@@ -20,4 +20,10 @@ public class Operation {
 	public void execute(ServerState state) {
 	}
 
+	public String toString() {
+		return "Operation{" +
+				"account='" + account + '\'' +
+				'}';
+	}
+
 }

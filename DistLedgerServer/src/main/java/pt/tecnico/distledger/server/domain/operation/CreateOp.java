@@ -12,4 +12,10 @@ public class CreateOp extends Operation {
 	public void execute(ServerState state) {
 		state.addCreateOperation(this);
 	}
+
+	public String toString() {
+		return "CreateOp{" +
+				"account='" + getAccount() + '\'' +
+				'}';
+	}
 }

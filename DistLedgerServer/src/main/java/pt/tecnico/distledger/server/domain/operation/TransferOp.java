@@ -33,4 +33,12 @@ public class TransferOp extends Operation {
 		state.addTransferOperation(this);
 	}
 
+	public String toString() {
+		return "TransferOp{" +
+				"fromAccount='" + getAccount() + '\'' +
+				"destAccount='" + destAccount + '\'' +
+				", amount=" + amount +
+				'}';
+	}
+
 }
