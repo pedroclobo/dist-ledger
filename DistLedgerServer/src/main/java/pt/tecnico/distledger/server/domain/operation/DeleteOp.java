@@ -13,4 +13,10 @@ public class DeleteOp extends Operation {
 		state.addDeleteOperation(this);
 	}
 
+	public String toString() {
+		return "DeleteOp{" +
+				"account='" + getAccount() + '\'' +
+				'}';
+	}
+
 }

@@ -9,6 +9,8 @@ import java.io.IOException;
 
 public class ServerMain {
 
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// Receive and print arguments.
 		System.out.printf("Received %d arguments%n", args.length);
@@ -28,7 +30,7 @@ public class ServerMain {
 		final String qualifer = args[1];
 
 		// Initialize services.
-		final ServerState state = new ServerState();
+		final ServerState state = new ServerState(DEBUG_FLAG);
 		final BindableService admin = new AdminServiceImpl(state);
 		final BindableService user =  new UserServiceImpl(state);
 

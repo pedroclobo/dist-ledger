@@ -28,6 +28,13 @@ public class ServerState {
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
 
+	private static boolean DEBUG_FLAG = false;
+
+	public ServerState(boolean debug) {
+		this();
+		DEBUG_FLAG = debug;
+	}
+
 	public ServerState() {
 		this.mode = ServerMode.ACTIVE;
 		this.ledger = new ArrayList<>();
@@ -35,6 +42,8 @@ public class ServerState {
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
+
+		debug("ServerState initialized");
 	}
 
 	private void checkMode() {
@@ -49,6 +58,7 @@ public class ServerState {
 
 	public void setServerMode(ServerMode mode) {
 		this.mode = mode;
+		debug("ServerMode changed to " + mode.toString());
 	}
 
 	public List<Operation> getLedger() {
@@ -57,6 +67,7 @@ public class ServerState {
 
 	public void setLedger(List<Operation> ledger) {
 		this.ledger = ledger;
+		debug("Ledger changed to " + ledger.toString());
 	}
 
 	public int getAccountBalance(String account) {
@@ -66,6 +77,7 @@ public class ServerState {
 
 	public void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
+		debug("Operation added to ledger: " + operation.toString());
 	}
 
 	public void addCreateOperation(CreateOp operation) {
@@ -81,6 +93,7 @@ public class ServerState {
 
 		addOperationToLedger(operation);
 		this.accounts.put(operation.getAccount(), 0);
+		debug("Account created: " + operation.toString() + " with balance " + this.accounts.get(operation.getAccount()));
 	}
 
 	public void addDeleteOperation(DeleteOp operation) {
@@ -97,6 +110,7 @@ public class ServerState {
 
 		addOperationToLedger(operation);
 		this.accounts.remove(operation.getAccount());
+		debug("Account deleted: " + operation.toString());
 	}
 
 	public void addTransferOperation(TransferOp operation) {
@@ -119,6 +133,13 @@ public class ServerState {
 		addOperationToLedger(operation);
 		this.accounts.put(operation.getAccount(), this.accounts.get(operation.getAccount()) - operation.getAmount());
 		this.accounts.put(operation.getDestAccount(), this.accounts.get(operation.getDestAccount()) + operation.getAmount());
+		debug("Transfer operation executed: " + operation.toString());
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 
 }
