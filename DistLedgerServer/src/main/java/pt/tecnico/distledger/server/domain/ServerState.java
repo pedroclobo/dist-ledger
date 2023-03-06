@@ -24,6 +24,9 @@ public class ServerState {
 		this.mode = ServerMode.ACTIVE;
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
+
+		// initialize broker account
+		this.accounts.put("broker", 1000);
 	}
 
 	public ServerMode getServerMode() {
