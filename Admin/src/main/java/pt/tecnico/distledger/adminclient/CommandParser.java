@@ -69,7 +69,7 @@ public class CommandParser {
 		}
 		String server = split[1];
 
-		System.out.println(adminService.activate());
+		System.out.println(adminService.activate() + "\n");
 	}
 
 	private void deactivate(String line){
@@ -81,7 +81,7 @@ public class CommandParser {
 		}
 		String server = split[1];
 
-		System.out.println(adminService.deactivate());
+		System.out.println(adminService.deactivate() + "\n");
 	}
 
 	private void dump(String line){
@@ -93,7 +93,7 @@ public class CommandParser {
 		}
 		String server = split[1];
 
-		System.out.printf(adminService.getLedgerState());
+		System.out.printf(adminService.getLedgerState() + "\n");
 	}
 
 	@SuppressWarnings("unused")
