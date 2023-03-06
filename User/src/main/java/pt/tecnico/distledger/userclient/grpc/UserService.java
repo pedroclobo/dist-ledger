@@ -5,6 +5,7 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
+import io.grpc.StatusRuntimeException;
 
 public class UserService {
 
@@ -17,35 +18,51 @@ public class UserService {
 		stub = UserServiceGrpc.newBlockingStub(channel);
 	}
 
-	public int balance(String account) {
-		BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
-		BalanceResponse response = stub.balance(request);
+	public String balance(String account) {
+		try {
+			BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
+			BalanceResponse response = stub.balance(request);
 
-		return response.getValue();
+			return String.valueOf(response.getValue());
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription();
+		}
 	}
 
 	public String createAccount(String account) {
-		CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
-		CreateAccountResponse response = stub.createAccount(request);
+		try {
+			CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
+			CreateAccountResponse response = stub.createAccount(request);
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription();
+		}
 
 		return "OK";
 	}
 
 	public String deleteAccount(String account) {
-		DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
-		DeleteAccountResponse response = stub.deleteAccount(request);
+		try {
+			DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
+			DeleteAccountResponse response = stub.deleteAccount(request);
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription();
+		}
 
 		return "OK";
 	}
 
 	public String transferTo(String accountFrom, String accountTo, int amount) {
-		TransferToRequest request = TransferToRequest.newBuilder().
-			setAccountFrom(accountFrom).
-			setAccountTo(accountTo).
-			setAmount(amount).
-			build();
+		try {
+			TransferToRequest request = TransferToRequest.newBuilder().
+				setAccountFrom(accountFrom).
+				setAccountTo(accountTo).
+				setAmount(amount).
+				build();
 
-		TransferToResponse response = stub.transferTo(request);
+			TransferToResponse response = stub.transferTo(request);
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription();
+		}
 
 		return "OK";
 	}
