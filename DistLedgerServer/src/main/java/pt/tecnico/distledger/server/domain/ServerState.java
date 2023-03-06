@@ -10,12 +10,28 @@ import java.util.List;
 import java.util.HashMap;
 
 public class ServerState {
+
+	public enum ServerMode {
+		ACTIVE,
+		INACTIVE
+	}
+
+	private ServerMode mode;
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
 
 	public ServerState() {
+		this.mode = ServerMode.ACTIVE;
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
+	}
+
+	public ServerMode getServerMode() {
+		return mode;
+	}
+
+	public void setServerMode(ServerMode mode) {
+		this.mode = mode;
 	}
 
 	public List<Operation> getLedger() {
@@ -49,4 +65,5 @@ public class ServerState {
 		this.accounts.put(operation.getAccount(), this.accounts.get(operation.getAccount()) - operation.getAmount());
 		this.accounts.put(operation.getDestAccount(), this.accounts.get(operation.getDestAccount()) + operation.getAmount());
 	}
+
 }

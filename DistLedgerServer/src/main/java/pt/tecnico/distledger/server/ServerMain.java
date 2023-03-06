@@ -3,6 +3,7 @@ package pt.tecnico.distledger.server;
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import pt.tecnico.distledger.server.domain.ServerState;
 
 import java.io.IOException;
 
@@ -27,8 +28,9 @@ public class ServerMain {
 		final String qualifer = args[1];
 
 		// Initialize services.
-		final BindableService admin = new AdminServiceImpl();
-		final BindableService user = new UserServiceImpl();
+		final ServerState state = new ServerState();
+		final BindableService admin = new AdminServiceImpl(state);
+		final BindableService user =  new UserServiceImpl(state);
 
 		// Create a new server to listen on port.
 		Server server = ServerBuilder.forPort(port).addService(admin).addService(user).build();

@@ -9,7 +9,11 @@ import io.grpc.stub.StreamObserver;
 
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
-	private ServerState state = new ServerState();
+	private ServerState state;
+
+    public UserServiceImpl(ServerState state) {
+        this.state = state;
+    }
 
 	@Override
 	public void balance(BalanceRequest request, StreamObserver<BalanceResponse> responseObserver) {
