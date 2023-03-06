@@ -6,6 +6,7 @@ import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 
 import io.grpc.stub.StreamObserver;
+import static io.grpc.Status.INVALID_ARGUMENT;
 
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
@@ -19,35 +20,46 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	public void balance(BalanceRequest request, StreamObserver<BalanceResponse> responseObserver) {
 		String userId = request.getUserId();
 
-		int ammount = state.getAccountBalance(userId);
+		try {
+			int ammount = state.getAccountBalance(userId);
 
-		BalanceResponse response = BalanceResponse.newBuilder().setValue(ammount).build();
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
+			BalanceResponse response = BalanceResponse.newBuilder().setValue(ammount).build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+		}
 	}
 
 	@Override
 	public void createAccount(CreateAccountRequest request, StreamObserver<CreateAccountResponse> responseObserver) {
 		String userId = request.getUserId();
+		try {
+			CreateOp operation = new CreateOp(userId);
+			operation.execute(state);
 
-		CreateOp operation = new CreateOp(userId);
-		operation.execute(state);
-
-		CreateAccountResponse response = CreateAccountResponse.newBuilder().build();
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
+			CreateAccountResponse response = CreateAccountResponse.newBuilder().build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+		}
 	}
 
 	@Override
 	public void deleteAccount(DeleteAccountRequest request, StreamObserver<DeleteAccountResponse> responseObserver) {
 		String userId = request.getUserId();
 
-		DeleteOp operation = new DeleteOp(userId);
-		operation.execute(state);
+		try {
+			DeleteOp operation = new DeleteOp(userId);
+			operation.execute(state);
 
-		DeleteAccountResponse response = DeleteAccountResponse.newBuilder().build();
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
+			DeleteAccountResponse response = DeleteAccountResponse.newBuilder().build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+		}
 	}
 
 	@Override
@@ -56,11 +68,15 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 		String accountTo = request.getAccountTo();
 		int amount = request.getAmount();
 
-		TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
-		operation.execute(state);
+		try {
+			TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
+			operation.execute(state);
 
-		TransferToResponse response = TransferToResponse.newBuilder().build();
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
+			TransferToResponse response = TransferToResponse.newBuilder().build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
+		}
 	}
 }
