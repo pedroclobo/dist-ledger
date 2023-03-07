@@ -11,11 +11,17 @@ public class ServerMain {
 
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
+	}
+
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// Receive and print arguments.
-		System.out.printf("Received %d arguments%n", args.length);
+		debug(String.format("Received %d arguments", args.length));
 		for (int i = 0; i < args.length; i++) {
-			System.out.printf("arg[%d] = %s%n", i, args[i]);
+			debug(String.format("arg[%d] = %s", i, args[i]));
 		}
 
 		// Check arguments.
