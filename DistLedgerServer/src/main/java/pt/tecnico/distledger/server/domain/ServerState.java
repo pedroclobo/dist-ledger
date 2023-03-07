@@ -33,6 +33,7 @@ public class ServerState {
 	public ServerState(boolean debug) {
 		this();
 		DEBUG_FLAG = debug;
+		debug("ServerState initialized");
 	}
 
 	public ServerState() {
@@ -42,8 +43,6 @@ public class ServerState {
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
-
-		debug("ServerState initialized");
 	}
 
 	private void checkMode() {
