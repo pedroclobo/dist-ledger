@@ -71,6 +71,10 @@ public class ServerState {
 
 	public int getAccountBalance(String account) {
 		checkMode();
+		if (!this.accounts.containsKey(account)) {
+			throw new AccountNotFoundException(account);
+		}
+
 		return this.accounts.get(account);
 	}
 
