@@ -47,7 +47,7 @@ public class ServerState {
 
 	private void checkMode() {
 		if (this.mode == ServerMode.INACTIVE) {
-			throw new RuntimeException("UNAVAILABLE");
+			throw new ServerUnavailableException();
 		}
 	}
 
