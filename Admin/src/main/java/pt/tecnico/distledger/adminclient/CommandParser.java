@@ -42,22 +42,18 @@ public class CommandParser {
 
 			switch (cmd) {
 				case ACTIVATE:
-					debug("Call activate()");
 					this.activate(line);
 					break;
 
 				case DEACTIVATE:
-					debug("Call deactivate()");
 					this.deactivate(line);
 					break;
 
 				case GET_LEDGER_STATE:
-					debug("Call dump()");
 					this.dump(line);
 					break;
 
 				case GOSSIP:
-					debug("Call gossip()");
 					this.gossip(line);
 					break;
 
@@ -72,6 +68,7 @@ public class CommandParser {
 					break;
 
 				default:
+					debug("Command doesn't exist");
 					break;
 			}
 

@@ -33,6 +33,7 @@ public class AdminService {
 		ActivateRequest request = ActivateRequest.newBuilder().build();
 		debug("Send activate request");
 		stub.activate(request);
+		debug("Received activate response");
 
 		return "OK";
 	}
@@ -41,6 +42,7 @@ public class AdminService {
 		DeactivateRequest request = DeactivateRequest.newBuilder().build();
 		debug("Send deactivate request");
 		stub.deactivate(request);
+		debug("Received deactivate response");
 
 		return "OK";
 	}
@@ -49,8 +51,8 @@ public class AdminService {
 		getLedgerStateRequest request = getLedgerStateRequest.newBuilder().build();
 		debug("Send getLedgerState request");
 		getLedgerStateResponse response = stub.getLedgerState(request);
-		debug(String.format("getLedgerState response:%n%s", response));
-
+		debug(String.format("Received getLedgerState response:%n%s", response));
+		
 		return "OK%n" + response;
 	}
 
