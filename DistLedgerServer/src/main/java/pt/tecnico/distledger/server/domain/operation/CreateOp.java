@@ -14,8 +14,6 @@ public class CreateOp extends Operation {
 	}
 
 	public String toString() {
-		return "CreateOp{" +
-				"account='" + getAccount() + '\'' +
-				'}';
+		return "CreateOp{" + "account='" + getAccount() + '\'' + '}';
 	}
 }

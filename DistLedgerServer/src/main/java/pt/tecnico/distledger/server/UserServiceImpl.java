@@ -12,9 +12,9 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	private ServerState state;
 
-    public UserServiceImpl(ServerState state) {
-        this.state = state;
-    }
+	public UserServiceImpl(ServerState state) {
+		this.state = state;
+	}
 
 	@Override
 	public void balance(BalanceRequest request, StreamObserver<BalanceResponse> responseObserver) {

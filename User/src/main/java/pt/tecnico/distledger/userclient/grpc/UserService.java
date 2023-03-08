@@ -9,8 +9,10 @@ import io.grpc.StatusRuntimeException;
 
 public class UserService {
 
-	/** Set flag to true to print debug messages. 
-	 * The flag can be set using the -Ddebug command line option. */
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug command line option.
+	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
@@ -69,11 +71,7 @@ public class UserService {
 
 	public String transferTo(String accountFrom, String accountTo, int amount) {
 		try {
-			TransferToRequest request = TransferToRequest.newBuilder().
-				setAccountFrom(accountFrom).
-				setAccountTo(accountTo).
-				setAmount(amount).
-				build();
+			TransferToRequest request = TransferToRequest.newBuilder().setAccountFrom(accountFrom).setAccountTo(accountTo).setAmount(amount).build();
 			debug("Send transferTo request");
 			stub.transferTo(request);
 			debug("Received transferTo response");

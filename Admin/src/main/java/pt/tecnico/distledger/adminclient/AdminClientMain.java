@@ -4,8 +4,10 @@ import pt.tecnico.distledger.adminclient.grpc.AdminService;
 
 public class AdminClientMain {
 
-	/** Set flag to true to print debug messages. 
-	 * The flag can be set using the -Ddebug command line option. */
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug command line option.
+	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */

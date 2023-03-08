@@ -14,9 +14,7 @@ public class DeleteOp extends Operation {
 	}
 
 	public String toString() {
-		return "DeleteOp{" +
-				"account='" + getAccount() + '\'' +
-				'}';
+		return "DeleteOp{" + "account='" + getAccount() + '\'' + '}';
 	}
 
 }
