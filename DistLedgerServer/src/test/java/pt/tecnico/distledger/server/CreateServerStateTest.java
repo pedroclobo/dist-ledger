@@ -8,19 +8,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class CreateServerStateTest {
 	private static ServerState state;
 
-    @BeforeEach
-    public void setUp() {
+	@BeforeEach
+	public void setUp() {
 		state = new ServerState();
-    }
+	}
 
-    @AfterEach
-    public void tearDown() {
+	@AfterEach
+	public void tearDown() {
 		state = null;
-    }
+	}
 
-    @Test
-    public void initState() {
+	@Test
+	public void initState() {
 		assertEquals(state.getServerMode(), ServerState.ServerMode.ACTIVE);
 		assertEquals(state.getLedger().size(), 0);
-    }
+	}
 }

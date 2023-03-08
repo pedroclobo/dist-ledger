@@ -6,8 +6,10 @@ import java.util.Scanner;
 
 public class CommandParser {
 
-	/** Set flag to true to print debug messages. 
-	 * The flag can be set using the -Ddebug command line option. */
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug command line option.
+	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
@@ -42,49 +44,48 @@ public class CommandParser {
 			debug(String.format("input line: %s", line));
 			debug(String.format("command: %s", cmd));
 
-			try{
+			try {
 				switch (cmd) {
-					case CREATE_ACCOUNT:
-						this.createAccount(line);
-						break;
+				case CREATE_ACCOUNT:
+					this.createAccount(line);
+					break;
 
-					case DELETE_ACCOUNT:
-						this.deleteAccount(line);
-						break;
+				case DELETE_ACCOUNT:
+					this.deleteAccount(line);
+					break;
 
-					case TRANSFER_TO:
-						this.transferTo(line);
-						break;
+				case TRANSFER_TO:
+					this.transferTo(line);
+					break;
 
-					case BALANCE:
-						this.balance(line);
-						break;
+				case BALANCE:
+					this.balance(line);
+					break;
 
-					case HELP:
-						debug("Call printUsage()");
-						this.printUsage();
-						break;
+				case HELP:
+					debug("Call printUsage()");
+					this.printUsage();
+					break;
 
-					case EXIT:
-						exit = true;
-						debug("Exiting");
-						break;
+				case EXIT:
+					exit = true;
+					debug("Exiting");
+					break;
 
-					default:
-						debug("Command doesn't exist");
-						break;
+				default:
+					debug("Command doesn't exist");
+					break;
 				}
-			}
-			catch (Exception e){
+			} catch (Exception e) {
 				System.err.println(e.getMessage());
 			}
 		}
 	}
 
-	private void createAccount(String line){
+	private void createAccount(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 3){
+		if (split.length != 3) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -99,10 +100,10 @@ public class CommandParser {
 		System.out.println(userService.createAccount(username) + "\n");
 	}
 
-	private void deleteAccount(String line){
+	private void deleteAccount(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 3){
+		if (split.length != 3) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -116,11 +117,10 @@ public class CommandParser {
 		System.out.println(userService.deleteAccount(username) + "\n");
 	}
 
-
-	private void balance(String line){
+	private void balance(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 3){
+		if (split.length != 3) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -134,10 +134,10 @@ public class CommandParser {
 		System.out.printf(userService.balance(username) + "%n%n");
 	}
 
-	private void transferTo(String line){
+	private void transferTo(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 5){
+		if (split.length != 5) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -156,11 +156,7 @@ public class CommandParser {
 	}
 
 	private void printUsage() {
-		System.out.println("Usage:\n" +
-						"- createAccount <server> <username>\n" +
-						"- deleteAccount <server> <username>\n" +
-						"- balance <server> <username>\n" +
-						"- transferTo <server> <username_from> <username_to> <amount>\n" +
-						"- exit\n");
+		System.out.println("Usage:\n" + "- createAccount <server> <username>\n" + "- deleteAccount <server> <username>\n" + "- balance <server> <username>\n"
+		    + "- transferTo <server> <username_from> <username_to> <amount>\n" + "- exit\n");
 	}
 }

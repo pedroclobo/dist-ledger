@@ -6,8 +6,10 @@ import java.util.Scanner;
 
 public class CommandParser {
 
-	/** Set flag to true to print debug messages. 
-	 * The flag can be set using the -Ddebug command line option. */
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug command line option.
+	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
@@ -25,9 +27,11 @@ public class CommandParser {
 	private static final String EXIT = "exit";
 
 	private final AdminService adminService;
+
 	public CommandParser(AdminService adminService) {
 		this.adminService = adminService;
 	}
+
 	void parseInput() {
 
 		Scanner scanner = new Scanner(System.in);
@@ -41,44 +45,44 @@ public class CommandParser {
 			debug(String.format("command: %s", cmd));
 
 			switch (cmd) {
-				case ACTIVATE:
-					this.activate(line);
-					break;
+			case ACTIVATE:
+				this.activate(line);
+				break;
 
-				case DEACTIVATE:
-					this.deactivate(line);
-					break;
+			case DEACTIVATE:
+				this.deactivate(line);
+				break;
 
-				case GET_LEDGER_STATE:
-					this.dump(line);
-					break;
+			case GET_LEDGER_STATE:
+				this.dump(line);
+				break;
 
-				case GOSSIP:
-					this.gossip(line);
-					break;
+			case GOSSIP:
+				this.gossip(line);
+				break;
 
-				case HELP:
-					debug("Call printUsage()");
-					this.printUsage();
-					break;
+			case HELP:
+				debug("Call printUsage()");
+				this.printUsage();
+				break;
 
-				case EXIT:
-					exit = true;
-					debug("Exiting");
-					break;
+			case EXIT:
+				exit = true;
+				debug("Exiting");
+				break;
 
-				default:
-					debug("Command doesn't exist");
-					break;
+			default:
+				debug("Command doesn't exist");
+				break;
 			}
 
 		}
 	}
 
-	private void activate(String line){
+	private void activate(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 2){
+		if (split.length != 2) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -90,10 +94,10 @@ public class CommandParser {
 		System.out.println(adminService.activate() + "\n");
 	}
 
-	private void deactivate(String line){
+	private void deactivate(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 2){
+		if (split.length != 2) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -105,10 +109,10 @@ public class CommandParser {
 		System.out.println(adminService.deactivate() + "\n");
 	}
 
-	private void dump(String line){
+	private void dump(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 2){
+		if (split.length != 2) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
@@ -121,17 +125,13 @@ public class CommandParser {
 	}
 
 	@SuppressWarnings("unused")
-	private void gossip(String line){
+	private void gossip(String line) {
 		/* TODO Phase-3 */
 		System.out.println("TODO: implement gossip command (only for Phase-3)");
 	}
+
 	private void printUsage() {
-		System.out.println("Usage:\n" +
-				"- activate <server>\n" +
-				"- deactivate <server>\n" +
-				"- getLedgerState <server>\n" +
-				"- gossip <server>\n" +
-				"- exit\n");
+		System.out.println("Usage:\n" + "- activate <server>\n" + "- deactivate <server>\n" + "- getLedgerState <server>\n" + "- gossip <server>\n" + "- exit\n");
 	}
 
 }

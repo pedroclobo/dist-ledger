@@ -22,8 +22,7 @@ import java.util.HashMap;
 public class ServerState {
 
 	public enum ServerMode {
-		ACTIVE,
-		INACTIVE
+		ACTIVE, INACTIVE
 	}
 
 	private ServerMode mode;

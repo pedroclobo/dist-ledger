@@ -10,8 +10,10 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 
 public class AdminService {
 
-	/** Set flag to true to print debug messages. 
-	 * The flag can be set using the -Ddebug command line option. */
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug command line option.
+	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
@@ -52,7 +54,7 @@ public class AdminService {
 		debug("Send getLedgerState request");
 		getLedgerStateResponse response = stub.getLedgerState(request);
 		debug(String.format("Received getLedgerState response:%n%s", response));
-		
+
 		return "OK%n" + response;
 	}
 

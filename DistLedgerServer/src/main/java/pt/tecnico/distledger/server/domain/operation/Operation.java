@@ -21,9 +21,7 @@ public class Operation {
 	}
 
 	public String toString() {
-		return "Operation{" +
-				"account='" + account + '\'' +
-				'}';
+		return "Operation{" + "account='" + account + '\'' + '}';
 	}
 
 }

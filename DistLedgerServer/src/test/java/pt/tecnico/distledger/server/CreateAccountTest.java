@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class CreateAccountTest {
 	private static ServerState state;
 
-    @BeforeEach
-    public void setUp() {
+	@BeforeEach
+	public void setUp() {
 		state = new ServerState();
-    }
+	}
 
-    @AfterEach
-    public void tearDown() {
+	@AfterEach
+	public void tearDown() {
 		state = null;
-    }
+	}
 
 	// Create new account
 	@Test
