@@ -11,6 +11,8 @@ import pt.tecnico.distledger.server.exceptions.AccountNotFoundException;
 import pt.tecnico.distledger.server.exceptions.CreateBrokerException;
 import pt.tecnico.distledger.server.exceptions.DeleteBrokerException;
 import pt.tecnico.distledger.server.exceptions.InsufficientBalanceException;
+import pt.tecnico.distledger.server.exceptions.InvalidBalanceException;
+import pt.tecnico.distledger.server.exceptions.InvalidTransferException;
 import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
 
 import java.util.ArrayList;
@@ -129,6 +131,10 @@ public class ServerState {
 			throw new AccountNotFoundException(fromAccount);
 		} else if (!this.accounts.containsKey(operation.getDestAccount())) {
 			throw new AccountNotFoundException(toAccount);
+		} else if (fromAccount.equals(toAccount)) {
+			throw new InvalidTransferException();
+		} else if (amount <= 0) {
+			throw new InvalidBalanceException(amount);
 		} else if (fromAccountBalance < amount) {
 			throw new InsufficientBalanceException(fromAccount, fromAccountBalance);
 		}
