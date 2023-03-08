@@ -105,11 +105,13 @@ public class ServerState {
 		checkMode();
 
 		String account = operation.getAccount();
-		int balance = this.accounts.get(account);
 
 		if (account.equals("broker")) {
 			throw new DeleteBrokerException();
+		} else if (!this.accounts.containsKey(operation.getAccount())) {
+			throw new AccountNotFoundException(account);
 		} else if (this.accounts.get(operation.getAccount()) != 0) {
+			int balance = this.accounts.get(operation.getAccount());
 			throw new AccountHasBalanceException(account, balance);
 		}
 
