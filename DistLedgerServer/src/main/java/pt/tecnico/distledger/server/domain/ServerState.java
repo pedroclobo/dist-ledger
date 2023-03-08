@@ -47,31 +47,31 @@ public class ServerState {
 		this.accounts.put("broker", 1000);
 	}
 
-	private void checkMode() {
+	private synchronized void checkMode() {
 		if (this.mode == ServerMode.INACTIVE) {
 			throw new ServerUnavailableException();
 		}
 	}
 
-	public ServerMode getServerMode() {
+	public synchronized ServerMode getServerMode() {
 		return mode;
 	}
 
-	public void setServerMode(ServerMode mode) {
+	public synchronized void setServerMode(ServerMode mode) {
 		this.mode = mode;
 		debug("ServerMode changed to " + mode.toString());
 	}
 
-	public List<Operation> getLedger() {
+	public synchronized List<Operation> getLedger() {
 		return ledger;
 	}
 
-	public void setLedger(List<Operation> ledger) {
+	public synchronized void setLedger(List<Operation> ledger) {
 		this.ledger = ledger;
 		debug("Ledger changed to " + ledger.toString());
 	}
 
-	public int getAccountBalance(String account) {
+	public synchronized int getAccountBalance(String account) {
 		checkMode();
 		if (!this.accounts.containsKey(account)) {
 			throw new AccountNotFoundException(account);
@@ -80,12 +80,12 @@ public class ServerState {
 		return this.accounts.get(account);
 	}
 
-	public void addOperationToLedger(Operation operation) {
+	public synchronized void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
 		debug("Operation added to ledger: " + operation.toString());
 	}
 
-	public void addCreateOperation(CreateOp operation) {
+	public synchronized void addCreateOperation(CreateOp operation) {
 		checkMode();
 
 		String account = operation.getAccount();
@@ -101,7 +101,7 @@ public class ServerState {
 		debug("Account created: " + operation.toString() + " with balance " + this.accounts.get(operation.getAccount()));
 	}
 
-	public void addDeleteOperation(DeleteOp operation) {
+	public synchronized void addDeleteOperation(DeleteOp operation) {
 		checkMode();
 
 		String account = operation.getAccount();
@@ -120,7 +120,7 @@ public class ServerState {
 		debug("Account deleted: " + operation.toString());
 	}
 
-	public void addTransferOperation(TransferOp operation) {
+	public synchronized void addTransferOperation(TransferOp operation) {
 		checkMode();
 
 		String fromAccount = operation.getAccount();
