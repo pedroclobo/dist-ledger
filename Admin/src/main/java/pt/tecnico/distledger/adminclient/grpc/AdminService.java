@@ -2,7 +2,6 @@ package pt.tecnico.distledger.adminclient.grpc;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.LedgerState;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.ActivateRequest;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.DeactivateRequest;
@@ -10,6 +9,16 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
 
 public class AdminService {
+
+	/** Set flag to true to print debug messages. 
+	 * The flag can be set using the -Ddebug command line option. */
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
+	}
 
 	private final ManagedChannel channel;
 	private AdminServiceGrpc.AdminServiceBlockingStub stub;
@@ -22,6 +31,7 @@ public class AdminService {
 
 	public String activate() {
 		ActivateRequest request = ActivateRequest.newBuilder().build();
+		debug("Send activate request");
 		stub.activate(request);
 
 		return "OK";
@@ -29,6 +39,7 @@ public class AdminService {
 
 	public String deactivate() {
 		DeactivateRequest request = DeactivateRequest.newBuilder().build();
+		debug("Send deactivate request");
 		stub.deactivate(request);
 
 		return "OK";
@@ -36,9 +47,11 @@ public class AdminService {
 
 	public String getLedgerState() {
 		getLedgerStateRequest request = getLedgerStateRequest.newBuilder().build();
+		debug("Send getLedgerState request");
 		getLedgerStateResponse response = stub.getLedgerState(request);
+		debug(String.format("getLedgerState response:%n%s", response));
 
-		return "OK%n" + response.toString();
+		return "OK%n" + response;
 	}
 
 	public void shutdown() {
