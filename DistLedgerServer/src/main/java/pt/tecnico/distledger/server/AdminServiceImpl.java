@@ -21,7 +21,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
 	@Override
 	public void activate(ActivateRequest request, StreamObserver<ActivateResponse> responseObserver) {
-		state.setServerMode(ServerMode.ACTIVE);
+		state.setMode(ServerMode.ACTIVE);
 
 		ActivateResponse response = ActivateResponse.newBuilder().build();
 		responseObserver.onNext(response);
@@ -30,7 +30,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
 	@Override
 	public void deactivate(DeactivateRequest request, StreamObserver<DeactivateResponse> responseObserver) {
-		state.setServerMode(ServerMode.INACTIVE);
+		state.setMode(ServerMode.INACTIVE);
 
 		DeactivateResponse response = DeactivateResponse.newBuilder().build();
 		responseObserver.onNext(response);
