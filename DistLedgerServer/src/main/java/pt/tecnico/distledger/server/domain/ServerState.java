@@ -123,8 +123,6 @@ public class ServerState {
 		String toAccount = operation.getDestAccount();
 		int amount = operation.getAmount();
 
-		int fromAccountBalance = this.accounts.get(operation.getAccount());
-
 		if (!this.accounts.containsKey(operation.getAccount())) {
 			throw new AccountNotFoundException(fromAccount);
 		} else if (!this.accounts.containsKey(operation.getDestAccount())) {
@@ -133,7 +131,8 @@ public class ServerState {
 			throw new InvalidTransferException();
 		} else if (amount <= 0) {
 			throw new InvalidBalanceException(amount);
-		} else if (fromAccountBalance < amount) {
+		} else if (this.accounts.get(operation.getAccount()) < amount) {
+			int fromAccountBalance = this.accounts.get(operation.getAccount());
 			throw new InsufficientBalanceException(fromAccount, fromAccountBalance);
 		}
 
