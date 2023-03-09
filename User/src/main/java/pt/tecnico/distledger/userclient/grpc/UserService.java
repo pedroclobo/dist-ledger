@@ -35,9 +35,9 @@ public class UserService {
 			BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
 			debug("Send balance request");
 			BalanceResponse response = stub.balance(request);
-			debug(String.format("Received balance response: %s", String.valueOf(response.getValue())));
+			debug(String.format("Received balance response: %s", response));
 
-			return "OK%n" + String.valueOf(response.getValue());
+			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription();
 		}
@@ -53,7 +53,7 @@ public class UserService {
 			return e.getStatus().getDescription();
 		}
 
-		return "OK";
+		return "OK\n";
 	}
 
 	public String deleteAccount(String account) {
@@ -66,7 +66,7 @@ public class UserService {
 			return e.getStatus().getDescription();
 		}
 
-		return "OK";
+		return "OK\n";
 	}
 
 	public String transferTo(String accountFrom, String accountTo, int amount) {
@@ -79,7 +79,7 @@ public class UserService {
 			return e.getStatus().getDescription();
 		}
 
-		return "OK";
+		return "OK\n";
 	}
 
 	public void shutdown() {

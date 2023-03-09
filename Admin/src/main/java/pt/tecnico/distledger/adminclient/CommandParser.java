@@ -91,7 +91,7 @@ public class CommandParser {
 		debug(String.format("server: %s", server));
 
 		debug("Call adminService.activate()");
-		System.out.println(adminService.activate() + "\n");
+		System.out.println(adminService.activate());
 	}
 
 	private void deactivate(String line) {
@@ -106,7 +106,7 @@ public class CommandParser {
 		debug(String.format("server: %s", server));
 
 		debug("Call adminService.deactivate()");
-		System.out.println(adminService.deactivate() + "\n");
+		System.out.println(adminService.deactivate());
 	}
 
 	private void dump(String line) {
@@ -121,7 +121,7 @@ public class CommandParser {
 		debug(String.format("server: %s", server));
 
 		debug("Call adminService.getLedgerState()");
-		System.out.printf(adminService.getLedgerState() + "\n");
+		System.out.printf(adminService.getLedgerState());
 	}
 
 	@SuppressWarnings("unused")
