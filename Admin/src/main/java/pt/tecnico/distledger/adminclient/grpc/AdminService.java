@@ -37,7 +37,7 @@ public class AdminService {
 		stub.activate(request);
 		debug("Received activate response");
 
-		return "OK";
+		return "OK\n";
 	}
 
 	public String deactivate() {
@@ -46,7 +46,7 @@ public class AdminService {
 		stub.deactivate(request);
 		debug("Received deactivate response");
 
-		return "OK";
+		return "OK\n";
 	}
 
 	public String getLedgerState() {
@@ -55,7 +55,7 @@ public class AdminService {
 		getLedgerStateResponse response = stub.getLedgerState(request);
 		debug(String.format("Received getLedgerState response:%n%s", response));
 
-		return "OK%n" + response;
+		return "OK\n" + response + "\n";
 	}
 
 	public void shutdown() {

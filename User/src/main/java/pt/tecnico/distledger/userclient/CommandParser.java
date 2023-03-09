@@ -97,7 +97,7 @@ public class CommandParser {
 		debug(String.format("username: %s", username));
 
 		debug("Call userService.createAccount()");
-		System.out.println(userService.createAccount(username) + "\n");
+		System.out.println(userService.createAccount(username));
 	}
 
 	private void deleteAccount(String line) {
@@ -114,7 +114,7 @@ public class CommandParser {
 		debug(String.format("username: %s", username));
 
 		debug("Call userService.deleteAccount()");
-		System.out.println(userService.deleteAccount(username) + "\n");
+		System.out.println(userService.deleteAccount(username));
 	}
 
 	private void balance(String line) {
@@ -131,7 +131,7 @@ public class CommandParser {
 		debug(String.format("username: %s", username));
 
 		debug("Call userService.balance()");
-		System.out.printf(userService.balance(username) + "%n%n");
+		System.out.println(userService.balance(username));
 	}
 
 	private void transferTo(String line) {
@@ -152,7 +152,7 @@ public class CommandParser {
 		debug(String.format("amount: %s", amount));
 
 		debug("Call userService.transferTo()");
-		System.out.println(userService.transferTo(from, dest, amount) + "\n");
+		System.out.println(userService.transferTo(from, dest, amount));
 	}
 
 	private void printUsage() {
