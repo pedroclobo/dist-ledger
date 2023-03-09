@@ -36,7 +36,7 @@ public class ServerMain {
 		final String qualifer = args[1];
 
 		// Initialize services.
-		final ServerState state = new ServerState(DEBUG_FLAG);
+		final ServerState state = new ServerState();
 		final BindableService admin = new AdminServiceImpl(state);
 		final BindableService user = new UserServiceImpl(state);
 
