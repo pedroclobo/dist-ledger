@@ -17,9 +17,6 @@ public class UserClientMain {
 	}
 
 	public static void main(String[] args) {
-
-		debug(String.format("%s", UserClientMain.class.getSimpleName()));
-
 		// receive and print arguments
 		debug(String.format("Received %d arguments", args.length));
 		for (int i = 0; i < args.length; i++) {
