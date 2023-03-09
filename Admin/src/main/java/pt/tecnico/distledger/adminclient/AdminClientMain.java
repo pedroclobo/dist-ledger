@@ -38,7 +38,6 @@ public class AdminClientMain {
 		AdminService adminService = new AdminService(host, port);
 		CommandParser parser = new CommandParser(adminService);
 
-		System.out.println("Hello Administrator");
 		debug("Call parseInput()");
 		parser.parseInput();
 

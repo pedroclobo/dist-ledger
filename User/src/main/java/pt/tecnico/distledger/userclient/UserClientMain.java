@@ -38,7 +38,6 @@ public class UserClientMain {
 		UserService userService = new UserService(host, port);
 		CommandParser parser = new CommandParser(userService);
 
-		System.out.println("Hello User");
 		debug("Call parseInput()");
 		parser.parseInput();
 
