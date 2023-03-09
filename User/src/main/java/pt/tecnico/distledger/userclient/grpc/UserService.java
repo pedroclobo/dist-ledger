@@ -39,7 +39,7 @@ public class UserService {
 
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription();
+			return e.getStatus().getDescription() + "\n";
 		}
 	}
 
@@ -47,39 +47,39 @@ public class UserService {
 		try {
 			CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send createAccount request");
-			stub.createAccount(request);
+			CreateAccountResponse response = stub.createAccount(request);
 			debug("Received createAccount response");
-		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription();
-		}
 
-		return "OK\n";
+			return "OK\n" + response;
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
 	}
 
 	public String deleteAccount(String account) {
 		try {
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send deleteAccount request");
-			stub.deleteAccount(request);
+			DeleteAccountResponse response = stub.deleteAccount(request);
 			debug("Received deleteAccount response");
-		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription();
-		}
 
-		return "OK\n";
+			return "OK\n" + response;
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
 	}
 
 	public String transferTo(String accountFrom, String accountTo, int amount) {
 		try {
 			TransferToRequest request = TransferToRequest.newBuilder().setAccountFrom(accountFrom).setAccountTo(accountTo).setAmount(amount).build();
 			debug("Send transferTo request");
-			stub.transferTo(request);
+			TransferToResponse response = stub.transferTo(request);
 			debug("Received transferTo response");
-		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription();
-		}
 
-		return "OK\n";
+			return "OK\n" + response;
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
 	}
 
 	public void shutdown() {
