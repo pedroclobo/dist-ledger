@@ -31,13 +31,10 @@ public class ServerState {
 
 	private static boolean DEBUG_FLAG = false;
 
-	public ServerState(boolean debug) {
-		this();
-		DEBUG_FLAG = debug;
-		debug("ServerState initialized");
-	}
-
 	public ServerState() {
+		DEBUG_FLAG = System.getProperty("debug") != null;
+		debug("ServerState initialized");
+
 		this.mode = ServerMode.ACTIVE;
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
