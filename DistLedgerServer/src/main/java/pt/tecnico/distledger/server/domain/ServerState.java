@@ -49,11 +49,11 @@ public class ServerState {
 		}
 	}
 
-	public synchronized ServerMode getServerMode() {
+	public synchronized ServerMode getMode() {
 		return mode;
 	}
 
-	public synchronized void setServerMode(ServerMode mode) {
+	public synchronized void setMode(ServerMode mode) {
 		this.mode = mode;
 		debug("ServerMode changed to " + mode.toString());
 	}
@@ -78,7 +78,7 @@ public class ServerState {
 
 	public synchronized void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
-		debug("Operation added to ledger: " + operation.toString());
+		debug("Operation added to ledger: " + operation);
 	}
 
 	public synchronized void addCreateOperation(CreateOp operation) {
@@ -94,7 +94,7 @@ public class ServerState {
 
 		addOperationToLedger(operation);
 		this.accounts.put(operation.getAccount(), 0);
-		debug("Account created: " + operation.toString() + " with balance " + this.accounts.get(operation.getAccount()));
+		debug("Account created: " + operation);
 	}
 
 	public synchronized void addDeleteOperation(DeleteOp operation) {
@@ -138,9 +138,9 @@ public class ServerState {
 		}
 
 		addOperationToLedger(operation);
-		this.accounts.put(operation.getAccount(), this.accounts.get(operation.getAccount()) - operation.getAmount());
-		this.accounts.put(operation.getDestAccount(), this.accounts.get(operation.getDestAccount()) + operation.getAmount());
-		debug("Transfer operation executed: " + operation.toString());
+		this.accounts.put(fromAccount, this.accounts.get(fromAccount) - amount);
+		this.accounts.put(toAccount, this.accounts.get(toAccount) + amount);
+		debug("Transfer operation executed: " + operation);
 	}
 
 	/** Helper method to print debug messages. */

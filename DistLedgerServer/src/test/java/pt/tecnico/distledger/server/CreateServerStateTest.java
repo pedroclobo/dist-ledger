@@ -20,7 +20,7 @@ class CreateServerStateTest {
 
 	@Test
 	public void initState() {
-		assertEquals(state.getServerMode(), ServerState.ServerMode.ACTIVE);
+		assertEquals(state.getMode(), ServerState.ServerMode.ACTIVE);
 		assertEquals(state.getLedger().size(), 0);
 	}
 }
