@@ -45,12 +45,16 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 		for (pt.tecnico.distledger.server.domain.operation.Operation op : state.getLedger()) {
 			Operation.Builder operation = Operation.newBuilder();
 
-			if (op instanceof CreateOp) {
+			switch (op.getType()) {
+			case "CreateOp":
 				operation.setType(OperationType.OP_CREATE_ACCOUNT).setUserId(op.getAccount());
-			} else if (op instanceof DeleteOp) {
+				break;
+			case "DeleteOp":
 				operation.setType(OperationType.OP_DELETE_ACCOUNT).setUserId(op.getAccount());
-			} else if (op instanceof TransferOp) {
+				break;
+			case "TransferOp":
 				operation.setType(OperationType.OP_TRANSFER_TO).setUserId(op.getAccount()).setDestUserId(((TransferOp) op).getDestAccount()).setAmount(((TransferOp) op).getAmount());
+				break;
 			}
 			ledgerBuilder.addLedger(operation);
 		}

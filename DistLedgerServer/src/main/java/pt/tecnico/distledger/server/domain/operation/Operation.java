@@ -17,6 +17,10 @@ public class Operation {
 		this.account = account;
 	}
 
+	public String getType() {
+		return this.getClass().getSimpleName();
+	}
+
 	public void execute(ServerState state) {
 	}
 
