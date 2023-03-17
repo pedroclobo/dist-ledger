@@ -1,6 +1,7 @@
 package pt.tecnico.distledger.adminclient;
 
 import pt.tecnico.distledger.adminclient.grpc.AdminService;
+import pt.tecnico.distledger.adminclient.grpc.NamingServerService;
 
 public class AdminClientMain {
 
@@ -17,25 +18,8 @@ public class AdminClientMain {
 	}
 
 	public static void main(String[] args) {
-		// receive and print arguments
-		debug(String.format("Received %d arguments", args.length));
-		for (int i = 0; i < args.length; i++) {
-			debug(String.format("arg[%d] = %s", i, args[i]));
-		}
-
-		// check arguments
-		if (args.length != 2) {
-			System.err.println("Argument(s) missing!");
-			System.err.println("Usage: mvn exec:java -Dexec.args=<host> <port>");
-			return;
-		}
-
-		final String host = args[0];
-		final int port = Integer.parseInt(args[1]);
-		debug(String.format("host=%s : port=%d", host, port));
-
 		debug("Create CommandParser and AdminService");
-		AdminService adminService = new AdminService(host, port);
+		AdminService adminService = new AdminService(new NamingServerService("localhost", 5001));
 		CommandParser parser = new CommandParser(adminService);
 
 		debug("Call parseInput()");
