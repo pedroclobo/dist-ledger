@@ -5,6 +5,8 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import pt.tecnico.distledger.server.domain.ServerState;
 
+import pt.tecnico.distledger.server.grpc.NamingServerService;
+
 import java.io.IOException;
 
 public class ServerMain {
@@ -40,6 +42,10 @@ public class ServerMain {
 		final BindableService admin = new AdminServiceImpl(state);
 		final BindableService user = new UserServiceImpl(state);
 
+		// Register server on naming server.
+		final NamingServerService namingServerService = new NamingServerService("localhost", 5001);
+		namingServerService.register("DistLedger", qualifer, "localhost", port);
+
 		// Create a new server to listen on port.
 		Server server = ServerBuilder.forPort(port).addService(admin).addService(user).build();
 
@@ -48,6 +54,9 @@ public class ServerMain {
 
 		// Do not exit the main thread. Wait until server is terminated.
 		server.awaitTermination();
+
+		// Unregister server from naming server.
+		namingServerService.delete("DistLedger", "localhost", port);
 	}
 
 }
