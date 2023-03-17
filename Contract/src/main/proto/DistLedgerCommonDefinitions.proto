@@ -21,3 +21,8 @@ message LedgerState {
 	repeated Operation ledger = 1;
 }
 
+message Server {
+	string qualifier = 1;
+	string host = 2;
+	int32 port = 3;
+}
