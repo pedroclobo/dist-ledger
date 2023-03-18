@@ -11,8 +11,7 @@ import java.util.List;
 
 import io.grpc.stub.StreamObserver;
 
-
-public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceImplBase{
+public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceImplBase {
 
 	private ServerState state;
 
@@ -22,10 +21,10 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 
 	@Override
 	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
-	List<Operation> newLedgerState = new ArrayList<>();
+		List<Operation> newLedgerState = new ArrayList<>();
 
-	for (DistLedgerCommonDefinitions.Operation op : request.getState().getLedgerList()) {
-		switch (op.getType()) {
+		for (DistLedgerCommonDefinitions.Operation op : request.getState().getLedgerList()) {
+			switch (op.getType()) {
 			case OP_CREATE_ACCOUNT:
 				newLedgerState.add(new CreateOp(op.getUserId()));
 				break;
@@ -39,12 +38,12 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 				break;
 			default:
 				break;
+			}
 		}
-	}
-	this.state.setLedger(newLedgerState);
+		this.state.setLedger(newLedgerState);
 
-	PropagateStateResponse response = PropagateStateResponse.newBuilder().build();
-	responseObserver.onNext(response);
-	responseObserver.onCompleted();
+		PropagateStateResponse response = PropagateStateResponse.newBuilder().build();
+		responseObserver.onNext(response);
+		responseObserver.onCompleted();
 	}
 }
