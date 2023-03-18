@@ -48,8 +48,6 @@ public class NamingServerServiceImpl extends NamingServerServiceGrpc.NamingServe
 				Server.Builder server = Server.newBuilder();
 				server.setQualifier(serverEntry.getQualifier()).setHost(serverEntry.getHost()).setPort(serverEntry.getPort());
 
-				System.out.println("Server: " + serverEntry.getHost() + ":" + serverEntry.getPort() + " (" + serverEntry.getQualifier() + ")");
-
 				response.addServer(server);
 			}
 
