@@ -30,6 +30,14 @@ public class NamingServerService {
 		return response;
 	}
 
+	public DistLedgerCrossServerServiceStubHandler getHandler(String qualifier) {
+		LookupResponse serverResponse = this.lookup("DistLedger", qualifier);
+		String host = serverResponse.getServer(0).getHost();
+		int port = serverResponse.getServer(0).getPort();
+
+		return new DistLedgerCrossServerServiceStubHandler(host, port);
+	}
+
 	public void delete(String serviceName, String host, int port) {
 		DeleteRequest request = DeleteRequest.newBuilder().setServiceName(serviceName).setHost(host).setPort(port).build();
 		DeleteResponse response = stub.delete(request);
