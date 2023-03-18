@@ -22,6 +22,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	public void balance(BalanceRequest request, StreamObserver<BalanceResponse> responseObserver) {
 		if (mode.isInactive()) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+			return;
 		}
 
 		String userId = request.getUserId();
@@ -41,6 +42,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	public void createAccount(CreateAccountRequest request, StreamObserver<CreateAccountResponse> responseObserver) {
 		if (mode.isInactive()) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+			return;
 		}
 
 		String userId = request.getUserId();
@@ -60,6 +62,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	public void deleteAccount(DeleteAccountRequest request, StreamObserver<DeleteAccountResponse> responseObserver) {
 		if (mode.isInactive()) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+			return;
 		}
 
 		String userId = request.getUserId();
@@ -80,6 +83,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	public void transferTo(TransferToRequest request, StreamObserver<TransferToResponse> responseObserver) {
 		if (mode.isInactive()) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+			return;
 		}
 
 		String accountFrom = request.getAccountFrom();
