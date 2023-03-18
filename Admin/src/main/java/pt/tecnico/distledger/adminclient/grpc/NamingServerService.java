@@ -27,6 +27,14 @@ public class NamingServerService {
 		return response;
 	}
 
+	public AdminServiceStubHandler getHandler(String qualifier) {
+		LookupResponse serverResponse = this.lookup("DistLedger", qualifier);
+		String host = serverResponse.getServer(0).getHost();
+		int port = serverResponse.getServer(0).getPort();
+
+		return new AdminServiceStubHandler(host, port);
+	}
+
 	public void shutdown() {
 		channel.shutdown();
 	}
