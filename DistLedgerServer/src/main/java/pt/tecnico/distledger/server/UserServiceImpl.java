@@ -11,13 +11,19 @@ import static io.grpc.Status.INVALID_ARGUMENT;
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	private ServerState state;
+	private ServerMode mode;
 
-	public UserServiceImpl(ServerState state) {
+	public UserServiceImpl(ServerState state, ServerMode mode) {
 		this.state = state;
+		this.mode = mode;
 	}
 
 	@Override
 	public void balance(BalanceRequest request, StreamObserver<BalanceResponse> responseObserver) {
+		if (mode.isInactive()) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+		}
+
 		String userId = request.getUserId();
 
 		try {
@@ -33,6 +39,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	@Override
 	public void createAccount(CreateAccountRequest request, StreamObserver<CreateAccountResponse> responseObserver) {
+		if (mode.isInactive()) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+		}
+
 		String userId = request.getUserId();
 		try {
 			CreateOp operation = new CreateOp(userId);
@@ -48,6 +58,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	@Override
 	public void deleteAccount(DeleteAccountRequest request, StreamObserver<DeleteAccountResponse> responseObserver) {
+		if (mode.isInactive()) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+		}
+
 		String userId = request.getUserId();
 
 		try {
@@ -64,6 +78,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	@Override
 	public void transferTo(TransferToRequest request, StreamObserver<TransferToResponse> responseObserver) {
+		if (mode.isInactive()) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
+		}
+
 		String accountFrom = request.getAccountFrom();
 		String accountTo = request.getAccountTo();
 		int amount = request.getAmount();

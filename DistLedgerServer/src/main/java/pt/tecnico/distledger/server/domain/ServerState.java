@@ -13,7 +13,6 @@ import pt.tecnico.distledger.server.exceptions.DeleteBrokerException;
 import pt.tecnico.distledger.server.exceptions.InsufficientBalanceException;
 import pt.tecnico.distledger.server.exceptions.InvalidBalanceException;
 import pt.tecnico.distledger.server.exceptions.InvalidTransferException;
-import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,6 @@ import java.util.HashMap;
 
 public class ServerState {
 
-	public enum ServerMode {
-		ACTIVE, INACTIVE
-	}
-
-	private ServerMode mode;
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
 
@@ -35,27 +29,11 @@ public class ServerState {
 		DEBUG_FLAG = System.getProperty("debug") != null;
 		debug("ServerState initialized");
 
-		this.mode = ServerMode.ACTIVE;
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
-	}
-
-	private synchronized void checkMode() {
-		if (this.mode == ServerMode.INACTIVE) {
-			throw new ServerUnavailableException();
-		}
-	}
-
-	public synchronized ServerMode getMode() {
-		return mode;
-	}
-
-	public synchronized void setMode(ServerMode mode) {
-		this.mode = mode;
-		debug("ServerMode changed to " + mode.toString());
 	}
 
 	public synchronized List<Operation> getLedger() {
@@ -68,7 +46,6 @@ public class ServerState {
 	}
 
 	public synchronized int getAccountBalance(String account) {
-		checkMode();
 		if (!this.accounts.containsKey(account)) {
 			throw new AccountNotFoundException(account);
 		}
@@ -82,8 +59,6 @@ public class ServerState {
 	}
 
 	public synchronized void addCreateOperation(CreateOp operation) {
-		checkMode();
-
 		String account = operation.getAccount();
 
 		if (account.equals("broker")) {
@@ -98,8 +73,6 @@ public class ServerState {
 	}
 
 	public synchronized void addDeleteOperation(DeleteOp operation) {
-		checkMode();
-
 		String account = operation.getAccount();
 
 		if (account.equals("broker")) {
@@ -117,8 +90,6 @@ public class ServerState {
 	}
 
 	public synchronized void addTransferOperation(TransferOp operation) {
-		checkMode();
-
 		String fromAccount = operation.getAccount();
 		String toAccount = operation.getDestAccount();
 		int amount = operation.getAmount();
