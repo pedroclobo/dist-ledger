@@ -39,8 +39,9 @@ public class ServerMain {
 
 		// Initialize services.
 		final ServerState state = new ServerState();
-		final BindableService admin = new AdminServiceImpl(state);
-		final BindableService user = new UserServiceImpl(state);
+		final ServerMode mode = new ServerMode();
+		final BindableService admin = new AdminServiceImpl(state, mode);
+		final BindableService user = new UserServiceImpl(state, mode);
 		final BindableService cross = new CrossServerServiceImpl(state);
 
 		// Register server on naming server.
