@@ -2,6 +2,8 @@ package pt.tecnico.distledger.userclient.grpc;
 
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerServiceGrpc;
+import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
+import pt.tecnico.distledger.userclient.grpc.UserServiceStubHandler;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -25,6 +27,14 @@ public class NamingServerService {
 		LookupResponse response = stub.lookup(request);
 
 		return response;
+	}
+
+	public UserServiceStubHandler getHandler(String qualifier) {
+		LookupResponse serverResponse = this.lookup("DistLedger", qualifier);
+		String host = serverResponse.getServer(0).getHost();
+		int port = serverResponse.getServer(0).getPort();
+
+		return new UserServiceStubHandler(host, port);
 	}
 
 	public void shutdown() {
