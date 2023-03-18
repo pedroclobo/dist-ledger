@@ -23,6 +23,13 @@ public class NamingServerService {
 		RegisterResponse response = stub.register(request);
 	}
 
+	public LookupResponse lookup(String serviceName, String qualifier) {
+		LookupRequest request = LookupRequest.newBuilder().setServiceName(serviceName).setQualifier(qualifier).build();
+		LookupResponse response = stub.lookup(request);
+
+		return response;
+	}
+
 	public void delete(String serviceName, String host, int port) {
 		DeleteRequest request = DeleteRequest.newBuilder().setServiceName(serviceName).setHost(host).setPort(port).build();
 		DeleteResponse response = stub.delete(request);
