@@ -41,13 +41,14 @@ public class ServerMain {
 		final ServerState state = new ServerState();
 		final BindableService admin = new AdminServiceImpl(state);
 		final BindableService user = new UserServiceImpl(state);
+		final BindableService cross = new CrossServerServiceImpl(state);
 
 		// Register server on naming server.
 		final NamingServerService namingServerService = new NamingServerService("localhost", 5001);
 		namingServerService.register("DistLedger", qualifer, "localhost", port);
 
 		// Create a new server to listen on port.
-		Server server = ServerBuilder.forPort(port).addService(admin).addService(user).build();
+		Server server = ServerBuilder.forPort(port).addService(admin).addService(user).addService(cross).build();
 
 		// Start the server
 		server.start();
