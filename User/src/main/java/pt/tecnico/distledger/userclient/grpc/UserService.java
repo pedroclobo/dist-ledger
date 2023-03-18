@@ -4,6 +4,7 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
+import pt.tecnico.distledger.userclient.grpc.UserServiceStubHandler;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -30,87 +31,70 @@ public class UserService {
 	}
 
 	public String balance(String qualifier, String account) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
+		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
 
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);
-
-		try {
 			BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
 			debug("Send balance request");
 			BalanceResponse response = stub.balance(request);
 			debug(String.format("Received balance response: %s", response));
 
-			channel.shutdown();
-
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
-			channel.shutdown();
 			return e.getStatus().getDescription() + "\n";
+		} catch (Exception e) {
+			return e.getMessage() + "\n";
 		}
 	}
 
 	public String createAccount(String qualifier, String account) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
+		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
 
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);
-
-		try {
 			CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send createAccount request");
 			CreateAccountResponse response = stub.createAccount(request);
 			debug("Received createAccount response");
 
-			channel.shutdown();
-
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
+		} catch (Exception e) {
+			return e.getMessage() + "\n";
 		}
 	}
 
 	public String deleteAccount(String qualifier, String account) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
+		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
 
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);
-
-		try {
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send deleteAccount request");
 			DeleteAccountResponse response = stub.deleteAccount(request);
 			debug("Received deleteAccount response");
 
-			channel.shutdown();
-
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
+		} catch (Exception e) {
+			return e.getMessage() + "\n";
 		}
 	}
 
 	public String transferTo(String qualifier, String accountFrom, String accountTo, int amount) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
+		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
 
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		UserServiceGrpc.UserServiceBlockingStub stub = UserServiceGrpc.newBlockingStub(channel);
-
-		try {
 			TransferToRequest request = TransferToRequest.newBuilder().setAccountFrom(accountFrom).setAccountTo(accountTo).setAmount(amount).build();
 			debug("Send transferTo request");
 			TransferToResponse response = stub.transferTo(request);
 			debug("Received transferTo response");
 
-			channel.shutdown();
-
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
+		} catch (Exception e) {
+			return e.getMessage() + "\n";
 		}
 	}
 
