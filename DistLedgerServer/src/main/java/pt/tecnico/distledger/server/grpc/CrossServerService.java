@@ -14,7 +14,8 @@ public class CrossServerService {
 	}
 
 	public void propagateState(Operation operation) {
-        // TODO: refactor hardcoded server names
+		// TODO: refactor hardcoded server names
+		// Can we assume there is only one secondary and hardcode it to B?
 		try (DistLedgerCrossServerServiceStubHandler stubHandler = namingServerService.getHandler("B")) {
 			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub();
 
