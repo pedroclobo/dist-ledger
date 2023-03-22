@@ -1,4 +1,4 @@
-package pt.tecnico.distledger.server.exceptions;
+package pt.tecnico.distledger.server.domain.exceptions;
 
 public class AccountAlreadyExistsException extends RuntimeException {
 	public AccountAlreadyExistsException(String account) {

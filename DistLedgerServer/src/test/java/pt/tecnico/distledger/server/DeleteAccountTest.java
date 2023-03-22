@@ -4,9 +4,9 @@ import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.operation.DeleteOp;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
-import pt.tecnico.distledger.server.exceptions.AccountHasBalanceException;
-import pt.tecnico.distledger.server.exceptions.AccountNotFoundException;
-import pt.tecnico.distledger.server.exceptions.DeleteBrokerException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountHasBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
+import pt.tecnico.distledger.server.domain.exceptions.DeleteBrokerException;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

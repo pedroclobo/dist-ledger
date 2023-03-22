@@ -1,4 +1,4 @@
-package pt.tecnico.distledger.server.exceptions;
+package pt.tecnico.distledger.server.domain.exceptions;
 
 public class InsufficientBalanceException extends RuntimeException {
 	public InsufficientBalanceException(String account, int amount) {
