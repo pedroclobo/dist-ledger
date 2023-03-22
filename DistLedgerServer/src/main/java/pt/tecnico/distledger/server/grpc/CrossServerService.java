@@ -29,6 +29,5 @@ public class CrossServerService {
 
 	public void shutdown() {
 		stubHandler.shutdown();
-		namingServerService.shutdown();
 	}
 }
