@@ -37,7 +37,7 @@ public class ServerState {
 	}
 
 	public synchronized List<Operation> getLedger() {
-		return ledger;
+		return new ArrayList<Operation>(ledger);
 	}
 
 	public synchronized void setLedger(List<Operation> ledger) {
