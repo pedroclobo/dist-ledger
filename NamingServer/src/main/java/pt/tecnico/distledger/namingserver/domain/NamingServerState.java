@@ -52,13 +52,13 @@ public class NamingServerState {
 
 	public synchronized List<ServerEntry> lookup(String serviceName, String qualifier) {
 		// Service or qualifier don't exist
-		if (!services.containsKey(serviceName) || (qualifier != null && !containsQualifier(qualifier))) {
+		if (!services.containsKey(serviceName) || (!qualifier.equals("") && !containsQualifier(qualifier))) {
 			return new ArrayList<>();
 		}
 
 		List<ServerEntry> servers = new ArrayList<>();
 
-		if (qualifier == null) {
+		if (qualifier.equals("")) {
 			for (ServerEntry server : services.get(serviceName).getServers()) {
 				servers.add(server);
 			}

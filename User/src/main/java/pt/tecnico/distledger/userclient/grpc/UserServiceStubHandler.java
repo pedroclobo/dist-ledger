@@ -7,7 +7,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
-public class UserServiceStubHandler implements AutoCloseable {
+public class UserServiceStubHandler {
 	private ManagedChannel channel;
 	private UserServiceGrpc.UserServiceBlockingStub stub;
 
@@ -21,8 +21,7 @@ public class UserServiceStubHandler implements AutoCloseable {
 		return stub;
 	}
 
-	@Override
-	public void close() throws Exception {
+	public void shutdown() {
 		channel.shutdown();
 	}
 }
