@@ -3,10 +3,10 @@ package pt.tecnico.distledger.server;
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
-import pt.tecnico.distledger.server.exceptions.AccountNotFoundException;
-import pt.tecnico.distledger.server.exceptions.InsufficientBalanceException;
-import pt.tecnico.distledger.server.exceptions.InvalidBalanceException;
-import pt.tecnico.distledger.server.exceptions.InvalidTransferException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
+import pt.tecnico.distledger.server.domain.exceptions.InsufficientBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.InvalidBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.InvalidTransferException;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

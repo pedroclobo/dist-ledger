@@ -2,8 +2,8 @@ package pt.tecnico.distledger.server;
 
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
-import pt.tecnico.distledger.server.exceptions.AccountAlreadyExistsException;
-import pt.tecnico.distledger.server.exceptions.CreateBrokerException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
+import pt.tecnico.distledger.server.domain.exceptions.CreateBrokerException;
 
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

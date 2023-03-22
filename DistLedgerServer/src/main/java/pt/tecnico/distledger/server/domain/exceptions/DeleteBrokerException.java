@@ -1,4 +1,4 @@
-package pt.tecnico.distledger.server.exceptions;
+package pt.tecnico.distledger.server.domain.exceptions;
 
 public class DeleteBrokerException extends RuntimeException {
 	public DeleteBrokerException() {

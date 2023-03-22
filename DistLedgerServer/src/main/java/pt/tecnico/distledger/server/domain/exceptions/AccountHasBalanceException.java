@@ -1,4 +1,4 @@
-package pt.tecnico.distledger.server.exceptions;
+package pt.tecnico.distledger.server.domain.exceptions;
 
 public class AccountHasBalanceException extends RuntimeException {
 	public AccountHasBalanceException(String account, int balance) {

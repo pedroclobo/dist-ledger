@@ -5,14 +5,14 @@ import pt.tecnico.distledger.server.domain.operation.DeleteOp;
 import pt.tecnico.distledger.server.domain.operation.Operation;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
 
-import pt.tecnico.distledger.server.exceptions.AccountAlreadyExistsException;
-import pt.tecnico.distledger.server.exceptions.AccountHasBalanceException;
-import pt.tecnico.distledger.server.exceptions.AccountNotFoundException;
-import pt.tecnico.distledger.server.exceptions.CreateBrokerException;
-import pt.tecnico.distledger.server.exceptions.DeleteBrokerException;
-import pt.tecnico.distledger.server.exceptions.InsufficientBalanceException;
-import pt.tecnico.distledger.server.exceptions.InvalidBalanceException;
-import pt.tecnico.distledger.server.exceptions.InvalidTransferException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountHasBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
+import pt.tecnico.distledger.server.domain.exceptions.CreateBrokerException;
+import pt.tecnico.distledger.server.domain.exceptions.DeleteBrokerException;
+import pt.tecnico.distledger.server.domain.exceptions.InsufficientBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.InvalidBalanceException;
+import pt.tecnico.distledger.server.domain.exceptions.InvalidTransferException;
 
 import java.util.ArrayList;
 import java.util.List;
