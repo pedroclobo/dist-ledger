@@ -6,6 +6,8 @@ import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLe
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
 
+import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,18 +24,25 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 		this.mode = mode;
 	}
 
+	private void checkIfInactive() {
+		if (mode.isInactive()) {
+			throw new ServerUnavailableException();
+		}
+	}
+
 	@Override
 	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
-		if (mode.isInactive()) {
-			responseObserver.onError(INVALID_ARGUMENT.withDescription("UNAVAILABLE").asRuntimeException());
-			return;
+		try {
+			checkIfInactive();
+
+			Operation operation = Operation.fromProtobuf(request.getState().getLedgerList().get(0));
+			operation.execute(state);
+
+			PropagateStateResponse response = PropagateStateResponse.newBuilder().build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage()).asRuntimeException());
 		}
-
-		Operation operation = Operation.fromProtobuf(request.getState().getLedgerList().get(0));
-		operation.execute(state);
-
-		PropagateStateResponse response = PropagateStateResponse.newBuilder().build();
-		responseObserver.onNext(response);
-		responseObserver.onCompleted();
 	}
 }
