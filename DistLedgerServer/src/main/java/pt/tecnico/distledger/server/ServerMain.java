@@ -8,6 +8,7 @@ import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.grpc.NamingServerService;
 import pt.tecnico.distledger.server.grpc.CrossServerService;
 
+import java.util.Scanner;
 import java.io.IOException;
 
 public class ServerMain {
@@ -57,11 +58,17 @@ public class ServerMain {
 		// Start the server
 		server.start();
 
-		// Do not exit the main thread. Wait until server is terminated.
-		server.awaitTermination();
+		System.out.println("Press enter to shutdown");
+		Scanner scanner = new Scanner(System.in);
+		scanner.nextLine();
 
 		// Unregister server from naming server.
 		namingServerService.delete("DistLedger", "localhost", port);
+		namingServerService.shutdown();
+
+		crossServerService.shutdown();
+
+		server.shutdown();
 	}
 
 }
