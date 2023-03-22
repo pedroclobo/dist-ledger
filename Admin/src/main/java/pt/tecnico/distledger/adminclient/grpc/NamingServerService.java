@@ -2,12 +2,14 @@ package pt.tecnico.distledger.adminclient.grpc;
 
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerServiceGrpc;
+import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Server;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
-import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 public class NamingServerService {
 
@@ -25,6 +27,17 @@ public class NamingServerService {
 		LookupResponse response = stub.lookup(request);
 
 		return response;
+	}
+
+	public Map<String, AdminServiceStubHandler> getHandlers() {
+		Map<String, AdminServiceStubHandler> handlers = new HashMap<>();
+		LookupResponse serverResponse = this.lookup("DistLedger", "");
+
+		for (Server server : serverResponse.getServerList()) {
+			handlers.put(server.getQualifier(), new AdminServiceStubHandler(server.getHost(), server.getPort()));
+		}
+
+		return handlers;
 	}
 
 	public AdminServiceStubHandler getHandler(String qualifier) {
