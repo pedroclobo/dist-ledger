@@ -6,26 +6,29 @@ import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Ledger
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
 
+import java.util.Map;
+
 public class CrossServerService {
 	private final NamingServerService namingServerService;
+	private StubHandler stubHandler;
 
 	public CrossServerService(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
+		this.stubHandler = new StubHandler(namingServerService);
 	}
 
 	public void propagateState(Operation operation) {
-		// TODO: refactor hardcoded server names
-		// Can we assume there is only one secondary and hardcode it to B?
-		try (DistLedgerCrossServerServiceStubHandler stubHandler = namingServerService.getHandler("B")) {
-			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub();
+		// FIXME: IOException
+		DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub("B");
 
-			LedgerState.Builder ledgerState = LedgerState.newBuilder();
-			ledgerState.addLedger(operation.toProtobuf());
-			PropagateStateRequest request = PropagateStateRequest.newBuilder().setState(ledgerState).build();
-			stub.propagateState(request);
+		LedgerState.Builder ledgerState = LedgerState.newBuilder();
+		ledgerState.addLedger(operation.toProtobuf());
+		PropagateStateRequest request = PropagateStateRequest.newBuilder().setState(ledgerState).build();
+		stub.propagateState(request);
+	}
 
-		} catch (Exception e) {
-			throw new RuntimeException("Error while connecting to server", e);
-		}
+	public void shutdown() {
+		stubHandler.shutdown();
+		namingServerService.shutdown();
 	}
 }

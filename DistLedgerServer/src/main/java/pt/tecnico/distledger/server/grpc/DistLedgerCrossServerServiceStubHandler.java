@@ -7,7 +7,7 @@ import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
-public class DistLedgerCrossServerServiceStubHandler implements AutoCloseable {
+public class DistLedgerCrossServerServiceStubHandler {
 	private ManagedChannel channel;
 	private DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub;
 
@@ -21,8 +21,7 @@ public class DistLedgerCrossServerServiceStubHandler implements AutoCloseable {
 		return stub;
 	}
 
-	@Override
-	public void close() throws Exception {
+	public void shutdown() {
 		channel.shutdown();
 	}
 }
