@@ -8,7 +8,6 @@ import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.ServerMode;
 import pt.tecnico.distledger.server.ServerMode.Mode;
-// import pt.tecnico.distledger.server.domain.operation.Operation;
 
 import io.grpc.stub.StreamObserver;
 
