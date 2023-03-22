@@ -6,6 +6,9 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 import pt.tecnico.distledger.userclient.grpc.UserServiceStubHandler;
 
+import java.util.Map;
+import java.util.HashMap;
+
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -25,14 +28,16 @@ public class UserService {
 	}
 
 	private NamingServerService namingServerService;
+	private Map<String, UserServiceStubHandler> stubHandlers;
 
 	public UserService(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
+		this.stubHandlers = namingServerService.getHandlers();
 	}
 
 	public String balance(String qualifier, String account) {
-		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
+		try {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 			BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
 			debug("Send balance request");
@@ -42,14 +47,12 @@ public class UserService {
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
-		} catch (Exception e) {
-			return e.getMessage() + "\n";
 		}
 	}
 
 	public String createAccount(String qualifier, String account) {
-		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
+		try {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 			CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send createAccount request");
@@ -59,14 +62,12 @@ public class UserService {
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
-		} catch (Exception e) {
-			return e.getMessage() + "\n";
 		}
 	}
 
 	public String deleteAccount(String qualifier, String account) {
-		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
+		try {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send deleteAccount request");
@@ -76,14 +77,12 @@ public class UserService {
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
-		} catch (Exception e) {
-			return e.getMessage() + "\n";
 		}
 	}
 
 	public String transferTo(String qualifier, String accountFrom, String accountTo, int amount) {
-		try (UserServiceStubHandler stubHandler = namingServerService.getHandler(qualifier)) {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub();
+		try {
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 			TransferToRequest request = TransferToRequest.newBuilder().setAccountFrom(accountFrom).setAccountTo(accountTo).setAmount(amount).build();
 			debug("Send transferTo request");
@@ -93,12 +92,11 @@ public class UserService {
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
 			return e.getStatus().getDescription() + "\n";
-		} catch (Exception e) {
-			return e.getMessage() + "\n";
 		}
 	}
 
 	public void shutdown() {
+		stubHandlers.values().forEach(UserServiceStubHandler::shutdown);
 		namingServerService.shutdown();
 	}
 }
