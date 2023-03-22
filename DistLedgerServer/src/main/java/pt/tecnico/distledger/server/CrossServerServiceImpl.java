@@ -29,26 +29,7 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 			return;
 		}
 
-		Operation operation = null;
-
-		// TODO: convert to Operation
-		for (DistLedgerCommonDefinitions.Operation op : request.getState().getLedgerList()) {
-			switch (op.getType()) {
-			case OP_CREATE_ACCOUNT:
-				operation = new CreateOp(op.getUserId());
-				break;
-			case OP_DELETE_ACCOUNT:
-				operation = new DeleteOp(op.getUserId());
-				break;
-			case OP_TRANSFER_TO:
-				operation = new TransferOp(op.getUserId(), op.getDestUserId(), op.getAmount());
-				break;
-			case OP_UNSPECIFIED:
-				break;
-			default:
-				break;
-			}
-		}
+		Operation operation = Operation.fromProtobuf(request.getState().getLedgerList().get(0));
 		operation.execute(state);
 
 		PropagateStateResponse response = PropagateStateResponse.newBuilder().build();

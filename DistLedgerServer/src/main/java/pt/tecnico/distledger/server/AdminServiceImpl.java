@@ -46,20 +46,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 		LedgerState.Builder ledgerBuilder = LedgerState.newBuilder();
 
 		for (pt.tecnico.distledger.server.domain.operation.Operation op : state.getLedger()) {
-			Operation.Builder operation = Operation.newBuilder();
-
-			switch (op.getType()) {
-			case "CreateOp":
-				operation.setType(OperationType.OP_CREATE_ACCOUNT).setUserId(op.getAccount());
-				break;
-			case "DeleteOp":
-				operation.setType(OperationType.OP_DELETE_ACCOUNT).setUserId(op.getAccount());
-				break;
-			case "TransferOp":
-				operation.setType(OperationType.OP_TRANSFER_TO).setUserId(op.getAccount()).setDestUserId(((TransferOp) op).getDestAccount()).setAmount(((TransferOp) op).getAmount());
-				break;
-			}
-			ledgerBuilder.addLedger(operation);
+			ledgerBuilder.addLedger(op.toProtobuf());
 		}
 
 		getLedgerStateResponse response = responseBuilder.setLedgerState(ledgerBuilder).build();

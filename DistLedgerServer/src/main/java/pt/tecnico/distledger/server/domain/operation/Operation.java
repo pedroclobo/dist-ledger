@@ -1,8 +1,9 @@
 package pt.tecnico.distledger.server.domain.operation;
 
 import pt.tecnico.distledger.server.domain.ServerState;
+import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 
-public class Operation {
+public abstract class Operation {
 	private String account;
 
 	public Operation(String fromAccount) {
@@ -24,8 +25,18 @@ public class Operation {
 	public void execute(ServerState state) {
 	}
 
-	public String toString() {
-		return "Operation{" + "account='" + account + '\'' + '}';
-	}
+	public abstract DistLedgerCommonDefinitions.Operation toProtobuf();
 
+	public static Operation fromProtobuf(DistLedgerCommonDefinitions.Operation op) {
+		switch (op.getType()) {
+		case OP_CREATE_ACCOUNT:
+			return new CreateOp(op.getUserId());
+		case OP_DELETE_ACCOUNT:
+			return new DeleteOp(op.getUserId());
+		case OP_TRANSFER_TO:
+			return new TransferOp(op.getUserId(), op.getDestUserId(), op.getAmount());
+		default:
+			return null;
+		}
+	};
 }
