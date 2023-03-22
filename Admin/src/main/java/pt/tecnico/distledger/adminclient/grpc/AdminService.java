@@ -9,6 +9,9 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
+import java.util.Map;
+import java.util.HashMap;
+
 public class AdminService {
 
 	/**
@@ -24,63 +27,48 @@ public class AdminService {
 	}
 
 	private NamingServerService namingServerService;
+	private Map<String, AdminServiceStubHandler> stubHandlers;
 
 	public AdminService(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
+		this.stubHandlers = namingServerService.getHandlers();
 	}
 
 	public String activate(String qualifier) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
-
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		AdminServiceGrpc.AdminServiceBlockingStub stub = AdminServiceGrpc.newBlockingStub(channel);
+		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 		ActivateRequest request = ActivateRequest.newBuilder().build();
 		debug("Send activate request");
 		stub.activate(request);
 		debug("Received activate response");
 
-		channel.shutdown();
-
 		return "OK\n";
 	}
 
 	public String deactivate(String qualifier) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
-
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		AdminServiceGrpc.AdminServiceBlockingStub stub = AdminServiceGrpc.newBlockingStub(channel);
+		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 		DeactivateRequest request = DeactivateRequest.newBuilder().build();
 		debug("Send deactivate request");
 		stub.deactivate(request);
 		debug("Received deactivate response");
 
-		channel.shutdown();
-
 		return "OK\n";
 	}
 
 	public String getLedgerState(String qualifier) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
-		String target = serverResponse.getServer(0).getHost() + ":" + serverResponse.getServer(0).getPort();
-
-		ManagedChannel channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
-		AdminServiceGrpc.AdminServiceBlockingStub stub = AdminServiceGrpc.newBlockingStub(channel);
+		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
 
 		getLedgerStateRequest request = getLedgerStateRequest.newBuilder().build();
 		debug("Send getLedgerState request");
 		getLedgerStateResponse response = stub.getLedgerState(request);
 		debug(String.format("Received getLedgerState response:%n%s", response));
 
-		channel.shutdown();
-
 		return "OK\n" + response + "\n";
 	}
 
 	public void shutdown() {
+		stubHandlers.values().forEach(AdminServiceStubHandler::shutdown);
 		namingServerService.shutdown();
 	}
 }
