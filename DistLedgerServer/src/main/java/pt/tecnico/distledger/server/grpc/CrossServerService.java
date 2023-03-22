@@ -20,24 +20,7 @@ public class CrossServerService {
 			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub();
 
 			LedgerState.Builder ledgerState = LedgerState.newBuilder();
-			DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
-
-			switch (operation.getType()) {
-			case "CreateOp":
-				op.setType(DistLedgerCommonDefinitions.OperationType.OP_CREATE_ACCOUNT).setUserId(operation.getAccount());
-				break;
-			case "DeleteOp":
-				op.setType(DistLedgerCommonDefinitions.OperationType.OP_DELETE_ACCOUNT).setUserId(operation.getAccount());
-				break;
-			case "TransferOp":
-				op.setType(DistLedgerCommonDefinitions.OperationType.OP_TRANSFER_TO).setUserId(operation.getAccount()).setDestUserId(((TransferOp) operation).getDestAccount())
-				    .setAmount(((TransferOp) operation).getAmount());
-				break;
-			default:
-				break;
-			}
-
-			ledgerState.addLedger(op);
+			ledgerState.addLedger(operation.toProtobuf());
 			PropagateStateRequest request = PropagateStateRequest.newBuilder().setState(ledgerState).build();
 			stub.propagateState(request);
 
