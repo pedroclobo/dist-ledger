@@ -23,6 +23,10 @@ public class DistLedgerCrossServerServiceStubHandler {
 		return stub;
 	}
 
+	public ManagedChannel getChannel() {
+		return channel;
+	}
+
 	public void shutdown() {
 		channel.shutdown();
 	}
