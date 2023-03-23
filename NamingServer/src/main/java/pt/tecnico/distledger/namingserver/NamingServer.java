@@ -7,6 +7,7 @@ import io.grpc.Server;
 import io.grpc.ServerBuilder;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class NamingServer {
 
@@ -25,8 +26,12 @@ public class NamingServer {
 		// Start the server
 		server.start();
 
+		System.out.println("Press enter to shutdown");
+		Scanner scanner = new Scanner(System.in);
+		scanner.nextLine();
+
 		// Do not exit the main thread. Wait until server is terminated.
-		server.awaitTermination();
+		server.shutdown();
 	}
 
 }
