@@ -44,38 +44,41 @@ public class CommandParser {
 			debug(String.format("input line: %s", line));
 			debug(String.format("command: %s", cmd));
 
-			switch (cmd) {
-			case ACTIVATE:
-				this.activate(line);
-				break;
+			try {
+				switch (cmd) {
+				case ACTIVATE:
+					this.activate(line);
+					break;
 
-			case DEACTIVATE:
-				this.deactivate(line);
-				break;
+				case DEACTIVATE:
+					this.deactivate(line);
+					break;
 
-			case GET_LEDGER_STATE:
-				this.dump(line);
-				break;
+				case GET_LEDGER_STATE:
+					this.dump(line);
+					break;
 
-			case GOSSIP:
-				this.gossip(line);
-				break;
+				case GOSSIP:
+					this.gossip(line);
+					break;
 
-			case HELP:
-				debug("Call printUsage()");
-				this.printUsage();
-				break;
+				case HELP:
+					debug("Call printUsage()");
+					this.printUsage();
+					break;
 
-			case EXIT:
-				exit = true;
-				debug("Exiting");
-				break;
+				case EXIT:
+					exit = true;
+					debug("Exiting");
+					break;
 
-			default:
-				debug("Command doesn't exist");
-				break;
+				default:
+					debug("Command doesn't exist");
+					break;
+				}
+			} catch (Exception e) {
+				System.err.println(e.getMessage());
 			}
-
 		}
 	}
 
