@@ -18,7 +18,6 @@ public class CrossServerService {
 	}
 
 	public void propagateState(Operation operation) {
-		// FIXME: IOException
 		try {
 			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub(
 			    "B");
