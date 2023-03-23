@@ -32,7 +32,7 @@ public class AdminClientMain {
 	 * instance to handle user input, and finally shuts down the AdminService
 	 * instance.
 	 */
-	public static void main() {
+	public static void main(String args[]) {
 		debug("Create CommandParser and AdminService");
 		AdminService adminService = new AdminService(
 		    new NamingServerService("localhost", 5001));
