@@ -4,18 +4,26 @@ import pt.tecnico.distledger.adminclient.grpc.AdminService;
 
 import java.util.Scanner;
 
+/**
+ * The CommandParser class is responsible for parsing user input and calling the
+ * corresponding methods of the UserService class based on the provided command.
+ */
 public class CommandParser {
 
 	/**
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+	private static final boolean DEBUG_FLAG = (System
+	    .getProperty("debug") != null);
 
-	/** Helper method to print debug messages. */
+	/**
+	 * Helper method to print debug messages.
+	 */
 	private static void debug(String debugMessage) {
-		if (DEBUG_FLAG)
+		if (DEBUG_FLAG) {
 			System.err.println(debugMessage);
+		}
 	}
 
 	private static final String SPACE = " ";
@@ -28,10 +36,18 @@ public class CommandParser {
 
 	private final AdminService adminService;
 
+	/**
+	 * Constructs and initilizes the CommandParser
+	 *
+	 * @param adminService adminService
+	 */
 	public CommandParser(AdminService adminService) {
 		this.adminService = adminService;
 	}
 
+	/**
+	 * Parses user input from the console and executes corresponding commands.
+	 */
 	void parseInput() {
 
 		Scanner scanner = new Scanner(System.in);
@@ -82,6 +98,13 @@ public class CommandParser {
 		}
 	}
 
+	/**
+	 * This method activates a server and prints out the result of calling the
+	 * adminService.activate() method.
+	 *
+	 * @param line the input line that contains the command and server to
+	 *             activate
+	 */
 	private void activate(String line) {
 		String[] split = line.split(SPACE);
 
@@ -97,6 +120,13 @@ public class CommandParser {
 		System.out.println(adminService.activate(server));
 	}
 
+	/**
+	 * This method deactivates a server and prints out the result of calling the
+	 * adminService.activate() method.
+	 *
+	 * @param line the input line that contains the command and server to
+	 *             activate
+	 */
 	private void deactivate(String line) {
 		String[] split = line.split(SPACE);
 
@@ -112,6 +142,11 @@ public class CommandParser {
 		System.out.println(adminService.deactivate(server));
 	}
 
+	/**
+	 * This method prints the ledger state of a server.
+	 *
+	 * @param line the input command
+	 */
 	private void dump(String line) {
 		String[] split = line.split(SPACE);
 
@@ -133,8 +168,13 @@ public class CommandParser {
 		System.out.println("TODO: implement gossip command (only for Phase-3)");
 	}
 
+	/**
+	 * This method prints the available commands.
+	 */
 	private void printUsage() {
-		System.out.println("Usage:\n" + "- activate <server>\n" + "- deactivate <server>\n" + "- getLedgerState <server>\n" + "- gossip <server>\n" + "- exit\n");
+		System.out.println("Usage:\n" + "- activate <server>\n"
+		    + "- deactivate <server>\n" + "- getLedgerState <server>\n"
+		    + "- gossip <server>\n" + "- exit\n");
 	}
 
 }
