@@ -6,9 +6,6 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 import pt.tecnico.distledger.userclient.grpc.UserServiceStubHandler;
 
-import java.util.Map;
-import java.util.HashMap;
-
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -28,16 +25,16 @@ public class UserService {
 	}
 
 	private NamingServerService namingServerService;
-	private Map<String, UserServiceStubHandler> stubHandlers;
+	private StubHandler stubHandler;
 
 	public UserService(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
-		this.stubHandlers = namingServerService.getHandlers();
+		this.stubHandler = new StubHandler(namingServerService);
 	}
 
 	public String balance(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
 			BalanceRequest request = BalanceRequest.newBuilder().setUserId(account).build();
 			debug("Send balance request");
@@ -52,7 +49,7 @@ public class UserService {
 
 	public String createAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
 			CreateAccountRequest request = CreateAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send createAccount request");
@@ -67,7 +64,7 @@ public class UserService {
 
 	public String deleteAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder().setUserId(account).build();
 			debug("Send deleteAccount request");
@@ -82,7 +79,7 @@ public class UserService {
 
 	public String transferTo(String qualifier, String accountFrom, String accountTo, int amount) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
 			TransferToRequest request = TransferToRequest.newBuilder().setAccountFrom(accountFrom).setAccountTo(accountTo).setAmount(amount).build();
 			debug("Send transferTo request");
@@ -96,7 +93,7 @@ public class UserService {
 	}
 
 	public void shutdown() {
-		stubHandlers.values().forEach(UserServiceStubHandler::shutdown);
+		stubHandler.shutdown();
 		namingServerService.shutdown();
 	}
 }
