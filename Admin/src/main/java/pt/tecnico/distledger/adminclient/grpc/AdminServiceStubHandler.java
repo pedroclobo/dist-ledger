@@ -35,6 +35,10 @@ public class AdminServiceStubHandler {
 		return stub;
 	}
 
+	public ManagedChannel getChannel() {
+		return channel;
+	}
+
 	/**
 	 * Shuts down the gRPC channel.
 	 */

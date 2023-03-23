@@ -5,6 +5,9 @@ import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Ledger
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ConnectivityState;
+
 import java.util.Map;
 
 /**
@@ -27,6 +30,45 @@ public class StubHandler {
 	}
 
 	/**
+	 * Checks if the channel for the given server qualifier should be replaced.
+	 *
+	 * @param qualifier the server qualifier
+	 */
+	private boolean shouldReplaceChannel(String qualifier) {
+		if (!stubHandlers.containsKey(qualifier)) {
+			return true;
+		}
+
+		// This is done twice to refresh the channel state.
+		ConnectivityState state = stubHandlers.get(qualifier)
+		                                      .getChannel()
+		                                      .getState(true);
+		state = stubHandlers.get(qualifier)
+		                    .getChannel()
+		                    .getState(true);
+
+		return state == ConnectivityState.TRANSIENT_FAILURE
+		    || state == ConnectivityState.CONNECTING
+		    || state == ConnectivityState.SHUTDOWN;
+	}
+
+	/**
+	 * Replaces the channel for the given server qualifier.
+	 *
+	 * @param qualifier the server qualifier
+	 */
+	private void replaceChannel(String qualifier) {
+		if (!stubHandlers.containsKey(qualifier)) {
+			return;
+		}
+
+		stubHandlers.get(qualifier)
+		            .shutdown();
+		stubHandlers.replace(qualifier,
+		    namingServerService.getHandler(qualifier));
+	}
+
+	/**
 	 * Returns the gRPC stub for the AdminService service.
 	 *
 	 * @param qualifier the server qualifier
@@ -37,6 +79,8 @@ public class StubHandler {
 			if (!stubHandlers.containsKey(qualifier)) {
 				stubHandlers.put(qualifier,
 				    namingServerService.getHandler(qualifier));
+			} else if (shouldReplaceChannel(qualifier)) {
+				replaceChannel(qualifier);
 			}
 
 			return stubHandlers.get(qualifier).getStub();
