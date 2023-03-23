@@ -23,6 +23,10 @@ public class UserServiceStubHandler {
 		return stub;
 	}
 
+	public ManagedChannel getChannel() {
+		return channel;
+	}
+
 	public void shutdown() {
 		channel.shutdown();
 	}
