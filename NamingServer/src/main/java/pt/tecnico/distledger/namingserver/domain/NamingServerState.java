@@ -8,9 +8,14 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class NamingServerState {
+
 	private Map<String, ServiceEntry> services = new HashMap<>();
 
+	private static boolean DEBUG_FLAG = false;
+
 	public NamingServerState() {
+		DEBUG_FLAG = System.getProperty("debug") != null;
+		debug("NamingServerState initialized");
 	}
 
 	public Map<String, ServiceEntry> getServices() {
@@ -19,6 +24,7 @@ public class NamingServerState {
 
 	public synchronized void setServices(Map<String, ServiceEntry> services) {
 		this.services = services;
+		debug("Services changed");
 	}
 
 	private synchronized boolean containsQualifier(String qualifier) {
@@ -50,6 +56,9 @@ public class NamingServerState {
 
 			services.put(serviceName, serviceEntry);
 		}
+		debug(String.format(
+		    "Added server with service='%s', qualifier='%s' and host:port='%s:%d'",
+		    serviceName, qualifier, host, port));
 	}
 
 	public synchronized List<ServerEntry> lookup(String serviceName,
@@ -84,6 +93,15 @@ public class NamingServerState {
 		if (services.containsKey(serviceName)) {
 			ServiceEntry serviceEntry = services.get(serviceName);
 			serviceEntry.removeServer(host, port);
+			debug(String.format(
+			    "Removed server with service='%s' and host:port='%s:%d'",
+			    serviceName, host, port));
 		}
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }
