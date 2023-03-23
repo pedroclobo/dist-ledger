@@ -4,6 +4,8 @@ import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedge
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Server;
 
+import pt.tecnico.distledger.adminclient.exceptions.ServerNotFoundException;
+
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -42,6 +44,11 @@ public class NamingServerService {
 
 	public AdminServiceStubHandler getHandler(String qualifier) {
 		LookupResponse serverResponse = this.lookup("DistLedger", qualifier);
+
+		if (serverResponse.getServerCount() == 0) {
+			throw new ServerNotFoundException(qualifier);
+		}
+
 		String host = serverResponse.getServer(0).getHost();
 		int port = serverResponse.getServer(0).getPort();
 

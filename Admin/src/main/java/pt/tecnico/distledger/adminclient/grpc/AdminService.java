@@ -9,8 +9,7 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
-import java.util.Map;
-import java.util.HashMap;
+import io.grpc.StatusRuntimeException;
 
 public class AdminService {
 
@@ -27,48 +26,61 @@ public class AdminService {
 	}
 
 	private NamingServerService namingServerService;
-	private Map<String, AdminServiceStubHandler> stubHandlers;
+	private StubHandler stubHandler;
 
 	public AdminService(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
-		this.stubHandlers = namingServerService.getHandlers();
+		this.stubHandler = new StubHandler(namingServerService);
 	}
 
 	public String activate(String qualifier) {
-		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+		try {
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
-		ActivateRequest request = ActivateRequest.newBuilder().build();
-		debug("Send activate request");
-		stub.activate(request);
-		debug("Received activate response");
+			ActivateRequest request = ActivateRequest.newBuilder().build();
+			debug("Send activate request");
+			stub.activate(request);
+			debug("Received activate response");
 
-		return "OK\n";
+			return "OK\n";
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
+
 	}
 
 	public String deactivate(String qualifier) {
-		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+		try {
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
-		DeactivateRequest request = DeactivateRequest.newBuilder().build();
-		debug("Send deactivate request");
-		stub.deactivate(request);
-		debug("Received deactivate response");
+			DeactivateRequest request = DeactivateRequest.newBuilder().build();
+			debug("Send deactivate request");
+			stub.deactivate(request);
+			debug("Received deactivate response");
 
-		return "OK\n";
+			return "OK\n";
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
 	}
 
 	public String getLedgerState(String qualifier) {
-		AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandlers.get(qualifier).getStub();
+		try {
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(qualifier);
 
-		getLedgerStateRequest request = getLedgerStateRequest.newBuilder().build();
-		debug("Send getLedgerState request");
-		getLedgerStateResponse response = stub.getLedgerState(request);
-		debug(String.format("Received getLedgerState response:%n%s", response));
+			getLedgerStateRequest request = getLedgerStateRequest.newBuilder().build();
+			debug("Send getLedgerState request");
+			getLedgerStateResponse response = stub.getLedgerState(request);
+			debug(String.format("Received getLedgerState response:%n%s", response));
 
-		return "OK\n" + response + "\n";
+			return "OK\n" + response + "\n";
+		} catch (StatusRuntimeException e) {
+			return e.getStatus().getDescription() + "\n";
+		}
 	}
 
 	public void shutdown() {
-		stubHandlers.values().forEach(AdminServiceStubHandler::shutdown);
+		stubHandler.shutdown();
 		namingServerService.shutdown();
 	}
 }
