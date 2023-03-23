@@ -23,8 +23,9 @@ public class AdminServiceStubHandler {
 	 */
 	public AdminServiceStubHandler(String host, int port) {
 		String target = host + ":" + port;
-		this.channel = ManagedChannelBuilder.forTarget(target).usePlaintext()
-		    .build();
+		this.channel = ManagedChannelBuilder.forTarget(target)
+		                                    .usePlaintext()
+		                                    .build();
 		this.stub = AdminServiceGrpc.newBlockingStub(channel);
 	}
 

@@ -104,7 +104,8 @@ public class ServerState {
 			throw new InvalidBalanceException(amount);
 		} else if (this.accounts.get(operation.getAccount()) < amount) {
 			int fromAccountBalance = this.accounts.get(operation.getAccount());
-			throw new InsufficientBalanceException(fromAccount, fromAccountBalance);
+			throw new InsufficientBalanceException(fromAccount,
+			    fromAccountBalance);
 		}
 
 		addOperationToLedger(operation);

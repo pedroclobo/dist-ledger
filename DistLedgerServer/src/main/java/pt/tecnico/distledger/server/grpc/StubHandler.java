@@ -17,15 +17,19 @@ public class StubHandler {
 		this.stubHandlers = namingServerService.getHandlers();
 	}
 
-	public DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub getStub(String qualifier) {
+	public DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub getStub(
+	    String qualifier) {
 		if (!stubHandlers.containsKey(qualifier)) {
-			stubHandlers.put(qualifier, namingServerService.getHandler(qualifier));
+			stubHandlers.put(qualifier,
+			    namingServerService.getHandler(qualifier));
 		}
 
-		return stubHandlers.get(qualifier).getStub();
+		return stubHandlers.get(qualifier)
+		                   .getStub();
 	}
 
 	public void shutdown() {
-		stubHandlers.values().forEach(DistLedgerCrossServerServiceStubHandler::shutdown);
+		stubHandlers.values()
+		            .forEach(DistLedgerCrossServerServiceStubHandler::shutdown);
 	}
 }

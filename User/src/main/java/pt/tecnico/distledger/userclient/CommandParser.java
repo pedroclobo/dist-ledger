@@ -10,7 +10,8 @@ public class CommandParser {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty(
+	    "debug") != null);
 
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
@@ -39,7 +40,8 @@ public class CommandParser {
 
 		while (!exit) {
 			System.out.print("> ");
-			String line = scanner.nextLine().trim();
+			String line = scanner.nextLine()
+			                     .trim();
 			String cmd = line.split(SPACE)[0];
 			debug(String.format("input line: %s", line));
 			debug(String.format("command: %s", cmd));
@@ -156,7 +158,10 @@ public class CommandParser {
 	}
 
 	private void printUsage() {
-		System.out.println("Usage:\n" + "- createAccount <server> <username>\n" + "- deleteAccount <server> <username>\n" + "- balance <server> <username>\n"
-		    + "- transferTo <server> <username_from> <username_to> <amount>\n" + "- exit\n");
+		System.out.println("Usage:\n" + "- createAccount <server> <username>\n"
+		    + "- deleteAccount <server> <username>\n"
+		    + "- balance <server> <username>\n"
+		    + "- transferTo <server> <username_from> <username_to> <amount>\n"
+		    + "- exit\n");
 	}
 }

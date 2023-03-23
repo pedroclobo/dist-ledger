@@ -24,7 +24,8 @@ public class NamingServerState {
 	private synchronized boolean containsQualifier(String qualifier) {
 		for (ServiceEntry service : services.values()) {
 			for (ServerEntry server : service.getServers()) {
-				if (server.getQualifier().equals(qualifier)) {
+				if (server.getQualifier()
+				          .equals(qualifier)) {
 					return true;
 				}
 			}
@@ -33,7 +34,8 @@ public class NamingServerState {
 		return false;
 	}
 
-	public synchronized void register(String serviceName, String qualifier, String host, int port) {
+	public synchronized void register(String serviceName, String qualifier,
+	    String host, int port) {
 		if (services.containsKey(serviceName)) {
 			ServiceEntry serviceEntry = services.get(serviceName);
 			if (serviceEntry.containsServer(host, port)) {
@@ -50,21 +52,26 @@ public class NamingServerState {
 		}
 	}
 
-	public synchronized List<ServerEntry> lookup(String serviceName, String qualifier) {
+	public synchronized List<ServerEntry> lookup(String serviceName,
+	    String qualifier) {
 		// Service or qualifier don't exist
-		if (!services.containsKey(serviceName) || (!qualifier.equals("") && !containsQualifier(qualifier))) {
+		if (!services.containsKey(serviceName)
+		    || (!qualifier.equals("") && !containsQualifier(qualifier))) {
 			return new ArrayList<>();
 		}
 
 		List<ServerEntry> servers = new ArrayList<>();
 
 		if (qualifier.equals("")) {
-			for (ServerEntry server : services.get(serviceName).getServers()) {
+			for (ServerEntry server : services.get(serviceName)
+			                                  .getServers()) {
 				servers.add(server);
 			}
 		} else {
-			for (ServerEntry server : services.get(serviceName).getServers()) {
-				if (server.getQualifier().equals(qualifier)) {
+			for (ServerEntry server : services.get(serviceName)
+			                                  .getServers()) {
+				if (server.getQualifier()
+				          .equals(qualifier)) {
 					servers.add(server);
 				}
 			}

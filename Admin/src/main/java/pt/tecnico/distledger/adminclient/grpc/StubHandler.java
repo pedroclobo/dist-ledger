@@ -83,7 +83,8 @@ public class StubHandler {
 				replaceChannel(qualifier);
 			}
 
-			return stubHandlers.get(qualifier).getStub();
+			return stubHandlers.get(qualifier)
+			                   .getStub();
 		} catch (RuntimeException e) {
 			throw e;
 		}
@@ -93,6 +94,7 @@ public class StubHandler {
 	 * Shuts down the gRPC channels.
 	 */
 	public void shutdown() {
-		stubHandlers.values().forEach(AdminServiceStubHandler::shutdown);
+		stubHandlers.values()
+		            .forEach(AdminServiceStubHandler::shutdown);
 	}
 }

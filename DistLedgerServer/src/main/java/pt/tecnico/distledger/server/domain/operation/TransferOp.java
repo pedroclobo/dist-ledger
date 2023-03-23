@@ -37,14 +37,17 @@ public class TransferOp extends Operation {
 	@Override
 	public DistLedgerCommonDefinitions.Operation toProtobuf() {
 		DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
-		op.setType(DistLedgerCommonDefinitions.OperationType.OP_TRANSFER_TO).setUserId(this.getAccount()).setDestUserId(((TransferOp) this).getDestAccount())
-		    .setAmount(((TransferOp) this).getAmount());
+		op.setType(DistLedgerCommonDefinitions.OperationType.OP_TRANSFER_TO)
+		  .setUserId(this.getAccount())
+		  .setDestUserId(((TransferOp) this).getDestAccount())
+		  .setAmount(((TransferOp) this).getAmount());
 
 		return op.build();
 	}
 
 	public String toString() {
-		return "TransferOp{" + "fromAccount='" + getAccount() + '\'' + "destAccount='" + destAccount + '\'' + ", amount=" + amount + '}';
+		return "TransferOp{" + "fromAccount='" + getAccount() + '\''
+		    + "destAccount='" + destAccount + '\'' + ", amount=" + amount + '}';
 	}
 
 }
