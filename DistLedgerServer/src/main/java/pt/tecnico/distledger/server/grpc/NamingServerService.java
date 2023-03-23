@@ -20,17 +20,28 @@ public class NamingServerService {
 
 	public NamingServerService(String host, int port) {
 		String target = host + ":" + port;
-		channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
+		channel = ManagedChannelBuilder.forTarget(target)
+		                               .usePlaintext()
+		                               .build();
 		stub = NamingServerServiceGrpc.newBlockingStub(channel);
 	}
 
-	public void register(String serviceName, String qualifier, String host, int port) {
-		RegisterRequest request = RegisterRequest.newBuilder().setServiceName(serviceName).setQualifier(qualifier).setHost(host).setPort(port).build();
+	public void register(String serviceName, String qualifier, String host,
+	    int port) {
+		RegisterRequest request = RegisterRequest.newBuilder()
+		                                         .setServiceName(serviceName)
+		                                         .setQualifier(qualifier)
+		                                         .setHost(host)
+		                                         .setPort(port)
+		                                         .build();
 		RegisterResponse response = stub.register(request);
 	}
 
 	public LookupResponse lookup(String serviceName, String qualifier) {
-		LookupRequest request = LookupRequest.newBuilder().setServiceName(serviceName).setQualifier(qualifier).build();
+		LookupRequest request = LookupRequest.newBuilder()
+		                                     .setServiceName(serviceName)
+		                                     .setQualifier(qualifier)
+		                                     .build();
 		LookupResponse response = stub.lookup(request);
 
 		return response;
@@ -41,27 +52,36 @@ public class NamingServerService {
 		LookupResponse serverResponse = this.lookup("DistLedger", "");
 
 		for (Server server : serverResponse.getServerList()) {
-			handlers.put(server.getQualifier(), new DistLedgerCrossServerServiceStubHandler(server.getHost(), server.getPort()));
+			handlers.put(server.getQualifier(),
+			    new DistLedgerCrossServerServiceStubHandler(server.getHost(),
+			        server.getPort()));
 		}
 
 		return handlers;
 	}
 
-	public DistLedgerCrossServerServiceStubHandler getHandler(String qualifier) {
+	public DistLedgerCrossServerServiceStubHandler getHandler(
+	    String qualifier) {
 		LookupResponse serverResponse = this.lookup("DistLedger", qualifier);
 
 		if (serverResponse.getServerCount() == 0) {
 			throw new ServerNotFoundException(qualifier);
 		}
 
-		String host = serverResponse.getServer(0).getHost();
-		int port = serverResponse.getServer(0).getPort();
+		String host = serverResponse.getServer(0)
+		                            .getHost();
+		int port = serverResponse.getServer(0)
+		                         .getPort();
 
 		return new DistLedgerCrossServerServiceStubHandler(host, port);
 	}
 
 	public void delete(String serviceName, String host, int port) {
-		DeleteRequest request = DeleteRequest.newBuilder().setServiceName(serviceName).setHost(host).setPort(port).build();
+		DeleteRequest request = DeleteRequest.newBuilder()
+		                                     .setServiceName(serviceName)
+		                                     .setHost(host)
+		                                     .setPort(port)
+		                                     .build();
 		DeleteResponse response = stub.delete(request);
 	}
 

@@ -19,16 +19,19 @@ public class StubHandler {
 	public UserServiceGrpc.UserServiceBlockingStub getStub(String qualifier) {
 		try {
 			if (!stubHandlers.containsKey(qualifier)) {
-				stubHandlers.put(qualifier, namingServerService.getHandler(qualifier));
+				stubHandlers.put(qualifier,
+				    namingServerService.getHandler(qualifier));
 			}
 
-			return stubHandlers.get(qualifier).getStub();
+			return stubHandlers.get(qualifier)
+			                   .getStub();
 		} catch (RuntimeException e) {
 			throw e;
 		}
 	}
 
 	public void shutdown() {
-		stubHandlers.values().forEach(UserServiceStubHandler::shutdown);
+		stubHandlers.values()
+		            .forEach(UserServiceStubHandler::shutdown);
 	}
 }

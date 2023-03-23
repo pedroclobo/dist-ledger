@@ -13,7 +13,8 @@ import java.io.IOException;
 
 public class ServerMain {
 
-	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty(
+	    "debug") != null);
 
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
@@ -21,7 +22,8 @@ public class ServerMain {
 			System.err.println(debugMessage);
 	}
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args)
+	    throws IOException, InterruptedException {
 		// Receive and print arguments.
 		debug(String.format("Received %d arguments", args.length));
 		for (int i = 0; i < args.length; i++) {
@@ -31,7 +33,8 @@ public class ServerMain {
 		// Check arguments.
 		if (args.length < 1) {
 			System.err.println("Argument(s) missing!");
-			System.err.printf("Usage: java %s port qualifier%n", ServerMain.class.getName());
+			System.err.printf("Usage: java %s port qualifier%n",
+			    ServerMain.class.getName());
 			return;
 		}
 
@@ -40,20 +43,27 @@ public class ServerMain {
 		final String qualifer = args[1];
 
 		// Register server on naming server.
-		final NamingServerService namingServerService = new NamingServerService("localhost", 5001);
+		final NamingServerService namingServerService = new NamingServerService(
+		    "localhost", 5001);
 		namingServerService.register("DistLedger", qualifer, "localhost", port);
 
 		// Initialize services.
 		final ServerState state = new ServerState();
 		final ServerMode mode = new ServerMode();
 		final ServerRole role = new ServerRole(qualifer);
-		final CrossServerService crossServerService = new CrossServerService(namingServerService);
+		final CrossServerService crossServerService = new CrossServerService(
+		    namingServerService);
 		final BindableService admin = new AdminServiceImpl(state, mode);
 		final BindableService cross = new CrossServerServiceImpl(state, mode);
-		final BindableService user = new UserServiceImpl(state, mode, role, crossServerService);
+		final BindableService user = new UserServiceImpl(state, mode, role,
+		    crossServerService);
 
 		// Create a new server to listen on port.
-		Server server = ServerBuilder.forPort(port).addService(admin).addService(user).addService(cross).build();
+		Server server = ServerBuilder.forPort(port)
+		                             .addService(admin)
+		                             .addService(user)
+		                             .addService(cross)
+		                             .build();
 
 		// Start the server
 		server.start();

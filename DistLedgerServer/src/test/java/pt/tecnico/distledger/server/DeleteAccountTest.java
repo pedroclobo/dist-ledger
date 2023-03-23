@@ -33,9 +33,15 @@ class DeleteAccountTest {
 		state.addCreateOperation(op1);
 		state.addDeleteOperation(op2);
 
-		assertEquals(state.getLedger().size(), 2);
-		assertEquals(state.getLedger().get(0), op1);
-		assertEquals(state.getLedger().get(1), op2);
+		assertEquals(state.getLedger()
+		                  .size(),
+		    2);
+		assertEquals(state.getLedger()
+		                  .get(0),
+		    op1);
+		assertEquals(state.getLedger()
+		                  .get(1),
+		    op2);
 	}
 
 	// Delete an account that does not exist
@@ -44,8 +50,11 @@ class DeleteAccountTest {
 		DeleteOp op = new DeleteOp("Alice");
 
 		// An exception should be thrown when deleting a non existing account
-		assertThrows(AccountNotFoundException.class, () -> state.addDeleteOperation(op));
-		assertEquals(state.getLedger().size(), 0);
+		assertThrows(AccountNotFoundException.class,
+		    () -> state.addDeleteOperation(op));
+		assertEquals(state.getLedger()
+		                  .size(),
+		    0);
 	}
 
 	// Delete an account that has balance
@@ -58,11 +67,19 @@ class DeleteAccountTest {
 		state.addCreateOperation(op1);
 		state.addTransferOperation(op2);
 
-		// An exception should be thrown when deleting a account that has balance
-		assertThrows(AccountHasBalanceException.class, () -> state.addDeleteOperation(op3));
-		assertEquals(state.getLedger().size(), 2);
-		assertEquals(state.getLedger().get(0), op1);
-		assertEquals(state.getLedger().get(1), op2);
+		// An exception should be thrown when deleting a account that has
+		// balance
+		assertThrows(AccountHasBalanceException.class,
+		    () -> state.addDeleteOperation(op3));
+		assertEquals(state.getLedger()
+		                  .size(),
+		    2);
+		assertEquals(state.getLedger()
+		                  .get(0),
+		    op1);
+		assertEquals(state.getLedger()
+		                  .get(1),
+		    op2);
 	}
 
 	// Delete the broker account
@@ -71,7 +88,10 @@ class DeleteAccountTest {
 		DeleteOp op = new DeleteOp("broker");
 
 		// An exception should be thrown when deleting the 'broker' account
-		assertThrows(DeleteBrokerException.class, () -> state.addDeleteOperation(op));
-		assertEquals(state.getLedger().size(), 0);
+		assertThrows(DeleteBrokerException.class,
+		    () -> state.addDeleteOperation(op));
+		assertEquals(state.getLedger()
+		                  .size(),
+		    0);
 	}
 }

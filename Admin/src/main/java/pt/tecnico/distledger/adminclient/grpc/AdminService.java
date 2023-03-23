@@ -20,8 +20,8 @@ public class AdminService {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System
-	    .getProperty("debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty(
+	    "debug") != null);
 
 	/**
 	 * Helper method to print debug messages.
@@ -52,17 +52,20 @@ public class AdminService {
 	 */
 	public String activate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler
-			    .getStub(qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			    qualifier);
 
-			ActivateRequest request = ActivateRequest.newBuilder().build();
+			ActivateRequest request = ActivateRequest.newBuilder()
+			                                         .build();
 			debug("Send activate request");
 			stub.activate(request);
 			debug("Received activate response");
 
 			return "OK\n";
 		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription() + "\n";
+			return e.getStatus()
+			        .getDescription()
+			    + "\n";
 		}
 
 	}
@@ -75,17 +78,20 @@ public class AdminService {
 	 */
 	public String deactivate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler
-			    .getStub(qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			    qualifier);
 
-			DeactivateRequest request = DeactivateRequest.newBuilder().build();
+			DeactivateRequest request = DeactivateRequest.newBuilder()
+			                                             .build();
 			debug("Send deactivate request");
 			stub.deactivate(request);
 			debug("Received deactivate response");
 
 			return "OK\n";
 		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription() + "\n";
+			return e.getStatus()
+			        .getDescription()
+			    + "\n";
 		}
 	}
 
@@ -97,11 +103,11 @@ public class AdminService {
 	 */
 	public String getLedgerState(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler
-			    .getStub(qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			    qualifier);
 
 			getLedgerStateRequest request = getLedgerStateRequest.newBuilder()
-			    .build();
+			                                                     .build();
 			debug("Send getLedgerState request");
 			getLedgerStateResponse response = stub.getLedgerState(request);
 			debug(String.format("Received getLedgerState response:%n%s",
@@ -109,7 +115,9 @@ public class AdminService {
 
 			return "OK\n" + response + "\n";
 		} catch (StatusRuntimeException e) {
-			return e.getStatus().getDescription() + "\n";
+			return e.getStatus()
+			        .getDescription()
+			    + "\n";
 		}
 	}
 

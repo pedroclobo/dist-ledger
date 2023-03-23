@@ -33,8 +33,10 @@ class LookupTest {
 
 		assertEquals(1, servers.size());
 
-		assertEquals("localhost", servers.get(0).getHost());
-		assertEquals(2001, servers.get(0).getPort());
+		assertEquals("localhost", servers.get(0)
+		                                 .getHost());
+		assertEquals(2001, servers.get(0)
+		                          .getPort());
 	}
 
 	// The service name doesn't exist
@@ -66,13 +68,19 @@ class LookupTest {
 
 		assertEquals(3, servers.size());
 
-		assertEquals("localhost", servers.get(0).getHost());
-		assertEquals(2001, servers.get(0).getPort());
+		assertEquals("localhost", servers.get(0)
+		                                 .getHost());
+		assertEquals(2001, servers.get(0)
+		                          .getPort());
 
-		assertEquals("localhost", servers.get(1).getHost());
-		assertEquals(2002, servers.get(1).getPort());
+		assertEquals("localhost", servers.get(1)
+		                                 .getHost());
+		assertEquals(2002, servers.get(1)
+		                          .getPort());
 
-		assertEquals("localhost", servers.get(2).getHost());
-		assertEquals(2003, servers.get(2).getPort());
+		assertEquals("localhost", servers.get(2)
+		                                 .getHost());
+		assertEquals(2003, servers.get(2)
+		                          .getPort());
 	}
 }

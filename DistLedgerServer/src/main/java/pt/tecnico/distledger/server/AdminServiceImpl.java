@@ -22,25 +22,30 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	}
 
 	@Override
-	public void activate(ActivateRequest request, StreamObserver<ActivateResponse> responseObserver) {
+	public void activate(ActivateRequest request,
+	    StreamObserver<ActivateResponse> responseObserver) {
 		mode.activate();
 
-		ActivateResponse response = ActivateResponse.newBuilder().build();
+		ActivateResponse response = ActivateResponse.newBuilder()
+		                                            .build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void deactivate(DeactivateRequest request, StreamObserver<DeactivateResponse> responseObserver) {
+	public void deactivate(DeactivateRequest request,
+	    StreamObserver<DeactivateResponse> responseObserver) {
 		mode.deactivate();
 
-		DeactivateResponse response = DeactivateResponse.newBuilder().build();
+		DeactivateResponse response = DeactivateResponse.newBuilder()
+		                                                .build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void getLedgerState(getLedgerStateRequest request, StreamObserver<getLedgerStateResponse> responseObserver) {
+	public void getLedgerState(getLedgerStateRequest request,
+	    StreamObserver<getLedgerStateResponse> responseObserver) {
 		getLedgerStateResponse.Builder responseBuilder = getLedgerStateResponse.newBuilder();
 		LedgerState.Builder ledgerBuilder = LedgerState.newBuilder();
 
@@ -48,13 +53,16 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 			ledgerBuilder.addLedger(op.toProtobuf());
 		}
 
-		getLedgerStateResponse response = responseBuilder.setLedgerState(ledgerBuilder).build();
+		getLedgerStateResponse response = responseBuilder.setLedgerState(
+		    ledgerBuilder)
+		                                                 .build();
 		responseObserver.onNext(response);
 		responseObserver.onCompleted();
 	}
 
 	@Override
-	public void gossip(GossipRequest request, StreamObserver<GossipResponse> responseObserver) {
+	public void gossip(GossipRequest request,
+	    StreamObserver<GossipResponse> responseObserver) {
 		// TODO: implement gossip service (only for Phase-3)
 	}
 }

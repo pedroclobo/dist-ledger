@@ -44,11 +44,15 @@ class RegisterTest {
 		List<ServerEntry> servers = state.lookup("DistLedger", "A");
 		assertEquals(2, servers.size());
 
-		assertEquals("localhost", servers.get(0).getHost());
-		assertEquals(2001, servers.get(0).getPort());
+		assertEquals("localhost", servers.get(0)
+		                                 .getHost());
+		assertEquals(2001, servers.get(0)
+		                          .getPort());
 
-		assertEquals("localhost", servers.get(1).getHost());
-		assertEquals(2002, servers.get(1).getPort());
+		assertEquals("localhost", servers.get(1)
+		                                 .getHost());
+		assertEquals(2002, servers.get(1)
+		                          .getPort());
 	}
 
 	// Register a server that already exists within the same service
@@ -56,7 +60,8 @@ class RegisterTest {
 	public void registerWithSameServer() {
 		state.register("DistLedger", "A", "localhost", 2001);
 
-		assertThrows(ServerAlreadyExistsException.class, () -> state.register("DistLedger", "A", "localhost", 2001));
+		assertThrows(ServerAlreadyExistsException.class,
+		    () -> state.register("DistLedger", "A", "localhost", 2001));
 
 		List<ServerEntry> servers = state.lookup("DistLedger", "A");
 		assertEquals(1, servers.size());

@@ -28,8 +28,10 @@ class DeleteTest {
 		List<ServerEntry> servers = state.lookup("DistLedger", "A");
 
 		assertEquals(1, servers.size());
-		assertEquals("localhost", servers.get(0).getHost());
-		assertEquals(2001, servers.get(0).getPort());
+		assertEquals("localhost", servers.get(0)
+		                                 .getHost());
+		assertEquals(2001, servers.get(0)
+		                          .getPort());
 
 		state.delete("DistLedger", "localhost", 2001);
 		servers = state.lookup("DistLedger", "A");

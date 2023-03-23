@@ -30,8 +30,9 @@ public class NamingServerService {
 	 */
 	public NamingServerService(String host, int port) {
 		String target = host + ":" + port;
-		channel = ManagedChannelBuilder.forTarget(target).usePlaintext()
-		    .build();
+		channel = ManagedChannelBuilder.forTarget(target)
+		                               .usePlaintext()
+		                               .build();
 		stub = NamingServerServiceGrpc.newBlockingStub(channel);
 	}
 
@@ -43,7 +44,9 @@ public class NamingServerService {
 	 */
 	public LookupResponse lookup(String serviceName, String qualifier) {
 		LookupRequest request = LookupRequest.newBuilder()
-		    .setServiceName(serviceName).setQualifier(qualifier).build();
+		                                     .setServiceName(serviceName)
+		                                     .setQualifier(qualifier)
+		                                     .build();
 		LookupResponse response = stub.lookup(request);
 
 		return response;
@@ -76,8 +79,10 @@ public class NamingServerService {
 			throw new ServerNotFoundException(qualifier);
 		}
 
-		String host = serverResponse.getServer(0).getHost();
-		int port = serverResponse.getServer(0).getPort();
+		String host = serverResponse.getServer(0)
+		                            .getHost();
+		int port = serverResponse.getServer(0)
+		                         .getPort();
 
 		return new AdminServiceStubHandler(host, port);
 	}

@@ -28,8 +28,12 @@ class CreateAccountTest {
 		CreateOp op = new CreateOp(account);
 		state.addCreateOperation(op);
 
-		assertEquals(state.getLedger().size(), 1);
-		assertEquals(state.getLedger().get(0), op);
+		assertEquals(state.getLedger()
+		                  .size(),
+		    1);
+		assertEquals(state.getLedger()
+		                  .get(0),
+		    op);
 		assertEquals(state.getAccountBalance(account), 0);
 	}
 
@@ -42,9 +46,14 @@ class CreateAccountTest {
 		state.addCreateOperation(op1);
 
 		// An exception should be thrown when creating a duplicate account
-		assertThrows(AccountAlreadyExistsException.class, () -> state.addCreateOperation(op2));
-		assertEquals(state.getLedger().size(), 1);
-		assertEquals(state.getLedger().get(0), op1);
+		assertThrows(AccountAlreadyExistsException.class,
+		    () -> state.addCreateOperation(op2));
+		assertEquals(state.getLedger()
+		                  .size(),
+		    1);
+		assertEquals(state.getLedger()
+		                  .get(0),
+		    op1);
 	}
 
 	// Create an account with the name 'broker'
@@ -53,7 +62,10 @@ class CreateAccountTest {
 		CreateOp op = new CreateOp("broker");
 
 		// An exception should be thrown when creating the 'broker' account
-		assertThrows(CreateBrokerException.class, () -> state.addCreateOperation(op));
-		assertEquals(state.getLedger().size(), 0);
+		assertThrows(CreateBrokerException.class,
+		    () -> state.addCreateOperation(op));
+		assertEquals(state.getLedger()
+		                  .size(),
+		    0);
 	}
 }

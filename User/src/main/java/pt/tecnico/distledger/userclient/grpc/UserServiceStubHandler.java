@@ -13,7 +13,9 @@ public class UserServiceStubHandler {
 
 	public UserServiceStubHandler(String host, int port) {
 		String target = host + ":" + port;
-		this.channel = ManagedChannelBuilder.forTarget(target).usePlaintext().build();
+		this.channel = ManagedChannelBuilder.forTarget(target)
+		                                    .usePlaintext()
+		                                    .build();
 		this.stub = UserServiceGrpc.newBlockingStub(channel);
 	}
 

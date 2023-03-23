@@ -17,7 +17,8 @@ public class DeleteOp extends Operation {
 	@Override
 	public DistLedgerCommonDefinitions.Operation toProtobuf() {
 		DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
-		op.setType(DistLedgerCommonDefinitions.OperationType.OP_DELETE_ACCOUNT).setUserId(this.getAccount());
+		op.setType(DistLedgerCommonDefinitions.OperationType.OP_DELETE_ACCOUNT)
+		  .setUserId(this.getAccount());
 
 		return op.build();
 	}

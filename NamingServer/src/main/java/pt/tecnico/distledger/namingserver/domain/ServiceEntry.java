@@ -32,10 +32,15 @@ public class ServiceEntry {
 	}
 
 	public boolean containsServer(String host, int port) {
-		return this.servers.stream().anyMatch(server -> server.getHost().equals(host) && server.getPort() == port);
+		return this.servers.stream()
+		                   .anyMatch(server -> server.getHost()
+		                                             .equals(host)
+		                       && server.getPort() == port);
 	}
 
 	public void removeServer(String host, int port) {
-		this.servers.removeIf(server -> server.getHost().equals(host) && server.getPort() == port);
+		this.servers.removeIf(server -> server.getHost()
+		                                      .equals(host)
+		    && server.getPort() == port);
 	}
 }
