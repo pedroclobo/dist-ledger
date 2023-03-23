@@ -11,10 +11,14 @@ import java.util.Scanner;
 
 public class NamingServer {
 
+	private static final boolean DEBUG_FLAG = (System.getProperty(
+	    "debug") != null);
+
 	public static void main(String[] args)
 	    throws IOException, InterruptedException {
 
 		// Get port.
+		debug(String.format("arg[0] = %s", args[0]));
 		final int port = Integer.parseInt(args[0]);
 
 		// Initialize services.
@@ -35,6 +39,12 @@ public class NamingServer {
 
 		// Do not exit the main thread. Wait until server is terminated.
 		server.shutdown();
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 
 }
