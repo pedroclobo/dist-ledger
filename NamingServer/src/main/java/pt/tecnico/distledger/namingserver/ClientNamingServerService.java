@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ClientNamingServerService extends NamingServerService {
-	public ClientNamingServerService(String host, int port) {
-		super(host, port);
+	public ClientNamingServerService() {
+		super();
 	}
 }

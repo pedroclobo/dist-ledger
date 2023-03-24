@@ -9,8 +9,7 @@ public class ClientFrontend<T> extends Frontend<T> {
 
 	@Override
 	public void initNamingServer() {
-		ClientNamingServerService namingServerService = new ClientNamingServerService(
-		    "localhost", 5001);
+		ClientNamingServerService namingServerService = new ClientNamingServerService();
 
 		setNamingServer(namingServerService);
 	}
