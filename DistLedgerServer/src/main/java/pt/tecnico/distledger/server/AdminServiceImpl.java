@@ -1,9 +1,10 @@
 package pt.tecnico.distledger.server;
 
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
+import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.*;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Operation;
-import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
+
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.ServerMode;

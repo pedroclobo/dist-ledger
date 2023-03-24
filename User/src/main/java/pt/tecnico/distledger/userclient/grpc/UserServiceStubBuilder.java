@@ -7,7 +7,7 @@ import pt.tecnico.distledger.sharedutils.StubBuilder;
 
 import io.grpc.ManagedChannel;
 
-public class UserServiceStubBuilder extends StubBuilder {
+public class UserServiceStubBuilder extends StubBuilder<UserServiceGrpc.UserServiceBlockingStub> {
 
 	public UserServiceStubBuilder() {
 		super();
