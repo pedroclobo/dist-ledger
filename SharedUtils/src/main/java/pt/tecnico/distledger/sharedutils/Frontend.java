@@ -68,17 +68,11 @@ public abstract class Frontend<T> {
 			return true;
 		}
 
-		// This is done twice to refresh the channel state.
 		ConnectivityState state = stubHandlers.get(qualifier)
 		                                      .getChannel()
 		                                      .getState(true);
-		state = stubHandlers.get(qualifier)
-		                    .getChannel()
-		                    .getState(true);
 
-		return state == ConnectivityState.TRANSIENT_FAILURE
-		    || state == ConnectivityState.CONNECTING
-		    || state == ConnectivityState.SHUTDOWN;
+		return state != ConnectivityState.READY;
 	}
 
 	private void replaceChannel(String qualifier) {
