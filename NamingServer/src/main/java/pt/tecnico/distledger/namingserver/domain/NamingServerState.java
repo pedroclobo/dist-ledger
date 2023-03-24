@@ -40,8 +40,7 @@ public class NamingServerState {
 		return false;
 	}
 
-	public synchronized void register(String serviceName, String qualifier,
-	    String host, int port) {
+	public synchronized void register(String serviceName, String qualifier, String host, int port) {
 		if (services.containsKey(serviceName)) {
 			ServiceEntry serviceEntry = services.get(serviceName);
 			if (serviceEntry.containsServer(host, port)) {
@@ -56,9 +55,8 @@ public class NamingServerState {
 
 			services.put(serviceName, serviceEntry);
 		}
-		debug(String.format(
-		    "Added server with service='%s', qualifier='%s' and host:port='%s:%d'",
-		    serviceName, qualifier, host, port));
+		debug(String.format("Added server with service='%s', qualifier='%s' and host:port='%s:%d'", serviceName,
+		    qualifier, host, port));
 	}
 
 	public synchronized List<ServerEntry> lookup(String serviceName) {
@@ -71,11 +69,9 @@ public class NamingServerState {
 		                                          .getServers());
 	}
 
-	public synchronized List<ServerEntry> lookup(String serviceName,
-	    String qualifier) {
+	public synchronized List<ServerEntry> lookup(String serviceName, String qualifier) {
 		// Service or qualifier don't exist
-		if (!services.containsKey(serviceName)
-		    || (!qualifier.equals("") && !containsQualifier(qualifier))) {
+		if (!services.containsKey(serviceName) || (!qualifier.equals("") && !containsQualifier(qualifier))) {
 			return new ArrayList<>();
 		}
 
@@ -103,9 +99,7 @@ public class NamingServerState {
 		if (services.containsKey(serviceName)) {
 			ServiceEntry serviceEntry = services.get(serviceName);
 			serviceEntry.removeServer(host, port);
-			debug(String.format(
-			    "Removed server with service='%s' and host:port='%s:%d'",
-			    serviceName, host, port));
+			debug(String.format("Removed server with service='%s' and host:port='%s:%d'", serviceName, host, port));
 		}
 	}
 

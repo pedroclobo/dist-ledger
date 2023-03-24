@@ -14,8 +14,7 @@ public class UserClientMain {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {

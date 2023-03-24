@@ -22,8 +22,7 @@ public class AdminService {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/**
 	 * Helper method to print debug messages.
@@ -40,8 +39,7 @@ public class AdminService {
 	 *
 	 * @param frontend the frontend to use
 	 */
-	public AdminService(
-	    ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend) {
+	public AdminService(ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend) {
 		this.frontend = frontend;
 	}
 
@@ -53,8 +51,7 @@ public class AdminService {
 	 */
 	public String activate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			ActivateRequest request = ActivateRequest.newBuilder()
 			                                         .build();
@@ -79,8 +76,7 @@ public class AdminService {
 	 */
 	public String deactivate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			DeactivateRequest request = DeactivateRequest.newBuilder()
 			                                             .build();
@@ -104,15 +100,13 @@ public class AdminService {
 	 */
 	public String getLedgerState(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			getLedgerStateRequest request = getLedgerStateRequest.newBuilder()
 			                                                     .build();
 			debug("Send getLedgerState request");
 			getLedgerStateResponse response = stub.getLedgerState(request);
-			debug(String.format("Received getLedgerState response:%n%s",
-			    response));
+			debug(String.format("Received getLedgerState response:%n%s", response));
 
 			return "OK\n" + response + "\n";
 		} catch (StatusRuntimeException e) {

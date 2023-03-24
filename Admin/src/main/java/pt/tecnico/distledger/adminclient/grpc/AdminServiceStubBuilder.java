@@ -13,8 +13,7 @@ public class AdminServiceStubBuilder extends StubBuilder {
 		super();
 	}
 
-	public AdminServiceGrpc.AdminServiceBlockingStub build(
-	    ManagedChannel channel) {
+	public AdminServiceGrpc.AdminServiceBlockingStub build(ManagedChannel channel) {
 		return AdminServiceGrpc.newBlockingStub(channel);
 	}
 }

@@ -11,11 +11,9 @@ import java.util.Scanner;
 
 public class NamingServer {
 
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
-	public static void main(String[] args)
-	    throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException {
 
 		// Get port.
 		debug(String.format("arg[0] = %s", args[0]));

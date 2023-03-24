@@ -46,8 +46,7 @@ class CreateAccountTest {
 		state.addCreateOperation(op1);
 
 		// An exception should be thrown when creating a duplicate account
-		assertThrows(AccountAlreadyExistsException.class,
-		    () -> state.addCreateOperation(op2));
+		assertThrows(AccountAlreadyExistsException.class, () -> state.addCreateOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -62,8 +61,7 @@ class CreateAccountTest {
 		CreateOp op = new CreateOp("broker");
 
 		// An exception should be thrown when creating the 'broker' account
-		assertThrows(CreateBrokerException.class,
-		    () -> state.addCreateOperation(op));
+		assertThrows(CreateBrokerException.class, () -> state.addCreateOperation(op));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    0);

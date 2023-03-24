@@ -46,8 +46,8 @@ public class TransferOp extends Operation {
 	}
 
 	public String toString() {
-		return "TransferOp{" + "fromAccount='" + getAccount() + '\''
-		    + "destAccount='" + destAccount + '\'' + ", amount=" + amount + '}';
+		return "TransferOp{" + "fromAccount='" + getAccount() + '\'' + "destAccount='" + destAccount + '\''
+		    + ", amount=" + amount + '}';
 	}
 
 }

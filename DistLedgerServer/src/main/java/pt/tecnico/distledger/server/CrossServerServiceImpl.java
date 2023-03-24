@@ -14,8 +14,7 @@ import java.util.List;
 import io.grpc.stub.StreamObserver;
 import static io.grpc.Status.INVALID_ARGUMENT;
 
-public class CrossServerServiceImpl extends
-    DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceImplBase {
+public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceImplBase {
 
 	private ServerState state;
 	private ServerMode mode;
@@ -32,8 +31,7 @@ public class CrossServerServiceImpl extends
 	}
 
 	@Override
-	public void propagateState(PropagateStateRequest request,
-	    StreamObserver<PropagateStateResponse> responseObserver) {
+	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
 		try {
 			checkIfInactive();
 
@@ -47,9 +45,8 @@ public class CrossServerServiceImpl extends
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 		} catch (RuntimeException e) {
-			responseObserver.onError(
-			    INVALID_ARGUMENT.withDescription(e.getMessage())
-			                    .asRuntimeException());
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
 		}
 	}
 }

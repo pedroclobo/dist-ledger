@@ -17,8 +17,7 @@ public class AdminClientMain {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/**
 	 * Helper method to print debug messages.
@@ -32,10 +31,9 @@ public class AdminClientMain {
 	}
 
 	/**
-	 * Creates an instance of the AdminService class and a CommandParser
-	 * instance with it, calls the parseInput() method on the CommandParser
-	 * instance to handle user input, and finally shuts down the AdminService
-	 * instance.
+	 * Creates an instance of the AdminService class and a CommandParser instance
+	 * with it, calls the parseInput() method on the CommandParser instance to
+	 * handle user input, and finally shuts down the AdminService instance.
 	 */
 	public static void main(String args[]) {
 		debug("Create CommandParser and AdminService");

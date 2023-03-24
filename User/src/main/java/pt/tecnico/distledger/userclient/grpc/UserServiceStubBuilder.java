@@ -13,8 +13,7 @@ public class UserServiceStubBuilder extends StubBuilder {
 		super();
 	}
 
-	public UserServiceGrpc.UserServiceBlockingStub build(
-	    ManagedChannel channel) {
+	public UserServiceGrpc.UserServiceBlockingStub build(ManagedChannel channel) {
 		return UserServiceGrpc.newBlockingStub(channel);
 	}
 }
