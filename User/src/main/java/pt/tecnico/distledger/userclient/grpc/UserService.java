@@ -4,7 +4,8 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
-import pt.tecnico.distledger.userclient.grpc.UserServiceStubHandler;
+
+import pt.tecnico.distledger.sharedutils.Frontend;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -25,17 +26,16 @@ public class UserService {
 			System.err.println(debugMessage);
 	}
 
-	private NamingServerService namingServerService;
-	private StubHandler stubHandler;
+	private Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend;
 
-	public UserService(NamingServerService namingServerService) {
-		this.namingServerService = namingServerService;
-		this.stubHandler = new StubHandler(namingServerService);
+	public UserService(
+	    Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
+		this.frontend = frontend;
 	}
 
 	public String balance(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			BalanceRequest request = BalanceRequest.newBuilder()
@@ -55,7 +55,7 @@ public class UserService {
 
 	public String createAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			CreateAccountRequest request = CreateAccountRequest.newBuilder()
@@ -76,7 +76,7 @@ public class UserService {
 
 	public String deleteAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder()
@@ -98,7 +98,7 @@ public class UserService {
 	public String transferTo(String qualifier, String accountFrom,
 	    String accountTo, int amount) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = stubHandler.getStub(
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			TransferToRequest request = TransferToRequest.newBuilder()
@@ -118,10 +118,5 @@ public class UserService {
 			        .getDescription()
 			    + "\n";
 		}
-	}
-
-	public void shutdown() {
-		stubHandler.shutdown();
-		namingServerService.shutdown();
 	}
 }

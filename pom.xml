@@ -18,6 +18,7 @@
 		<module>Admin</module>
 		<module>DistLedgerServer</module>
 		<module>NamingServer</module>
+		<module>SharedUtils</module>
 	</modules>
 
 </project>
