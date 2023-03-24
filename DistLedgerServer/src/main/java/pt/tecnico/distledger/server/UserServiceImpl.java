@@ -2,6 +2,7 @@ package pt.tecnico.distledger.server;
 
 import pt.ulisboa.tecnico.distledger.contract.user.UserDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
+
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.grpc.CrossServerService;
@@ -67,7 +68,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			CreateOp operation = new CreateOp(userId);
-			// propagate to other servers
 			crossServerService.propagateState(operation);
 
 			operation.execute(state);
@@ -91,7 +91,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			DeleteOp operation = new DeleteOp(userId);
-			// propagate to other servers
 			crossServerService.propagateState(operation);
 
 			operation.execute(state);
@@ -117,7 +116,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
-			// propagate to other servers
 			crossServerService.propagateState(operation);
 
 			operation.execute(state);

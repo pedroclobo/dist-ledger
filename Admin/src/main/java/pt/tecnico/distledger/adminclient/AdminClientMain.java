@@ -4,9 +4,9 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 
 import pt.tecnico.distledger.adminclient.grpc.AdminService;
+import pt.tecnico.distledger.adminclient.grpc.AdminServiceStubBuilder;
 import pt.tecnico.distledger.namingserver.ClientNamingServerService;
 import pt.tecnico.distledger.sharedutils.ClientFrontend;
-import pt.tecnico.distledger.adminclient.grpc.AdminServiceStubBuilder;
 
 /**
  * Entry point for the Admin user.

@@ -1,15 +1,12 @@
 package pt.tecnico.distledger.server;
 
+import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
+import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
+import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
+
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
-import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
-import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
-import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
-
 import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import io.grpc.stub.StreamObserver;
 import static io.grpc.Status.INVALID_ARGUMENT;

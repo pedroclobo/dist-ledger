@@ -7,7 +7,8 @@ import pt.tecnico.distledger.sharedutils.StubBuilder;
 
 import io.grpc.ManagedChannel;
 
-public class DistLedgerCrossServerServiceStubBuilder extends StubBuilder {
+public class DistLedgerCrossServerServiceStubBuilder
+    extends StubBuilder<DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub> {
 
 	public DistLedgerCrossServerServiceStubBuilder() {
 		super();

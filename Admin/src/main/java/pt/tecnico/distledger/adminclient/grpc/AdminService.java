@@ -1,7 +1,5 @@
 package pt.tecnico.distledger.adminclient.grpc;
 
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.ActivateRequest;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.DeactivateRequest;
@@ -12,6 +10,8 @@ import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedge
 import pt.tecnico.distledger.sharedutils.ClientFrontend;
 
 import io.grpc.StatusRuntimeException;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 
 /**
  * The AdminService class provides the gRPC stubs for the AdminService.
