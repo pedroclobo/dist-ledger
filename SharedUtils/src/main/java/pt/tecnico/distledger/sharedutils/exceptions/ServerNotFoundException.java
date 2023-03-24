@@ -1,4 +1,4 @@
-package pt.tecnico.distledger.userclient.exceptions;
+package pt.tecnico.distledger.sharedutils.exceptions;
 
 public class ServerNotFoundException extends RuntimeException {
 	public ServerNotFoundException(String qualifier) {
