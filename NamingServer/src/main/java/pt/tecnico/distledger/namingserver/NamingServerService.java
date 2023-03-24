@@ -16,8 +16,11 @@ public abstract class NamingServerService {
 	protected final ManagedChannel channel;
 	protected NamingServerServiceGrpc.NamingServerServiceBlockingStub stub;
 
-	public NamingServerService(String host, int port) {
-		String target = host + ":" + port;
+	private String HOST = "localhost";
+	private int PORT = 5001;
+
+	public NamingServerService() {
+		String target = HOST + ":" + PORT;
 		channel = ManagedChannelBuilder.forTarget(target)
 		                               .usePlaintext()
 		                               .build();

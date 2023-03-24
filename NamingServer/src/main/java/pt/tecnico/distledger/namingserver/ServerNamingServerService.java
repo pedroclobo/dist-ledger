@@ -12,9 +12,8 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ServerNamingServerService extends NamingServerService {
-
-	public ServerNamingServerService(String host, int port) {
-		super(host, port);
+	public ServerNamingServerService() {
+		super();
 	}
 
 	public void register(String serviceName, String qualifier, String host,
