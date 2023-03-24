@@ -64,7 +64,7 @@ class LookupTest {
 		state.register("DistLedger", "C", "localhost", 2003);
 		state.register("Other Service", "A", "localhost", 2004);
 
-		List<ServerEntry> servers = state.lookup("DistLedger", "");
+		List<ServerEntry> servers = state.lookup("DistLedger");
 
 		assertEquals(3, servers.size());
 

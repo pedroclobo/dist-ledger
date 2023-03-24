@@ -37,6 +37,15 @@ public abstract class NamingServerService {
 		return response;
 	}
 
+	public LookupResponse lookup(String serviceName) {
+		LookupRequest request = LookupRequest.newBuilder()
+		                                     .setServiceName(serviceName)
+		                                     .build();
+		LookupResponse response = stub.lookup(request);
+
+		return response;
+	}
+
 	public void shutdown() {
 		channel.shutdown();
 	}
