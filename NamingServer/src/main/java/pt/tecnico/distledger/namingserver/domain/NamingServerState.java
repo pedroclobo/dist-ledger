@@ -61,6 +61,16 @@ public class NamingServerState {
 		    serviceName, qualifier, host, port));
 	}
 
+	public synchronized List<ServerEntry> lookup(String serviceName) {
+		// Service doesn't exist
+		if (!services.containsKey(serviceName)) {
+			return new ArrayList<>();
+		}
+
+		return new ArrayList<ServerEntry>(services.get(serviceName)
+		                                          .getServers());
+	}
+
 	public synchronized List<ServerEntry> lookup(String serviceName,
 	    String qualifier) {
 		// Service or qualifier don't exist

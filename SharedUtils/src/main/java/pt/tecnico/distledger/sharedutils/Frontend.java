@@ -36,8 +36,8 @@ public abstract class Frontend<T> {
 
 	public Map<String, StubHandler<T>> getHandlers() {
 		Map<String, StubHandler<T>> handlers = new HashMap<>();
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger",
-		    "");
+		LookupResponse serverResponse = namingServerService.lookup(
+		    "DistLedger");
 
 		for (Server server : serverResponse.getServerList()) {
 			handlers.put(server.getQualifier(), new StubHandler<T>(
