@@ -16,8 +16,7 @@ public abstract class Frontend<T> {
 	private Map<String, StubHandler<T>> stubHandlers;
 	private StubBuilder<T> stubBuilder;
 
-	public Frontend(String qualifier, String host, int port,
-	    StubBuilder<T> stubBuilder) {
+	public Frontend(String qualifier, String host, int port, StubBuilder<T> stubBuilder) {
 		initNamingServer(qualifier, host, port);
 		this.stubBuilder = stubBuilder;
 		this.stubHandlers = this.getHandlers();
@@ -31,25 +30,22 @@ public abstract class Frontend<T> {
 		this.namingServerService = namingServerService;
 	}
 
-	public abstract void initNamingServer(String qualifier, String host,
-	    int port);
+	public abstract void initNamingServer(String qualifier, String host, int port);
 
 	public Map<String, StubHandler<T>> getHandlers() {
 		Map<String, StubHandler<T>> handlers = new HashMap<>();
-		LookupResponse serverResponse = namingServerService.lookup(
-		    "DistLedger");
+		LookupResponse serverResponse = namingServerService.lookup("DistLedger");
 
 		for (Server server : serverResponse.getServerList()) {
-			handlers.put(server.getQualifier(), new StubHandler<T>(
-			    server.getHost(), server.getPort(), this.stubBuilder));
+			handlers.put(server.getQualifier(),
+			    new StubHandler<T>(server.getHost(), server.getPort(), this.stubBuilder));
 		}
 
 		return handlers;
 	}
 
 	public StubHandler<T> getHandler(String qualifier) {
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger",
-		    qualifier);
+		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
 
 		if (serverResponse.getServerCount() == 0) {
 			throw new ServerNotFoundException(qualifier);

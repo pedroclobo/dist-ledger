@@ -13,8 +13,7 @@ public class DistLedgerCrossServerServiceStubBuilder extends StubBuilder {
 		super();
 	}
 
-	public DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub build(
-	    ManagedChannel channel) {
+	public DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub build(ManagedChannel channel) {
 		return DistLedgerCrossServerServiceGrpc.newBlockingStub(channel);
 	}
 }

@@ -53,8 +53,7 @@ class TransferToTest {
 
 		// An exception should be thrown when transferring from a non existing
 		// account
-		assertThrows(AccountNotFoundException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(AccountNotFoundException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -75,8 +74,7 @@ class TransferToTest {
 
 		// An exception should be thrown when transferring to a non existing
 		// account
-		assertThrows(AccountNotFoundException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(AccountNotFoundException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -96,8 +94,7 @@ class TransferToTest {
 		TransferOp op2 = new TransferOp("Alice", "Alice", 10);
 
 		// An exception should be thrown when transferring to the same account
-		assertThrows(InvalidTransferException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(InvalidTransferException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -117,8 +114,7 @@ class TransferToTest {
 		TransferOp op2 = new TransferOp("broker", "Alice", -10);
 
 		// An exception should be thrown when transferring a negative amount
-		assertThrows(InvalidBalanceException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(InvalidBalanceException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -139,8 +135,7 @@ class TransferToTest {
 		TransferOp op2 = new TransferOp("broker", "Alice", 0);
 
 		// An exception should be thrown when transferring no coins
-		assertThrows(InvalidBalanceException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(InvalidBalanceException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);
@@ -163,8 +158,7 @@ class TransferToTest {
 		// An exception should be thrown when transferring more coins than the
 		// account
 		// has
-		assertThrows(InsufficientBalanceException.class,
-		    () -> state.addTransferOperation(op2));
+		assertThrows(InsufficientBalanceException.class, () -> state.addTransferOperation(op2));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    1);

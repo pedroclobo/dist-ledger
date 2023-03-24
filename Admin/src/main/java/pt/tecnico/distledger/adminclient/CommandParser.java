@@ -14,8 +14,7 @@ public class CommandParser {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/**
 	 * Helper method to print debug messages.
@@ -103,8 +102,7 @@ public class CommandParser {
 	 * This method activates a server and prints out the result of calling the
 	 * adminService.activate() method.
 	 *
-	 * @param line the input line that contains the command and server to
-	 *             activate
+	 * @param line the input line that contains the command and server to activate
 	 */
 	private void activate(String line) {
 		String[] split = line.split(SPACE);
@@ -125,8 +123,7 @@ public class CommandParser {
 	 * This method deactivates a server and prints out the result of calling the
 	 * adminService.activate() method.
 	 *
-	 * @param line the input line that contains the command and server to
-	 *             activate
+	 * @param line the input line that contains the command and server to activate
 	 */
 	private void deactivate(String line) {
 		String[] split = line.split(SPACE);
@@ -173,9 +170,8 @@ public class CommandParser {
 	 * This method prints the available commands.
 	 */
 	private void printUsage() {
-		System.out.println("Usage:\n" + "- activate <server>\n"
-		    + "- deactivate <server>\n" + "- getLedgerState <server>\n"
-		    + "- gossip <server>\n" + "- exit\n");
+		System.out.println("Usage:\n" + "- activate <server>\n" + "- deactivate <server>\n"
+		    + "- getLedgerState <server>\n" + "- gossip <server>\n" + "- exit\n");
 	}
 
 }

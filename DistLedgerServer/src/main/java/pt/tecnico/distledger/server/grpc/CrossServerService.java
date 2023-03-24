@@ -20,14 +20,12 @@ public class CrossServerService {
 
 	public void propagateState(Operation operation) {
 		try {
-			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = frontend.getStub(
-			    "B");
+			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = frontend.getStub("B");
 
 			LedgerState.Builder ledgerState = LedgerState.newBuilder();
 			ledgerState.addLedger(operation.toProtobuf());
 			PropagateStateRequest request = PropagateStateRequest.newBuilder()
-			                                                     .setState(
-			                                                         ledgerState)
+			                                                     .setState(ledgerState)
 			                                                     .build();
 			stub.propagateState(request);
 		} catch (StatusRuntimeException e) {

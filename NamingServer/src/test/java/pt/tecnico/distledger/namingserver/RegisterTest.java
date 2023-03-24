@@ -60,8 +60,7 @@ class RegisterTest {
 	public void registerWithSameServer() {
 		state.register("DistLedger", "A", "localhost", 2001);
 
-		assertThrows(ServerAlreadyExistsException.class,
-		    () -> state.register("DistLedger", "A", "localhost", 2001));
+		assertThrows(ServerAlreadyExistsException.class, () -> state.register("DistLedger", "A", "localhost", 2001));
 
 		List<ServerEntry> servers = state.lookup("DistLedger", "A");
 		assertEquals(1, servers.size());

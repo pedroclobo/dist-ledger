@@ -50,8 +50,7 @@ class DeleteAccountTest {
 		DeleteOp op = new DeleteOp("Alice");
 
 		// An exception should be thrown when deleting a non existing account
-		assertThrows(AccountNotFoundException.class,
-		    () -> state.addDeleteOperation(op));
+		assertThrows(AccountNotFoundException.class, () -> state.addDeleteOperation(op));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    0);
@@ -69,8 +68,7 @@ class DeleteAccountTest {
 
 		// An exception should be thrown when deleting a account that has
 		// balance
-		assertThrows(AccountHasBalanceException.class,
-		    () -> state.addDeleteOperation(op3));
+		assertThrows(AccountHasBalanceException.class, () -> state.addDeleteOperation(op3));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    2);
@@ -88,8 +86,7 @@ class DeleteAccountTest {
 		DeleteOp op = new DeleteOp("broker");
 
 		// An exception should be thrown when deleting the 'broker' account
-		assertThrows(DeleteBrokerException.class,
-		    () -> state.addDeleteOperation(op));
+		assertThrows(DeleteBrokerException.class, () -> state.addDeleteOperation(op));
 		assertEquals(state.getLedger()
 		                  .size(),
 		    0);

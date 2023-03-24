@@ -22,8 +22,7 @@ public class ServerNamingServerService extends NamingServerService {
 		register("DistLedger", qualifier, host, port);
 	}
 
-	public void register(String serviceName, String qualifier, String host,
-	    int port) {
+	public void register(String serviceName, String qualifier, String host, int port) {
 		RegisterRequest request = RegisterRequest.newBuilder()
 		                                         .setServiceName(serviceName)
 		                                         .setQualifier(qualifier)

@@ -17,8 +17,7 @@ public class UserService {
 	 * Set flag to true to print debug messages. The flag can be set using the
 	 * -Ddebug command line option.
 	 */
-	private static final boolean DEBUG_FLAG = (System.getProperty(
-	    "debug") != null);
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
@@ -28,15 +27,13 @@ public class UserService {
 
 	private Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend;
 
-	public UserService(
-	    Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
+	public UserService(Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
 		this.frontend = frontend;
 	}
 
 	public String balance(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			BalanceRequest request = BalanceRequest.newBuilder()
 			                                       .setUserId(account)
@@ -55,12 +52,10 @@ public class UserService {
 
 	public String createAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			CreateAccountRequest request = CreateAccountRequest.newBuilder()
-			                                                   .setUserId(
-			                                                       account)
+			                                                   .setUserId(account)
 			                                                   .build();
 			debug("Send createAccount request");
 			CreateAccountResponse response = stub.createAccount(request);
@@ -76,12 +71,10 @@ public class UserService {
 
 	public String deleteAccount(String qualifier, String account) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			DeleteAccountRequest request = DeleteAccountRequest.newBuilder()
-			                                                   .setUserId(
-			                                                       account)
+			                                                   .setUserId(account)
 			                                                   .build();
 			debug("Send deleteAccount request");
 			DeleteAccountResponse response = stub.deleteAccount(request);
@@ -95,17 +88,13 @@ public class UserService {
 		}
 	}
 
-	public String transferTo(String qualifier, String accountFrom,
-	    String accountTo, int amount) {
+	public String transferTo(String qualifier, String accountFrom, String accountTo, int amount) {
 		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(
-			    qualifier);
+			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
 
 			TransferToRequest request = TransferToRequest.newBuilder()
-			                                             .setAccountFrom(
-			                                                 accountFrom)
-			                                             .setAccountTo(
-			                                                 accountTo)
+			                                             .setAccountFrom(accountFrom)
+			                                             .setAccountTo(accountTo)
 			                                             .setAmount(amount)
 			                                             .build();
 			debug("Send transferTo request");

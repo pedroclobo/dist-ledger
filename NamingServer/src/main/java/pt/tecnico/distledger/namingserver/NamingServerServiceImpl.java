@@ -11,8 +11,7 @@ import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Server
 import io.grpc.stub.StreamObserver;
 import static io.grpc.Status.INVALID_ARGUMENT;
 
-public class NamingServerServiceImpl
-    extends NamingServerServiceGrpc.NamingServerServiceImplBase {
+public class NamingServerServiceImpl extends NamingServerServiceGrpc.NamingServerServiceImplBase {
 
 	private NamingServerState state;
 
@@ -21,8 +20,7 @@ public class NamingServerServiceImpl
 	}
 
 	@Override
-	public void register(RegisterRequest request,
-	    StreamObserver<RegisterResponse> responseObserver) {
+	public void register(RegisterRequest request, StreamObserver<RegisterResponse> responseObserver) {
 		String serviceName = request.getServiceName();
 		String qualifier = request.getQualifier();
 		String host = request.getHost();
@@ -35,23 +33,20 @@ public class NamingServerServiceImpl
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 		} catch (RuntimeException e) {
-			responseObserver.onError(
-			    INVALID_ARGUMENT.withDescription(e.getMessage())
-			                    .asRuntimeException());
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
 		}
 	}
 
 	@Override
-	public void lookup(LookupRequest request,
-	    StreamObserver<LookupResponse> responseObserver) {
+	public void lookup(LookupRequest request, StreamObserver<LookupResponse> responseObserver) {
 		String serviceName = request.getServiceName();
 		String qualifier = request.getQualifier();
 
 		LookupResponse.Builder response = LookupResponse.newBuilder();
 
 		try {
-			for (ServerEntry serverEntry : state.lookup(serviceName,
-			    qualifier)) {
+			for (ServerEntry serverEntry : state.lookup(serviceName, qualifier)) {
 				Server.Builder server = Server.newBuilder();
 				server.setQualifier(serverEntry.getQualifier())
 				      .setHost(serverEntry.getHost())
@@ -64,15 +59,13 @@ public class NamingServerServiceImpl
 			responseObserver.onCompleted();
 
 		} catch (RuntimeException e) {
-			responseObserver.onError(
-			    INVALID_ARGUMENT.withDescription(e.getMessage())
-			                    .asRuntimeException());
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
 		}
 	}
 
 	@Override
-	public void delete(DeleteRequest request,
-	    StreamObserver<DeleteResponse> responseObserver) {
+	public void delete(DeleteRequest request, StreamObserver<DeleteResponse> responseObserver) {
 		String serviceName = request.getServiceName();
 		String host = request.getHost();
 		int port = request.getPort();
@@ -84,9 +77,8 @@ public class NamingServerServiceImpl
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 		} catch (RuntimeException e) {
-			responseObserver.onError(
-			    INVALID_ARGUMENT.withDescription(e.getMessage())
-			                    .asRuntimeException());
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
 		}
 	}
 }
