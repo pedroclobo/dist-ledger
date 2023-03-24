@@ -1,25 +1,26 @@
 package pt.tecnico.distledger.server.grpc;
 
-import pt.tecnico.distledger.server.domain.operation.*;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.LedgerState;
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
 
+import pt.tecnico.distledger.server.domain.operation.*;
+import pt.tecnico.distledger.sharedutils.ServerFrontend;
+
 import io.grpc.StatusRuntimeException;
 
 public class CrossServerService {
-	private final NamingServerService namingServerService;
-	private StubHandler stubHandler;
+	private ServerFrontend<DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub> frontend;
 
-	public CrossServerService(NamingServerService namingServerService) {
-		this.namingServerService = namingServerService;
-		this.stubHandler = new StubHandler(namingServerService);
+	public CrossServerService(
+	    ServerFrontend<DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub> frontend) {
+		this.frontend = frontend;
 	}
 
 	public void propagateState(Operation operation) {
 		try {
-			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = stubHandler.getStub(
+			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = frontend.getStub(
 			    "B");
 
 			LedgerState.Builder ledgerState = LedgerState.newBuilder();
@@ -32,9 +33,5 @@ public class CrossServerService {
 		} catch (StatusRuntimeException e) {
 			throw e;
 		}
-	}
-
-	public void shutdown() {
-		stubHandler.shutdown();
 	}
 }

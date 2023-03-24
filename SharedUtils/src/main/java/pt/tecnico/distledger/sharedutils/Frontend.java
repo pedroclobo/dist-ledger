@@ -16,18 +16,23 @@ public abstract class Frontend<T> {
 	private Map<String, StubHandler<T>> stubHandlers;
 	private StubBuilder<T> stubBuilder;
 
-	public Frontend(StubBuilder<T> stubBuilder) {
-		this.initNamingServer();
+	public Frontend(String qualifier, String host, int port,
+	    StubBuilder<T> stubBuilder) {
+		initNamingServer(qualifier, host, port);
 		this.stubBuilder = stubBuilder;
 		this.stubHandlers = this.getHandlers();
-		System.out.println(this.stubBuilder != null);
+	}
+
+	public NamingServerService getNamingServer() {
+		return namingServerService;
 	}
 
 	public void setNamingServer(NamingServerService namingServerService) {
 		this.namingServerService = namingServerService;
 	}
 
-	public abstract void initNamingServer();
+	public abstract void initNamingServer(String qualifier, String host,
+	    int port);
 
 	public Map<String, StubHandler<T>> getHandlers() {
 		Map<String, StubHandler<T>> handlers = new HashMap<>();
