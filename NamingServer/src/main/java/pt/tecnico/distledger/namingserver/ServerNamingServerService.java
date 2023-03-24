@@ -12,8 +12,14 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class ServerNamingServerService extends NamingServerService {
-	public ServerNamingServerService() {
+	private String host;
+	private int port;
+
+	public ServerNamingServerService(String qualifier, String host, int port) {
 		super();
+		this.host = host;
+		this.port = port;
+		register("DistLedger", qualifier, host, port);
 	}
 
 	public void register(String serviceName, String qualifier, String host,
@@ -34,5 +40,11 @@ public class ServerNamingServerService extends NamingServerService {
 		                                     .setPort(port)
 		                                     .build();
 		DeleteResponse response = stub.delete(request);
+	}
+
+	@Override
+	public void shutdown() {
+		delete("DistLedger", host, port);
+		super.shutdown();
 	}
 }

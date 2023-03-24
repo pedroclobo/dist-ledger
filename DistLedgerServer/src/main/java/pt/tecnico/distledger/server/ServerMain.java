@@ -1,12 +1,17 @@
 package pt.tecnico.distledger.server;
 
+import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
+import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
+
+import pt.tecnico.distledger.server.domain.ServerState;
+import pt.tecnico.distledger.server.grpc.CrossServerService;
+import pt.tecnico.distledger.server.grpc.DistLedgerCrossServerServiceStubBuilder;
+import pt.tecnico.distledger.sharedutils.ServerFrontend;
+import pt.tecnico.distledger.namingserver.ServerNamingServerService;
+
 import io.grpc.BindableService;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
-import pt.tecnico.distledger.server.domain.ServerState;
-
-import pt.tecnico.distledger.server.grpc.NamingServerService;
-import pt.tecnico.distledger.server.grpc.CrossServerService;
 
 import java.util.Scanner;
 import java.io.IOException;
@@ -42,17 +47,17 @@ public class ServerMain {
 		final int port = Integer.parseInt(args[0]);
 		final String qualifer = args[1];
 
-		// Register server on naming server.
-		final NamingServerService namingServerService = new NamingServerService(
-		    "localhost", 5001);
-		namingServerService.register("DistLedger", qualifer, "localhost", port);
-
 		// Initialize services.
 		final ServerState state = new ServerState();
 		final ServerMode mode = new ServerMode();
 		final ServerRole role = new ServerRole(qualifer);
+
+		ServerFrontend<DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub> frontend = new ServerFrontend(
+		    qualifer, "localhost", port,
+		    new DistLedgerCrossServerServiceStubBuilder());
+
 		final CrossServerService crossServerService = new CrossServerService(
-		    namingServerService);
+		    frontend);
 		final BindableService admin = new AdminServiceImpl(state, mode);
 		final BindableService cross = new CrossServerServiceImpl(state, mode);
 		final BindableService user = new UserServiceImpl(state, mode, role,
@@ -72,11 +77,7 @@ public class ServerMain {
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
 
-		// Unregister server from naming server.
-		namingServerService.delete("DistLedger", "localhost", port);
-		namingServerService.shutdown();
-
-		crossServerService.shutdown();
+		frontend.shutdown();
 
 		server.shutdown();
 	}
