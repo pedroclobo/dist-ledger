@@ -9,6 +9,8 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
+import pt.tecnico.distledger.sharedutils.ClientFrontend;
+
 import io.grpc.StatusRuntimeException;
 
 /**
@@ -31,17 +33,16 @@ public class AdminService {
 			System.err.println(debugMessage);
 	}
 
-	private NamingServerService namingServerService;
-	private StubHandler stubHandler;
+	private ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend;
 
 	/**
 	 * Constructs a new AdminService.
 	 *
-	 * @param namingServerService the naming server service to use
+	 * @param frontend the frontend to use
 	 */
-	public AdminService(NamingServerService namingServerService) {
-		this.namingServerService = namingServerService;
-		this.stubHandler = new StubHandler(namingServerService);
+	public AdminService(
+	    ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend) {
+		this.frontend = frontend;
 	}
 
 	/**
@@ -52,7 +53,7 @@ public class AdminService {
 	 */
 	public String activate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			ActivateRequest request = ActivateRequest.newBuilder()
@@ -78,7 +79,7 @@ public class AdminService {
 	 */
 	public String deactivate(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			DeactivateRequest request = DeactivateRequest.newBuilder()
@@ -103,7 +104,7 @@ public class AdminService {
 	 */
 	public String getLedgerState(String qualifier) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = stubHandler.getStub(
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(
 			    qualifier);
 
 			getLedgerStateRequest request = getLedgerStateRequest.newBuilder()
@@ -119,14 +120,5 @@ public class AdminService {
 			        .getDescription()
 			    + "\n";
 		}
-	}
-
-	/**
-	 * Shuts down the AdminService. It shuts down the stub handler and the
-	 * naming server service.
-	 */
-	public void shutdown() {
-		stubHandler.shutdown();
-		namingServerService.shutdown();
 	}
 }

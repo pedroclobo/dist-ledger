@@ -1,7 +1,12 @@
 package pt.tecnico.distledger.adminclient;
 
+import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
+import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
+
 import pt.tecnico.distledger.adminclient.grpc.AdminService;
-import pt.tecnico.distledger.adminclient.grpc.NamingServerService;
+import pt.tecnico.distledger.namingserver.ClientNamingServerService;
+import pt.tecnico.distledger.sharedutils.ClientFrontend;
+import pt.tecnico.distledger.adminclient.grpc.AdminServiceStubBuilder;
 
 /**
  * Entry point for the Admin user.
@@ -34,13 +39,16 @@ public class AdminClientMain {
 	 */
 	public static void main(String args[]) {
 		debug("Create CommandParser and AdminService");
-		AdminService adminService = new AdminService(
-		    new NamingServerService("localhost", 5001));
+
+		ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend = new ClientFrontend<>(
+		    new AdminServiceStubBuilder());
+
+		AdminService adminService = new AdminService(frontend);
 		CommandParser parser = new CommandParser(adminService);
 
 		debug("Call parseInput()");
 		parser.parseInput();
 
-		adminService.shutdown();
+		frontend.shutdown();
 	}
 }
