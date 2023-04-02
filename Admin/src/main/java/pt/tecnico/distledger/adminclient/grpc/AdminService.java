@@ -8,7 +8,7 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerSta
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
 import pt.tecnico.distledger.sharedutils.ClientFrontend;
-
+import pt.tecnico.distledger.sharedutils.VectorClock;
 import io.grpc.StatusRuntimeException;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
@@ -23,6 +23,8 @@ public class AdminService {
 	 * -Ddebug command line option.
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
+	private VectorClock prev;
 
 	/**
 	 * Helper method to print debug messages.
@@ -41,6 +43,7 @@ public class AdminService {
 	 */
 	public AdminService(ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend) {
 		this.frontend = frontend;
+		this.prev = new VectorClock();
 	}
 
 	/**

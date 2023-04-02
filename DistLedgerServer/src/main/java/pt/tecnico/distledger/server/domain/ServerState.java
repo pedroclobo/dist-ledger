@@ -4,7 +4,6 @@ import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.operation.DeleteOp;
 import pt.tecnico.distledger.server.domain.operation.Operation;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
-
 import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
 import pt.tecnico.distledger.server.domain.exceptions.AccountHasBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
@@ -14,6 +13,8 @@ import pt.tecnico.distledger.server.domain.exceptions.InsufficientBalanceExcepti
 import pt.tecnico.distledger.server.domain.exceptions.InvalidBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.InvalidTransferException;
 
+import pt.tecnico.distledger.sharedutils.VectorClock;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class ServerState {
 
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
+	private VectorClock valueTS;
 
 	private static boolean DEBUG_FLAG = false;
 
@@ -31,6 +33,7 @@ public class ServerState {
 
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
+		this.valueTS = new VectorClock();
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
