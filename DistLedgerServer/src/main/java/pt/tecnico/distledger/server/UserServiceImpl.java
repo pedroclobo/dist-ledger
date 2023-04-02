@@ -60,7 +60,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	}
 
 	@Override
-	public synchronized void createAccount(CreateAccountRequest request, StreamObserver<CreateAccountResponse> responseObserver) {
+	public synchronized void createAccount(CreateAccountRequest request,
+	    StreamObserver<CreateAccountResponse> responseObserver) {
 		String userId = request.getUserId();
 
 		try {
@@ -83,7 +84,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	}
 
 	@Override
-	public synchronized void deleteAccount(DeleteAccountRequest request, StreamObserver<DeleteAccountResponse> responseObserver) {
+	public synchronized void deleteAccount(DeleteAccountRequest request,
+	    StreamObserver<DeleteAccountResponse> responseObserver) {
 		String userId = request.getUserId();
 
 		try {
@@ -106,7 +108,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	}
 
 	@Override
-	public synchronized void transferTo(TransferToRequest request, StreamObserver<TransferToResponse> responseObserver) {
+	public synchronized void transferTo(TransferToRequest request,
+	    StreamObserver<TransferToResponse> responseObserver) {
 		String accountFrom = request.getAccountFrom();
 		String accountTo = request.getAccountTo();
 		int amount = request.getAmount();
