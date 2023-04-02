@@ -6,7 +6,7 @@ import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
 import pt.tecnico.distledger.sharedutils.Frontend;
-
+import pt.tecnico.distledger.sharedutils.VectorClock;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
@@ -19,6 +19,8 @@ public class UserService {
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
+	private VectorClock prev;
+
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
 		if (DEBUG_FLAG)
@@ -29,6 +31,7 @@ public class UserService {
 
 	public UserService(Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
 		this.frontend = frontend;
+		this.prev = new VectorClock();
 	}
 
 	public String balance(String qualifier, String account) {
