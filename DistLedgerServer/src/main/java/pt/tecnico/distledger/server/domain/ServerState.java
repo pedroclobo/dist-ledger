@@ -1,14 +1,12 @@
 package pt.tecnico.distledger.server.domain;
 
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
-import pt.tecnico.distledger.server.domain.operation.DeleteOp;
 import pt.tecnico.distledger.server.domain.operation.Operation;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
 import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
 import pt.tecnico.distledger.server.domain.exceptions.AccountHasBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
 import pt.tecnico.distledger.server.domain.exceptions.CreateBrokerException;
-import pt.tecnico.distledger.server.domain.exceptions.DeleteBrokerException;
 import pt.tecnico.distledger.server.domain.exceptions.InsufficientBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.InvalidBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.InvalidTransferException;
@@ -73,23 +71,6 @@ public class ServerState {
 		addOperationToLedger(operation);
 		this.accounts.put(operation.getAccount(), 0);
 		debug("Account created: " + operation);
-	}
-
-	public synchronized void addDeleteOperation(DeleteOp operation) {
-		String account = operation.getAccount();
-
-		if (account.equals("broker")) {
-			throw new DeleteBrokerException();
-		} else if (!this.accounts.containsKey(operation.getAccount())) {
-			throw new AccountNotFoundException(account);
-		} else if (this.accounts.get(operation.getAccount()) != 0) {
-			int balance = this.accounts.get(operation.getAccount());
-			throw new AccountHasBalanceException(account, balance);
-		}
-
-		addOperationToLedger(operation);
-		this.accounts.remove(operation.getAccount());
-		debug("Account deleted: " + operation.toString());
 	}
 
 	public synchronized void addTransferOperation(TransferOp operation) {

@@ -72,25 +72,6 @@ public class UserService {
 		}
 	}
 
-	public String deleteAccount(String qualifier, String account) {
-		try {
-			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
-
-			DeleteAccountRequest request = DeleteAccountRequest.newBuilder()
-			                                                   .setUserId(account)
-			                                                   .build();
-			debug("Send deleteAccount request");
-			DeleteAccountResponse response = stub.deleteAccount(request);
-			debug("Received deleteAccount response");
-
-			return "OK\n" + response;
-		} catch (StatusRuntimeException e) {
-			return e.getStatus()
-			        .getDescription()
-			    + "\n";
-		}
-	}
-
 	public String transferTo(String qualifier, String accountFrom, String accountTo, int amount) {
 		try {
 			UserServiceGrpc.UserServiceBlockingStub stub = frontend.getStub(qualifier);
