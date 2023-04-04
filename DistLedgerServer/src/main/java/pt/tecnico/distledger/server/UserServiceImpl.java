@@ -10,6 +10,8 @@ import pt.tecnico.distledger.server.grpc.CrossServerService;
 import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
 import pt.tecnico.distledger.server.exceptions.ReadOnlyServerException;
 
+import pt.tecnico.distledger.sharedutils.VectorClock;
+
 import io.grpc.stub.StreamObserver;
 import static io.grpc.Status.INVALID_ARGUMENT;
 
@@ -47,12 +49,23 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			int ammount = state.getAccountBalance(userId);
+			VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
-			BalanceResponse response = BalanceResponse.newBuilder()
-			                                          .setValue(ammount)
-			                                          .build();
-			responseObserver.onNext(response);
-			responseObserver.onCompleted();
+			if (state.getValueTS()
+			         .GE(prev)) {
+				prev.merge(state.getValueTS());
+				BalanceResponse response = BalanceResponse.newBuilder()
+				                                          .setValue(ammount)
+				                                          .setValueTS(prev.toProtobuf())
+				                                          .build();
+				responseObserver.onNext(response);
+				responseObserver.onCompleted();
+			} else {
+				BalanceResponse response = BalanceResponse.getDefaultInstance();
+				responseObserver.onNext(response);
+				responseObserver.onCompleted();
+			}
+
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());

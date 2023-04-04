@@ -1,5 +1,7 @@
 package pt.tecnico.distledger.sharedutils;
 
+import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
+
 import java.util.List;
 import java.util.ArrayList;
 
@@ -41,4 +43,19 @@ public class VectorClock {
 		}
 		return true;
 	}
+
+	public DistLedgerCommonDefinitions.VectorClock toProtobuf() {
+		DistLedgerCommonDefinitions.VectorClock.Builder ts = DistLedgerCommonDefinitions.VectorClock.newBuilder();
+		ts.addAllTs(this.timestamps);
+
+		return ts.build();
+	}
+
+	public static VectorClock fromProtobuf(DistLedgerCommonDefinitions.VectorClock ts) {
+		VectorClock clock = new VectorClock();
+		clock.timestamps = new ArrayList<Integer>(ts.getTsList());
+
+		return clock;
+	}
+
 }
