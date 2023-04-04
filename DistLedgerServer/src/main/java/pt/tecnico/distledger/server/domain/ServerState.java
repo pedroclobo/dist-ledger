@@ -46,6 +46,15 @@ public class ServerState {
 		debug("Ledger changed to " + ledger.toString());
 	}
 
+	public synchronized VectorClock getValueTS() {
+		return valueTS;
+	}
+
+	public synchronized void setValueTS(VectorClock valueTS) {
+		this.valueTS = valueTS;
+		debug("ValueTS changed to " + valueTS.toString());
+	}
+
 	public synchronized int getAccountBalance(String account) {
 		if (!this.accounts.containsKey(account)) {
 			throw new AccountNotFoundException(account);

@@ -40,9 +40,12 @@ public class UserService {
 
 			BalanceRequest request = BalanceRequest.newBuilder()
 			                                       .setUserId(account)
+			                                       .setPrevTS(this.prev.toProtobuf())
 			                                       .build();
 			debug("Send balance request");
 			BalanceResponse response = stub.balance(request);
+			this.prev.merge(VectorClock.fromProtobuf(response.getValueTS()));
+
 			debug(String.format("Received balance response: %s", response));
 
 			return "OK\n" + response;
