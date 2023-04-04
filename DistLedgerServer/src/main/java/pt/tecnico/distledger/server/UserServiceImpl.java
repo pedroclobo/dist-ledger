@@ -84,30 +84,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	}
 
 	@Override
-	public synchronized void deleteAccount(DeleteAccountRequest request,
-	    StreamObserver<DeleteAccountResponse> responseObserver) {
-		String userId = request.getUserId();
-
-		try {
-			checkIfSecondary();
-			checkIfInactive();
-
-			DeleteOp operation = new DeleteOp(userId);
-			crossServerService.propagateState(operation);
-
-			operation.execute(state);
-
-			DeleteAccountResponse response = DeleteAccountResponse.newBuilder()
-			                                                      .build();
-			responseObserver.onNext(response);
-			responseObserver.onCompleted();
-		} catch (RuntimeException e) {
-			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
-			                                         .asRuntimeException());
-		}
-	}
-
-	@Override
 	public synchronized void transferTo(TransferToRequest request,
 	    StreamObserver<TransferToResponse> responseObserver) {
 		String accountFrom = request.getAccountFrom();

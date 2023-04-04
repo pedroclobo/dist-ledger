@@ -32,8 +32,6 @@ public abstract class Operation {
 		switch (op.getType()) {
 		case OP_CREATE_ACCOUNT:
 			return new CreateOp(op.getUserId());
-		case OP_DELETE_ACCOUNT:
-			return new DeleteOp(op.getUserId());
 		case OP_TRANSFER_TO:
 			return new TransferOp(op.getUserId(), op.getDestUserId(), op.getAmount());
 		default:
