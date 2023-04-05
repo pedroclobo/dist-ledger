@@ -1,6 +1,7 @@
 package pt.tecnico.distledger.server.domain.operation;
 
 import pt.tecnico.distledger.server.domain.ServerState;
+import pt.tecnico.distledger.sharedutils.VectorClock;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 
 public class TransferOp extends Operation {
@@ -9,6 +10,13 @@ public class TransferOp extends Operation {
 
 	public TransferOp(String fromAccount, String destAccount, int amount) {
 		super(fromAccount);
+		this.destAccount = destAccount;
+		this.amount = amount;
+	}
+
+	public TransferOp(String fromAccount, String destAccount, int amount, VectorClock prevTs, VectorClock ts,
+	    boolean stable) {
+		super(fromAccount, prevTs, ts, stable);
 		this.destAccount = destAccount;
 		this.amount = amount;
 	}
@@ -34,8 +42,13 @@ public class TransferOp extends Operation {
 		DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
 		op.setType(DistLedgerCommonDefinitions.OperationType.OP_TRANSFER_TO)
 		  .setUserId(this.getAccount())
-		  .setDestUserId(((TransferOp) this).getDestAccount())
-		  .setAmount(((TransferOp) this).getAmount());
+		  .setDestUserId(this.getDestAccount())
+		  .setAmount(this.getAmount())
+		  .setPrevTS(this.getPrev()
+		                 .toProtobuf())
+		  .setTS(this.getTS()
+		             .toProtobuf())
+		  .setStable(this.isStable());
 
 		return op.build();
 	}

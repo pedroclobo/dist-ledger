@@ -7,7 +7,9 @@ import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Ledger
 
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.sharedutils.ServerFrontend;
+import pt.tecnico.distledger.sharedutils.VectorClock;
 
+import java.util.List;
 import io.grpc.StatusRuntimeException;
 
 public class CrossServerService {
@@ -18,14 +20,20 @@ public class CrossServerService {
 		this.frontend = frontend;
 	}
 
-	public void propagateState(Operation operation) {
+	public void propagateState(VectorClock replicaTS, List<Operation> ledger, String qualifier) {
 		try {
-			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = frontend.getStub("B");
+			DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub stub = frontend.getStub(
+			    qualifier);
 
 			LedgerState.Builder ledgerState = LedgerState.newBuilder();
-			ledgerState.addLedger(operation.toProtobuf());
+
+			for (Operation operation : ledger) {
+				ledgerState.addLedger(operation.toProtobuf());
+			}
+
 			PropagateStateRequest request = PropagateStateRequest.newBuilder()
 			                                                     .setState(ledgerState)
+			                                                     .setReplicaTS(replicaTS.toProtobuf())
 			                                                     .build();
 			stub.propagateState(request);
 		} catch (StatusRuntimeException e) {

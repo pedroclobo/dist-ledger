@@ -5,6 +5,8 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.ActivateRequ
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.DeactivateRequest;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateRequest;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
+import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.GossipRequest;
+import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.GossipResponse;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
 import pt.tecnico.distledger.sharedutils.ClientFrontend;
@@ -110,6 +112,22 @@ public class AdminService {
 			debug("Send getLedgerState request");
 			getLedgerStateResponse response = stub.getLedgerState(request);
 			debug(String.format("Received getLedgerState response:%n%s", response));
+
+			return "OK\n" + response + "\n";
+		} catch (StatusRuntimeException e) {
+			return e.getStatus()
+			        .getDescription()
+			    + "\n";
+		}
+	}
+
+	public String gossip(String qualifier) {
+		try {
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(qualifier);
+
+			GossipRequest request = GossipRequest.newBuilder()
+			                                     .build();
+			GossipResponse response = stub.gossip(request);
 
 			return "OK\n" + response + "\n";
 		} catch (StatusRuntimeException e) {
