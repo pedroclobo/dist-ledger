@@ -10,7 +10,7 @@ class CreateServerStateTest {
 
 	@BeforeEach
 	public void setUp() {
-		state = new ServerState();
+		state = new ServerState("A");
 	}
 
 	@AfterEach

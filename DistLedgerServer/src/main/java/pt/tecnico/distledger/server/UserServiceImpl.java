@@ -81,15 +81,26 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfSecondary();
 			checkIfInactive();
 
+			// Increment ReplicaTS
+			if (state.qualifier.equals("A")) {
+				state.replicaTS.incrementTS(0);
+			} else if (state.equals("B")) {
+				state.replicaTS.incrementTS(1);
+			}
+
+			// Set operationTS
 			CreateOp operation = new CreateOp(userId);
-			crossServerService.propagateState(operation);
+			operation.setTS(state.replicaTS);
 
-			operation.execute(state);
-
+			// Reply to user
 			CreateAccountResponse response = CreateAccountResponse.newBuilder()
+			                                                      .setTS(state.replicaTS.toProtobuf())
 			                                                      .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
+
+			state.addOperationToLedger(operation);
+
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());
@@ -107,15 +118,26 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfSecondary();
 			checkIfInactive();
 
+			// Increment ReplicaTS
+			if (state.qualifier.equals("A")) {
+				state.replicaTS.incrementTS(0);
+			} else if (state.qualifier.equals("B")) {
+				state.replicaTS.incrementTS(1);
+			}
+
+			// Set OperationTS
 			TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
-			crossServerService.propagateState(operation);
+			operation.setTS(state.replicaTS);
 
-			operation.execute(state);
-
+			// Reply to user
 			TransferToResponse response = TransferToResponse.newBuilder()
+			                                                .setTS(state.replicaTS.toProtobuf())
 			                                                .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
+
+			state.addOperationToLedger(operation);
+
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());

@@ -45,7 +45,7 @@ public class ServerMain {
 		final String qualifer = args[1];
 
 		// Initialize services.
-		final ServerState state = new ServerState();
+		final ServerState state = new ServerState(qualifer);
 		final ServerMode mode = new ServerMode();
 		final ServerRole role = new ServerRole(qualifer);
 

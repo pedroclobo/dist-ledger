@@ -10,6 +10,13 @@ public class VectorClock {
 
 	int DEFAULT_SIZE = 2;
 
+	public VectorClock(VectorClock other) {
+		this.timestamps = new ArrayList<Integer>(DEFAULT_SIZE);
+		for (int i = 0; i < DEFAULT_SIZE; i++) {
+			this.timestamps.add(other.getTS(i));
+		}
+	}
+
 	public VectorClock() {
 		this.timestamps = new ArrayList<Integer>(DEFAULT_SIZE);
 		for (int i = 0; i < DEFAULT_SIZE; i++) {
