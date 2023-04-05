@@ -16,7 +16,7 @@ class TransferToTest {
 
 	@BeforeEach
 	public void setUp() {
-		state = new ServerState();
+		state = new ServerState("A");
 	}
 
 	@AfterEach
@@ -27,17 +27,10 @@ class TransferToTest {
 	// Perform a transfer
 	@Test
 	public void transferTo() {
-		state.addCreateOperation(new CreateOp("Alice"));
+		state.executeOperation(new CreateOp("Alice"));
 
 		TransferOp op = new TransferOp("broker", "Alice", 10);
-		state.addTransferOperation(op);
-
-		assertEquals(state.getLedger()
-		                  .size(),
-		    2);
-		assertEquals(state.getLedger()
-		                  .get(1),
-		    op);
+		state.executeOperation(op);
 
 		assertEquals(state.getAccountBalance("Alice"), 10);
 		assertEquals(state.getAccountBalance("broker"), 990);
@@ -47,19 +40,13 @@ class TransferToTest {
 	@Test
 	public void transferFromMissingAccount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("Bob", "Alice", 10);
 
 		// An exception should be thrown when transferring from a non existing
 		// account
-		assertThrows(AccountNotFoundException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		assertThrows(AccountNotFoundException.class, () -> state.executeOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 	}
@@ -68,19 +55,13 @@ class TransferToTest {
 	@Test
 	public void transferToMissingAccount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("Alice", "Bob", 10);
 
 		// An exception should be thrown when transferring to a non existing
 		// account
-		assertThrows(AccountNotFoundException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		assertThrows(AccountNotFoundException.class, () -> state.executeOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 	}
@@ -89,18 +70,12 @@ class TransferToTest {
 	@Test
 	public void transferToSameAccount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("Alice", "Alice", 10);
 
 		// An exception should be thrown when transferring to the same account
-		assertThrows(InvalidTransferException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		assertThrows(InvalidTransferException.class, () -> state.executeOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 	}
@@ -109,18 +84,12 @@ class TransferToTest {
 	@Test
 	public void transferNegativeAmount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("broker", "Alice", -10);
 
 		// An exception should be thrown when transferring a negative amount
-		assertThrows(InvalidBalanceException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		assertThrows(InvalidBalanceException.class, () -> state.executeOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 		assertEquals(state.getAccountBalance("broker"), 1000);
@@ -130,18 +99,12 @@ class TransferToTest {
 	@Test
 	public void transferNullAmount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("broker", "Alice", 0);
 
 		// An exception should be thrown when transferring no coins
-		assertThrows(InvalidBalanceException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		assertThrows(InvalidBalanceException.class, () -> state.executeTransferOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 		assertEquals(state.getAccountBalance("broker"), 1000);
@@ -151,20 +114,13 @@ class TransferToTest {
 	@Test
 	public void transferNotEnoughBalance() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("broker", "Alice", 1050);
 
 		// An exception should be thrown when transferring more coins than the
-		// account
-		// has
-		assertThrows(InsufficientBalanceException.class, () -> state.addTransferOperation(op2));
-		assertEquals(state.getLedger()
-		                  .size(),
-		    1);
-		assertEquals(state.getLedger()
-		                  .get(0),
-		    op1);
+		// account has
+		assertThrows(InsufficientBalanceException.class, () -> state.executeOperation(op2));
 
 		assertEquals(state.getAccountBalance("Alice"), 0);
 		assertEquals(state.getAccountBalance("broker"), 1000);
@@ -174,18 +130,11 @@ class TransferToTest {
 	@Test
 	public void transferBalanceEqualsAmount() {
 		CreateOp op1 = new CreateOp("Alice");
-		state.addCreateOperation(op1);
+		state.executeOperation(op1);
 
 		TransferOp op2 = new TransferOp("broker", "Alice", 1000);
 
-		state.addTransferOperation(op2);
-
-		assertEquals(state.getLedger()
-		                  .size(),
-		    2);
-		assertEquals(state.getLedger()
-		                  .get(1),
-		    op2);
+		state.executeOperation(op2);
 
 		assertEquals(state.getAccountBalance("Alice"), 1000);
 		assertEquals(state.getAccountBalance("broker"), 0);

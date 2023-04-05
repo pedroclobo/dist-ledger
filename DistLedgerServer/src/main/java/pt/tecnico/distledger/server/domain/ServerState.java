@@ -19,19 +19,25 @@ import java.util.HashMap;
 
 public class ServerState {
 
+	public String qualifier; // FIXME
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
-	private VectorClock valueTS;
+	public VectorClock valueTS; // FIXME
+	public VectorClock replicaTS; // FIXME
 
 	private static boolean DEBUG_FLAG = false;
 
-	public ServerState() {
+	public ServerState(String qualifier) {
 		DEBUG_FLAG = System.getProperty("debug") != null;
 		debug("ServerState initialized");
 
+		this.qualifier = qualifier; // to increment vector clocks
+
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
+
 		this.valueTS = new VectorClock();
+		this.replicaTS = new VectorClock();
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
@@ -55,6 +61,15 @@ public class ServerState {
 		debug("ValueTS changed to " + valueTS.toString());
 	}
 
+	public synchronized VectorClock getReplicaTS() {
+		return replicaTS;
+	}
+
+	public synchronized void setReplicaTS(VectorClock replicaTS) {
+		this.replicaTS = replicaTS;
+		debug("ReplicaTS changed to " + valueTS.toString());
+	}
+
 	public synchronized int getAccountBalance(String account) {
 		if (!this.accounts.containsKey(account)) {
 			throw new AccountNotFoundException(account);
@@ -65,10 +80,28 @@ public class ServerState {
 
 	public synchronized void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
-		debug("Operation added to ledger: " + operation);
+
+		// Check if operation becomes stable
+		if (valueTS.GE(operation.getPrev())) {
+			operation.setStable();
+			executeOperation(operation);
+			valueTS.merge(operation.getTS());
+		}
 	}
 
-	public synchronized void addCreateOperation(CreateOp operation) {
+	public synchronized void executeOperation(Operation operation) {
+		switch (operation.getType()) {
+		case "CreateOp":
+			executeCreateOperation((CreateOp) operation);
+			break;
+		case "TransferOp":
+			executeTransferOperation((TransferOp) operation);
+			break;
+		}
+	}
+
+	// execute operation and update valueTS
+	public synchronized void executeCreateOperation(CreateOp operation) {
 		String account = operation.getAccount();
 
 		if (account.equals("broker")) {
@@ -77,12 +110,10 @@ public class ServerState {
 			throw new AccountAlreadyExistsException(account);
 		}
 
-		addOperationToLedger(operation);
 		this.accounts.put(operation.getAccount(), 0);
-		debug("Account created: " + operation);
 	}
 
-	public synchronized void addTransferOperation(TransferOp operation) {
+	public synchronized void executeTransferOperation(TransferOp operation) {
 		String fromAccount = operation.getAccount();
 		String toAccount = operation.getDestAccount();
 		int amount = operation.getAmount();
@@ -100,10 +131,8 @@ public class ServerState {
 			throw new InsufficientBalanceException(fromAccount, fromAccountBalance);
 		}
 
-		addOperationToLedger(operation);
 		this.accounts.put(fromAccount, this.accounts.get(fromAccount) - amount);
 		this.accounts.put(toAccount, this.accounts.get(toAccount) + amount);
-		debug("Transfer operation executed: " + operation);
 	}
 
 	/** Helper method to print debug messages. */

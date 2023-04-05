@@ -29,21 +29,21 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 
 	@Override
 	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
-		try {
-			checkIfInactive();
-
-			Operation operation = Operation.fromProtobuf(request.getState()
-			                                                    .getLedgerList()
-			                                                    .get(0));
-			operation.execute(state);
-
-			PropagateStateResponse response = PropagateStateResponse.newBuilder()
-			                                                        .build();
-			responseObserver.onNext(response);
-			responseObserver.onCompleted();
-		} catch (RuntimeException e) {
-			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
-			                                         .asRuntimeException());
-		}
+		// try {
+		// checkIfInactive();
+		//
+		// Operation operation = Operation.fromProtobuf(request.getState()
+		// .getLedgerList()
+		// .get(0));
+		// operation.execute(state);
+		//
+		// PropagateStateResponse response = PropagateStateResponse.newBuilder()
+		// .build();
+		// responseObserver.onNext(response);
+		// responseObserver.onCompleted();
+		// } catch (RuntimeException e) {
+		// responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+		// .asRuntimeException());
+		// }
 	}
 }

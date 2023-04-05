@@ -10,11 +10,6 @@ public class CreateOp extends Operation {
 	}
 
 	@Override
-	public void execute(ServerState state) {
-		state.addCreateOperation(this);
-	}
-
-	@Override
 	public DistLedgerCommonDefinitions.Operation toProtobuf() {
 		DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
 		op.setType(DistLedgerCommonDefinitions.OperationType.OP_CREATE_ACCOUNT)

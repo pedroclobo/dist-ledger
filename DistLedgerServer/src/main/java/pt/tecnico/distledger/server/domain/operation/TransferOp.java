@@ -30,11 +30,6 @@ public class TransferOp extends Operation {
 	}
 
 	@Override
-	public void execute(ServerState state) {
-		state.addTransferOperation(this);
-	}
-
-	@Override
 	public DistLedgerCommonDefinitions.Operation toProtobuf() {
 		DistLedgerCommonDefinitions.Operation.Builder op = DistLedgerCommonDefinitions.Operation.newBuilder();
 		op.setType(DistLedgerCommonDefinitions.OperationType.OP_TRANSFER_TO)

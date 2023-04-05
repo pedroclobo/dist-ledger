@@ -2,12 +2,22 @@ package pt.tecnico.distledger.server.domain.operation;
 
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
+import pt.tecnico.distledger.sharedutils.VectorClock;
 
 public abstract class Operation {
 	private String account;
 
+	private VectorClock prevTS;
+	private VectorClock TS;
+	private boolean stable;
+
 	public Operation(String fromAccount) {
 		this.account = fromAccount;
+
+		this.prevTS = new VectorClock();
+		this.TS = new VectorClock();
+
+		this.stable = false;
 	}
 
 	public String getAccount() {
@@ -18,12 +28,29 @@ public abstract class Operation {
 		this.account = account;
 	}
 
+	public VectorClock getPrev() {
+		return new VectorClock(prevTS);
+	}
+
+	public void setPrev(VectorClock prev) {
+		prevTS = prev;
+	}
+
+	public VectorClock getTS() {
+		return new VectorClock(TS);
+	}
+
+	public void setTS(VectorClock newTS) {
+		TS = newTS;
+	}
+
+	public void setStable() {
+		stable = true;
+	}
+
 	public String getType() {
 		return this.getClass()
 		           .getSimpleName();
-	}
-
-	public void execute(ServerState state) {
 	}
 
 	public abstract DistLedgerCommonDefinitions.Operation toProtobuf();
