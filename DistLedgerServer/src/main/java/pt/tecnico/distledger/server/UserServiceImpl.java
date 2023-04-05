@@ -19,11 +19,14 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	private ServerState state;
 	private ServerMode mode;
+	private ServerTimestamp timestamp;
 	private CrossServerService crossServerService;
 
-	public UserServiceImpl(ServerState state, ServerMode mode, CrossServerService crossServerService) {
+	public UserServiceImpl(ServerState state, ServerMode mode, ServerTimestamp timestamp,
+	    CrossServerService crossServerService) {
 		this.state = state;
 		this.mode = mode;
+		this.timestamp = timestamp;
 		this.crossServerService = crossServerService;
 	}
 
@@ -43,9 +46,9 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			int ammount = state.getAccountBalance(userId);
 			VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
-			if (state.getValueTS()
-			         .GE(prev)) {
-				prev.merge(state.getValueTS());
+			if (timestamp.getValueTS()
+			             .GE(prev)) {
+				prev.merge(timestamp.getValueTS());
 
 				BalanceResponse response = BalanceResponse.newBuilder()
 				                                          .setValue(ammount)
@@ -73,19 +76,16 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			// Increment ReplicaTS
-			if (state.qualifier.equals("A")) {
-				state.replicaTS.incrementTS(0);
-			} else if (state.equals("B")) {
-				state.replicaTS.incrementTS(1);
-			}
+			timestamp.incrementReplicaTS();
 
 			// Set operationTS
 			CreateOp operation = new CreateOp(userId);
-			operation.setTS(state.replicaTS);
+			operation.setTS(timestamp.getReplicaTS());
 
 			// Reply to user
 			CreateAccountResponse response = CreateAccountResponse.newBuilder()
-			                                                      .setTS(state.replicaTS.toProtobuf())
+			                                                      .setTS(timestamp.getReplicaTS()
+			                                                                      .toProtobuf())
 			                                                      .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
@@ -109,19 +109,16 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			checkIfInactive();
 
 			// Increment ReplicaTS
-			if (state.qualifier.equals("A")) {
-				state.replicaTS.incrementTS(0);
-			} else if (state.qualifier.equals("B")) {
-				state.replicaTS.incrementTS(1);
-			}
+			timestamp.incrementReplicaTS();
 
 			// Set OperationTS
 			TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
-			operation.setTS(state.replicaTS);
+			operation.setTS(timestamp.getReplicaTS());
 
 			// Reply to user
 			TransferToResponse response = TransferToResponse.newBuilder()
-			                                                .setTS(state.replicaTS.toProtobuf())
+			                                                .setTS(timestamp.getReplicaTS()
+			                                                                .toProtobuf())
 			                                                .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();

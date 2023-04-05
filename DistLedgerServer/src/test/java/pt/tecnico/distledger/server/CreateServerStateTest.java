@@ -1,5 +1,6 @@
 package pt.tecnico.distledger.server;
 
+import pt.tecnico.distledger.server.ServerTimestamp;
 import pt.tecnico.distledger.server.domain.ServerState;
 
 import org.junit.jupiter.api.*;
@@ -10,7 +11,7 @@ class CreateServerStateTest {
 
 	@BeforeEach
 	public void setUp() {
-		state = new ServerState("A");
+		state = new ServerState(new ServerTimestamp("A"));
 	}
 
 	@AfterEach
