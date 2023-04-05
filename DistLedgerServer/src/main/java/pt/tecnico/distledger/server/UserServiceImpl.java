@@ -54,6 +54,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			if (state.getValueTS()
 			         .GE(prev)) {
 				prev.merge(state.getValueTS());
+
 				BalanceResponse response = BalanceResponse.newBuilder()
 				                                          .setValue(ammount)
 				                                          .setValueTS(prev.toProtobuf())
@@ -61,9 +62,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 				responseObserver.onNext(response);
 				responseObserver.onCompleted();
 			} else {
-				BalanceResponse response = BalanceResponse.getDefaultInstance();
-				responseObserver.onNext(response);
-				responseObserver.onCompleted();
+				responseObserver.onError(INVALID_ARGUMENT.withDescription("ERROR: You are too up to date!")
+				                                         .asRuntimeException());
 			}
 
 		} catch (RuntimeException e) {
