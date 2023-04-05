@@ -1,5 +1,6 @@
 package pt.tecnico.distledger.server;
 
+import pt.tecnico.distledger.server.ServerTimestamp;
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
@@ -13,7 +14,7 @@ class CreateAccountTest {
 
 	@BeforeEach
 	public void setUp() {
-		state = new ServerState("A");
+		state = new ServerState(new ServerTimestamp("A"));
 	}
 
 	@AfterEach

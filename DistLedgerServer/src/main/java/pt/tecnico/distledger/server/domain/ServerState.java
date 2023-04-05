@@ -1,5 +1,6 @@
 package pt.tecnico.distledger.server.domain;
 
+import pt.tecnico.distledger.server.ServerTimestamp;
 import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.operation.Operation;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
@@ -19,25 +20,20 @@ import java.util.HashMap;
 
 public class ServerState {
 
-	public String qualifier; // FIXME
 	private List<Operation> ledger;
 	private HashMap<String, Integer> accounts;
-	public VectorClock valueTS; // FIXME
-	public VectorClock replicaTS; // FIXME
+	private ServerTimestamp timestamp;
 
 	private static boolean DEBUG_FLAG = false;
 
-	public ServerState(String qualifier) {
+	public ServerState(ServerTimestamp timestamp) {
 		DEBUG_FLAG = System.getProperty("debug") != null;
 		debug("ServerState initialized");
 
-		this.qualifier = qualifier; // to increment vector clocks
+		this.timestamp = timestamp;
 
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
-
-		this.valueTS = new VectorClock();
-		this.replicaTS = new VectorClock();
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
@@ -52,24 +48,6 @@ public class ServerState {
 		debug("Ledger changed to " + ledger.toString());
 	}
 
-	public synchronized VectorClock getValueTS() {
-		return valueTS;
-	}
-
-	public synchronized void setValueTS(VectorClock valueTS) {
-		this.valueTS = valueTS;
-		debug("ValueTS changed to " + valueTS.toString());
-	}
-
-	public synchronized VectorClock getReplicaTS() {
-		return replicaTS;
-	}
-
-	public synchronized void setReplicaTS(VectorClock replicaTS) {
-		this.replicaTS = replicaTS;
-		debug("ReplicaTS changed to " + valueTS.toString());
-	}
-
 	public synchronized int getAccountBalance(String account) {
 		if (!this.accounts.containsKey(account)) {
 			throw new AccountNotFoundException(account);
@@ -82,10 +60,11 @@ public class ServerState {
 		this.ledger.add(operation);
 
 		// Check if operation becomes stable
+		VectorClock valueTS = timestamp.getValueTS();
 		if (valueTS.GE(operation.getPrev())) {
 			operation.setStable();
 			executeOperation(operation);
-			valueTS.merge(operation.getTS());
+			timestamp.mergeValueTS(operation.getTS());
 		}
 	}
 
