@@ -114,6 +114,18 @@ public class ServerState {
 		this.accounts.put(toAccount, this.accounts.get(toAccount) + amount);
 	}
 
+	public synchronized void recomputeStability() {
+		for (Operation op : ledger) {
+			if (timestamp.getValueTS()
+			             .GE(op.getPrev())
+			    && !op.isStable()) {
+				op.setStable();
+				executeOperation(op);
+				timestamp.mergeValueTS(op.getTS());
+			}
+		}
+	}
+
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
 		if (DEBUG_FLAG)

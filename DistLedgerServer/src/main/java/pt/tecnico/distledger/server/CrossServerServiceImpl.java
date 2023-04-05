@@ -7,6 +7,7 @@ import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
+import pt.tecnico.distledger.sharedutils.VectorClock;
 
 import io.grpc.stub.StreamObserver;
 import static io.grpc.Status.INVALID_ARGUMENT;
@@ -15,10 +16,12 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 
 	private ServerState state;
 	private ServerMode mode;
+	private ServerTimestamp timestamp;
 
-	public CrossServerServiceImpl(ServerState state, ServerMode mode) {
+	public CrossServerServiceImpl(ServerState state, ServerMode mode, ServerTimestamp timestamp) {
 		this.state = state;
 		this.mode = mode;
+		this.timestamp = timestamp;
 	}
 
 	private void checkIfInactive() {
@@ -29,21 +32,32 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 
 	@Override
 	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
-		// try {
-		// checkIfInactive();
-		//
-		// Operation operation = Operation.fromProtobuf(request.getState()
-		// .getLedgerList()
-		// .get(0));
-		// operation.execute(state);
-		//
-		// PropagateStateResponse response = PropagateStateResponse.newBuilder()
-		// .build();
-		// responseObserver.onNext(response);
-		// responseObserver.onCompleted();
-		// } catch (RuntimeException e) {
-		// responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
-		// .asRuntimeException());
-		// }
+		try {
+			checkIfInactive();
+
+			VectorClock otherReplicaTS = VectorClock.fromProtobuf(request.getReplicaTS());
+
+			for (DistLedgerCommonDefinitions.Operation op : request.getState()
+			                                                       .getLedgerList()) {
+				Operation operation = Operation.fromProtobuf(op);
+
+				// TODO: check if this is correct
+				if (!timestamp.getReplicaTS()
+				              .GE(operation.getTS())) {
+					state.addOperationToLedger(operation);
+				}
+			}
+
+			timestamp.mergeReplicaTS(otherReplicaTS);
+			state.recomputeStability();
+
+			PropagateStateResponse response = PropagateStateResponse.newBuilder()
+			                                                        .build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (RuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
+		}
 	}
 }

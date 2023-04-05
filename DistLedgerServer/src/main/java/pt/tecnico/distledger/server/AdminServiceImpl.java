@@ -9,17 +9,27 @@ import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.ServerMode;
 import pt.tecnico.distledger.server.ServerMode.Mode;
+import pt.tecnico.distledger.server.grpc.CrossServerService;
 
 import io.grpc.stub.StreamObserver;
+import static io.grpc.Status.INVALID_ARGUMENT;
+import io.grpc.StatusRuntimeException;
 
 public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
 	private ServerState state;
 	private ServerMode mode;
+	private ServerTimestamp timestamp;
+	private CrossServerService crossServerService;
+	private String qualifier;
 
-	public AdminServiceImpl(ServerState state, ServerMode mode) {
+	public AdminServiceImpl(ServerState state, ServerMode mode, ServerTimestamp timestamp,
+	    CrossServerService crossServerService, String qualifier) {
 		this.state = state;
 		this.mode = mode;
+		this.timestamp = timestamp;
+		this.crossServerService = crossServerService;
+		this.qualifier = qualifier;
 	}
 
 	@Override
@@ -59,6 +69,24 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
 	@Override
 	public void gossip(GossipRequest request, StreamObserver<GossipResponse> responseObserver) {
-		// TODO: implement gossip service (only for Phase-3)
+		try {
+			switch (qualifier) {
+			case "A":
+				crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), "B");
+				break;
+
+			case "B":
+				crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), "A");
+				break;
+			}
+
+			GossipResponse response = GossipResponse.newBuilder()
+			                                        .build();
+			responseObserver.onNext(response);
+			responseObserver.onCompleted();
+		} catch (StatusRuntimeException e) {
+			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
+			                                         .asRuntimeException());
+		}
 	}
 }

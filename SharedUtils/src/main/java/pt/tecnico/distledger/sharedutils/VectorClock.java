@@ -6,44 +6,44 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class VectorClock {
-	private List<Integer> timestamps;
+	private int timestamps[];
 
-	int DEFAULT_SIZE = 2;
+	private static int SIZE = 2;
 
 	public VectorClock(VectorClock other) {
-		this.timestamps = new ArrayList<Integer>(DEFAULT_SIZE);
-		for (int i = 0; i < DEFAULT_SIZE; i++) {
-			this.timestamps.add(other.getTS(i));
+		timestamps = new int[SIZE];
+		for (int i = 0; i < SIZE; i++) {
+			timestamps[i] = other.getTS(i);
 		}
 	}
 
 	public VectorClock() {
-		this.timestamps = new ArrayList<Integer>(DEFAULT_SIZE);
-		for (int i = 0; i < DEFAULT_SIZE; i++) {
-			this.timestamps.add(0);
+		timestamps = new int[SIZE];
+		for (int i = 0; i < SIZE; i++) {
+			timestamps[i] = 0;
 		}
 	}
 
 	public Integer getTS(int index) {
-		return this.timestamps.get(index);
+		return timestamps[index];
 	}
 
 	public void setTS(int index, int value) {
-		this.timestamps.set(index, value);
+		timestamps[index] = value;
 	}
 
 	public void incrementTS(int index) {
-		this.timestamps.set(index, this.timestamps.get(index) + 1);
+		this.setTS(index, this.getTS(index) + 1);
 	}
 
 	public void merge(VectorClock other) {
-		for (int i = 0; i < this.timestamps.size(); i++) {
-			this.timestamps.set(i, Math.max(this.getTS(i), other.getTS(i)));
+		for (int i = 0; i < SIZE; i++) {
+			this.setTS(i, Math.max(this.getTS(i), other.getTS(i)));
 		}
 	}
 
 	public boolean GE(VectorClock other) {
-		for (int i = 0; i < this.timestamps.size(); i++) {
+		for (int i = 0; i < SIZE; i++) {
 			if (this.getTS(i) < other.getTS(i)) {
 				return false;
 			}
@@ -53,16 +53,21 @@ public class VectorClock {
 
 	public DistLedgerCommonDefinitions.VectorClock toProtobuf() {
 		DistLedgerCommonDefinitions.VectorClock.Builder ts = DistLedgerCommonDefinitions.VectorClock.newBuilder();
-		ts.addAllTs(this.timestamps);
+
+		for (int i = 0; i < SIZE; i++) {
+			ts.addTs(this.getTS(i));
+		}
 
 		return ts.build();
 	}
 
 	public static VectorClock fromProtobuf(DistLedgerCommonDefinitions.VectorClock ts) {
 		VectorClock clock = new VectorClock();
-		clock.timestamps = new ArrayList<Integer>(ts.getTsList());
+
+		for (int i = 0; i < SIZE; i++) {
+			clock.setTS(i, ts.getTs(i));
+		}
 
 		return clock;
 	}
-
 }

@@ -32,6 +32,10 @@ public class ServerTimestamp {
 		}
 	}
 
+	public synchronized void mergeReplicaTS(VectorClock other) {
+		replicaTS.merge(other);
+	}
+
 	public synchronized VectorClock getValueTS() {
 		return valueTS;
 	}
