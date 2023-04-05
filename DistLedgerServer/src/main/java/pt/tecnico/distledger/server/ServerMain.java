@@ -47,7 +47,6 @@ public class ServerMain {
 		// Initialize services.
 		final ServerState state = new ServerState(qualifer);
 		final ServerMode mode = new ServerMode();
-		final ServerRole role = new ServerRole(qualifer);
 
 		ServerFrontend<DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceBlockingStub> frontend = new ServerFrontend(
 		    qualifer, "localhost", port, new DistLedgerCrossServerServiceStubBuilder());
@@ -55,7 +54,7 @@ public class ServerMain {
 		final CrossServerService crossServerService = new CrossServerService(frontend);
 		final BindableService admin = new AdminServiceImpl(state, mode);
 		final BindableService cross = new CrossServerServiceImpl(state, mode);
-		final BindableService user = new UserServiceImpl(state, mode, role, crossServerService);
+		final BindableService user = new UserServiceImpl(state, mode, crossServerService);
 
 		// Create a new server to listen on port.
 		Server server = ServerBuilder.forPort(port)
