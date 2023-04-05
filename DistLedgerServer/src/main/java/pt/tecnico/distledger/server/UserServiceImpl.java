@@ -19,25 +19,17 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	private ServerState state;
 	private ServerMode mode;
-	private ServerRole role;
 	private CrossServerService crossServerService;
 
-	public UserServiceImpl(ServerState state, ServerMode mode, ServerRole role, CrossServerService crossServerService) {
+	public UserServiceImpl(ServerState state, ServerMode mode, CrossServerService crossServerService) {
 		this.state = state;
 		this.mode = mode;
-		this.role = role;
 		this.crossServerService = crossServerService;
 	}
 
 	private void checkIfInactive() {
 		if (mode.isInactive()) {
 			throw new ServerUnavailableException();
-		}
-	}
-
-	private void checkIfSecondary() {
-		if (!role.isPrimary()) {
-			throw new ReadOnlyServerException();
 		}
 	}
 
@@ -78,7 +70,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 		String userId = request.getUserId();
 
 		try {
-			checkIfSecondary();
 			checkIfInactive();
 
 			// Increment ReplicaTS
@@ -115,7 +106,6 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 		int amount = request.getAmount();
 
 		try {
-			checkIfSecondary();
 			checkIfInactive();
 
 			// Increment ReplicaTS
