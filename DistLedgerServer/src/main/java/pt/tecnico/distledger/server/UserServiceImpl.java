@@ -43,15 +43,16 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 		try {
 			checkIfInactive();
 
-			int ammount = state.getAccountBalance(userId);
 			VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
 			if (timestamp.getValueTS()
 			             .GE(prev)) {
 				prev.merge(timestamp.getValueTS());
 
+				int amount = state.getAccountBalance(userId);
+
 				BalanceResponse response = BalanceResponse.newBuilder()
-				                                          .setValue(ammount)
+				                                          .setValue(amount)
 				                                          .setValueTS(prev.toProtobuf())
 				                                          .build();
 				responseObserver.onNext(response);
