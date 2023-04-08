@@ -47,13 +47,12 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 			if (timestamp.getValueTS()
 			             .GE(prev)) {
-				prev.merge(timestamp.getValueTS());
 
 				int amount = state.getAccountBalance(userId);
 
 				BalanceResponse response = BalanceResponse.newBuilder()
 				                                          .setValue(amount)
-				                                          .setValueTS(prev.toProtobuf())
+				                                          .setValueTS(timestamp.getValueTS().toProtobuf())
 				                                          .build();
 				responseObserver.onNext(response);
 				responseObserver.onCompleted();
