@@ -64,7 +64,7 @@ public class UserService {
 			                                                   .setUserId(account)
 			                                                   .build();
 			debug("Send createAccount request");
-			CreateAccountResponse response = stub.createAccount(request);
+			UpdateOperationResponse response = stub.createAccount(request);
 			debug("Received createAccount response");
 
 			return "OK\n" + response;
@@ -85,7 +85,7 @@ public class UserService {
 			                                             .setAmount(amount)
 			                                             .build();
 			debug("Send transferTo request");
-			TransferToResponse response = stub.transferTo(request);
+			UpdateOperationResponse response = stub.transferTo(request);
 			debug("Received transferTo response");
 
 			return "OK\n" + response;

@@ -52,7 +52,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 				BalanceResponse response = BalanceResponse.newBuilder()
 				                                          .setValue(amount)
-				                                          .setValueTS(timestamp.getValueTS().toProtobuf())
+				                                          .setValueTS(timestamp.getValueTS()
+				                                                               .toProtobuf())
 				                                          .build();
 				responseObserver.onNext(response);
 				responseObserver.onCompleted();
@@ -69,7 +70,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	@Override
 	public synchronized void createAccount(CreateAccountRequest request,
-	    StreamObserver<CreateAccountResponse> responseObserver) {
+	    StreamObserver<UpdateOperationResponse> responseObserver) {
+
 		String userId = request.getUserId();
 
 		try {
@@ -83,10 +85,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			operation.setTS(timestamp.getReplicaTS());
 
 			// Reply to user
-			CreateAccountResponse response = CreateAccountResponse.newBuilder()
-			                                                      .setTS(timestamp.getReplicaTS()
-			                                                                      .toProtobuf())
-			                                                      .build();
+			UpdateOperationResponse response = UpdateOperationResponse.newBuilder()
+			                                                          .setTS(timestamp.getReplicaTS()
+			                                                                          .toProtobuf())
+			                                                          .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 
@@ -100,7 +102,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 	@Override
 	public synchronized void transferTo(TransferToRequest request,
-	    StreamObserver<TransferToResponse> responseObserver) {
+	    StreamObserver<UpdateOperationResponse> responseObserver) {
+
 		String accountFrom = request.getAccountFrom();
 		String accountTo = request.getAccountTo();
 		int amount = request.getAmount();
@@ -116,10 +119,10 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			operation.setTS(timestamp.getReplicaTS());
 
 			// Reply to user
-			TransferToResponse response = TransferToResponse.newBuilder()
-			                                                .setTS(timestamp.getReplicaTS()
-			                                                                .toProtobuf())
-			                                                .build();
+			UpdateOperationResponse response = UpdateOperationResponse.newBuilder()
+			                                                          .setTS(timestamp.getReplicaTS()
+			                                                                          .toProtobuf())
+			                                                          .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 

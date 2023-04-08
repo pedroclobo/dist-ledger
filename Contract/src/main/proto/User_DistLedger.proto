@@ -20,10 +20,6 @@ message CreateAccountRequest {
 	VectorClock prevTS = 2;
 }
 
-message CreateAccountResponse {
-	VectorClock TS = 1;
-}
-
 message TransferToRequest {
 	string accountFrom = 1;
 	string accountTo = 2;
@@ -31,12 +27,12 @@ message TransferToRequest {
 	VectorClock prevTS = 4;
 }
 
-message TransferToResponse {
+message UpdateOperationResponse {
 	VectorClock TS = 1;
 }
 
 service UserService {
 	rpc balance(BalanceRequest) returns (BalanceResponse);
-	rpc createAccount(CreateAccountRequest) returns (CreateAccountResponse);
-	rpc transferTo(TransferToRequest) returns (TransferToResponse);
+	rpc createAccount(CreateAccountRequest) returns (UpdateOperationResponse);
+	rpc transferTo(TransferToRequest) returns (UpdateOperationResponse);
 }
