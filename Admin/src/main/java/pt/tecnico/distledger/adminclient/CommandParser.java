@@ -179,7 +179,7 @@ public class CommandParser {
 	 */
 	private void printUsage() {
 		System.out.println("Usage:\n" + "- activate <server>\n" + "- deactivate <server>\n"
-		    + "- getLedgerState <server>\n" + "- gossip <server>\n" + "- exit\n");
+		    + "- getLedgerState <server>\n" + "- gossip <fromServer> <toServer>\n" + "- exit\n");
 	}
 
 }
