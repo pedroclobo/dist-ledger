@@ -19,8 +19,6 @@ public class UserService {
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
-	private VectorClock prev;
-
 	/** Helper method to print debug messages. */
 	private static void debug(String debugMessage) {
 		if (DEBUG_FLAG)
@@ -28,6 +26,8 @@ public class UserService {
 	}
 
 	private Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend;
+	private VectorClock prev;
+
 
 	public UserService(Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
 		this.frontend = frontend;
@@ -44,9 +44,9 @@ public class UserService {
 			                                       .build();
 			debug("Send balance request");
 			BalanceResponse response = stub.balance(request);
-			this.prev.merge(VectorClock.fromProtobuf(response.getValueTS()));
-
 			debug(String.format("Received balance response: %s", response));
+
+			this.prev.merge(VectorClock.fromProtobuf(response.getValueTS()));
 
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
@@ -62,10 +62,13 @@ public class UserService {
 
 			CreateAccountRequest request = CreateAccountRequest.newBuilder()
 			                                                   .setUserId(account)
+			                                                   .setPrevTS(prev.toProtobuf())
 			                                                   .build();
 			debug("Send createAccount request");
 			UpdateOperationResponse response = stub.createAccount(request);
 			debug("Received createAccount response");
+
+			this.prev.merge(VectorClock.fromProtobuf(response.getTS()));
 
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {
@@ -83,10 +86,13 @@ public class UserService {
 			                                             .setAccountFrom(accountFrom)
 			                                             .setAccountTo(accountTo)
 			                                             .setAmount(amount)
+			                                             .setPrevTS(prev.toProtobuf())
 			                                             .build();
 			debug("Send transferTo request");
 			UpdateOperationResponse response = stub.transferTo(request);
 			debug("Received transferTo response");
+
+			this.prev.merge(VectorClock.fromProtobuf(response.getTS()));
 
 			return "OK\n" + response;
 		} catch (StatusRuntimeException e) {

@@ -73,6 +73,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 	    StreamObserver<UpdateOperationResponse> responseObserver) {
 
 		String userId = request.getUserId();
+		VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
 		try {
 			checkIfInactive();
@@ -80,19 +81,24 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			// Increment ReplicaTS
 			timestamp.incrementReplicaTS();
 
-			// Set operationTS
-			CreateOp operation = new CreateOp(userId);
-			operation.setTS(timestamp.getReplicaTS());
+			// Create operationTS
+			VectorClock operationTS = new VectorClock(prev);
+			operationTS.mergeOnIdx(timestamp.getReplicaTS(), timestamp.getServerIdx());
 
 			// Reply to user
 			UpdateOperationResponse response = UpdateOperationResponse.newBuilder()
-			                                                          .setTS(timestamp.getReplicaTS()
-			                                                                          .toProtobuf())
+			                                                          .setTS(operationTS.toProtobuf())
 			                                                          .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 
-			state.addOperationToLedger(operation);
+			// Create the new Operation
+			CreateOp op = new CreateOp(userId);
+			op.setPrev(prev);
+			op.setTS(operationTS);
+
+			// Add op to Ledger and try to execute it
+			state.addOperationToLedger(op);
 
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
@@ -107,6 +113,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 		String accountFrom = request.getAccountFrom();
 		String accountTo = request.getAccountTo();
 		int amount = request.getAmount();
+		VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
 		try {
 			checkIfInactive();
@@ -114,19 +121,24 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			// Increment ReplicaTS
 			timestamp.incrementReplicaTS();
 
-			// Set OperationTS
-			TransferOp operation = new TransferOp(accountFrom, accountTo, amount);
-			operation.setTS(timestamp.getReplicaTS());
+			// Create operationTS
+			VectorClock operationTS = new VectorClock(prev);
+			operationTS.mergeOnIdx(timestamp.getReplicaTS(), timestamp.getServerIdx());
 
 			// Reply to user
 			UpdateOperationResponse response = UpdateOperationResponse.newBuilder()
-			                                                          .setTS(timestamp.getReplicaTS()
-			                                                                          .toProtobuf())
+			                                                          .setTS(operationTS.toProtobuf())
 			                                                          .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
 
-			state.addOperationToLedger(operation);
+			// Create the new Operation
+			TransferOp op = new TransferOp(accountFrom, accountTo, amount);
+			op.setPrev(prev);
+			op.setTS(operationTS);
+
+			// Add op to Ledger and try to execute it
+			state.addOperationToLedger(op);
 
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
