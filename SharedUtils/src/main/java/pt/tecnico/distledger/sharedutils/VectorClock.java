@@ -42,6 +42,10 @@ public class VectorClock {
 		}
 	}
 
+	public void mergeOnIdx(VectorClock other, int idx) {
+		this.setTS(idx, Math.max(this.getTS(idx), other.getTS(idx)));
+	}
+
 	public boolean GE(VectorClock other) {
 		for (int i = 0; i < SIZE; i++) {
 			if (this.getTS(i) < other.getTS(i)) {

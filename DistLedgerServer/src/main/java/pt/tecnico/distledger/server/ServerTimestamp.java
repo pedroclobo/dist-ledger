@@ -4,13 +4,23 @@ import pt.tecnico.distledger.sharedutils.VectorClock;
 
 public class ServerTimestamp {
 	public String qualifier;
+	public int serverIdx;
 	public VectorClock valueTS;
 	public VectorClock replicaTS;
 
 	public ServerTimestamp(String qualifier) {
 		this.qualifier = qualifier;
+		this.serverIdx = qualifier.charAt(0) - 'A'; // server qualifiers start at 'A' and go in alphabetical order
 		this.replicaTS = new VectorClock();
 		this.valueTS = new VectorClock();
+	}
+
+	public synchronized int getServerIdx() {
+		return this.serverIdx;
+	}
+
+	public synchronized void setServerIdx(int idx) {
+		this.serverIdx = idx;
 	}
 
 	public synchronized VectorClock getReplicaTS() {
@@ -22,14 +32,7 @@ public class ServerTimestamp {
 	}
 
 	public synchronized void incrementReplicaTS() {
-		switch (qualifier) {
-		case "A":
-			replicaTS.incrementTS(0);
-			break;
-		case "B":
-			replicaTS.incrementTS(1);
-			break;
-		}
+		replicaTS.incrementTS(serverIdx);
 	}
 
 	public synchronized void mergeReplicaTS(VectorClock other) {
