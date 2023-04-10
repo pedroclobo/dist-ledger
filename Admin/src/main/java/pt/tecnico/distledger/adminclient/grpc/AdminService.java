@@ -130,7 +130,7 @@ public class AdminService {
 			                                     .build();
 			GossipResponse response = stub.gossip(request);
 
-			return "OK\n" + response + "\n";
+			return "OK\n";
 		} catch (StatusRuntimeException e) {
 			return e.getStatus()
 			        .getDescription()
