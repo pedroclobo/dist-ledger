@@ -69,13 +69,17 @@ public class ServerState {
 	}
 
 	public synchronized void executeOperation(Operation operation) {
-		switch (operation.getType()) {
-		case "CreateOp":
-			executeCreateOperation((CreateOp) operation);
-			break;
-		case "TransferOp":
-			executeTransferOperation((TransferOp) operation);
-			break;
+		try {
+			switch (operation.getType()) {
+			case "CreateOp":
+				executeCreateOperation((CreateOp) operation);
+				break;
+			case "TransferOp":
+				executeTransferOperation((TransferOp) operation);
+				break;
+			}
+		} catch (RuntimeException e) {
+			debug("Operation " + operation.toString() + " failed: " + e.getMessage());
 		}
 	}
 
