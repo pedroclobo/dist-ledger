@@ -19,7 +19,7 @@ public abstract class Frontend<T> {
 	public Frontend(String qualifier, String host, int port, StubBuilder<T> stubBuilder) {
 		initNamingServer(qualifier, host, port);
 		this.stubBuilder = stubBuilder;
-		this.stubHandlers = this.getHandlers();
+		this.stubHandlers = new HashMap<>();
 	}
 
 	public NamingServerService getNamingServer() {
@@ -31,18 +31,6 @@ public abstract class Frontend<T> {
 	}
 
 	public abstract void initNamingServer(String qualifier, String host, int port);
-
-	public Map<String, StubHandler<T>> getHandlers() {
-		Map<String, StubHandler<T>> handlers = new HashMap<>();
-		LookupResponse serverResponse = namingServerService.lookup("DistLedger");
-
-		for (Server server : serverResponse.getServerList()) {
-			handlers.put(server.getQualifier(),
-			    new StubHandler<T>(server.getHost(), server.getPort(), this.stubBuilder));
-		}
-
-		return handlers;
-	}
 
 	public StubHandler<T> getHandler(String qualifier) {
 		LookupResponse serverResponse = namingServerService.lookup("DistLedger", qualifier);
