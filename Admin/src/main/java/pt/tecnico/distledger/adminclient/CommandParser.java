@@ -163,15 +163,15 @@ public class CommandParser {
 	private void gossip(String line) {
 		String[] split = line.split(SPACE);
 
-		if (split.length != 2) {
+		if (split.length != 3) {
 			debug("Call printUsage()");
 			this.printUsage();
 			return;
 		}
-		String server = split[1];
-		debug(String.format("server: %s", server));
+		String fromServer = split[1];
+		String toServer = split[2];
 
-		System.out.println(adminService.gossip(server));
+		System.out.println(adminService.gossip(fromServer, toServer));
 	}
 
 	/**

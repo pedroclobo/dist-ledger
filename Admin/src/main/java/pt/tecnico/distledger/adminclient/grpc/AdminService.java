@@ -121,11 +121,12 @@ public class AdminService {
 		}
 	}
 
-	public String gossip(String qualifier) {
+	public String gossip(String fromServer, String toServer) {
 		try {
-			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(qualifier);
+			AdminServiceGrpc.AdminServiceBlockingStub stub = frontend.getStub(fromServer);
 
 			GossipRequest request = GossipRequest.newBuilder()
+			                                     .setQualifier(toServer)
 			                                     .build();
 			GossipResponse response = stub.gossip(request);
 

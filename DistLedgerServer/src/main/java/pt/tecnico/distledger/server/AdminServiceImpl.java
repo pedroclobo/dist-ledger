@@ -24,12 +24,11 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	private String qualifier;
 
 	public AdminServiceImpl(ServerState state, ServerMode mode, ServerTimestamp timestamp,
-	    CrossServerService crossServerService, String qualifier) {
+	    CrossServerService crossServerService) {
 		this.state = state;
 		this.mode = mode;
 		this.timestamp = timestamp;
 		this.crossServerService = crossServerService;
-		this.qualifier = qualifier;
 	}
 
 	@Override
@@ -70,15 +69,9 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	@Override
 	public void gossip(GossipRequest request, StreamObserver<GossipResponse> responseObserver) {
 		try {
-			switch (qualifier) {
-			case "A":
-				crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), "B");
-				break;
+			String qualifier = request.getQualifier();
 
-			case "B":
-				crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), "A");
-				break;
-			}
+			crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), qualifier);
 
 			GossipResponse response = GossipResponse.newBuilder()
 			                                        .build();
