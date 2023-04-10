@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class VectorClock {
 	private int timestamps[];
 
-	private static int SIZE = 2;
+	private static int SIZE = 3;
 
 	public VectorClock(VectorClock other) {
 		timestamps = new int[SIZE];
