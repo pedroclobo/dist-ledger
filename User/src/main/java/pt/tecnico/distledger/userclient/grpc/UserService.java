@@ -28,7 +28,6 @@ public class UserService {
 	private Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend;
 	private VectorClock prev;
 
-
 	public UserService(Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend) {
 		this.frontend = frontend;
 		this.prev = new VectorClock();
