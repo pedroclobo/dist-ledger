@@ -53,7 +53,7 @@ public class ServerMain {
 		    qualifer, "localhost", port, new DistLedgerCrossServerServiceStubBuilder());
 
 		final CrossServerService crossServerService = new CrossServerService(frontend);
-		final BindableService admin = new AdminServiceImpl(state, mode, timestamp, crossServerService, qualifer);
+		final BindableService admin = new AdminServiceImpl(state, mode, timestamp, crossServerService);
 		final BindableService cross = new CrossServerServiceImpl(state, mode, timestamp);
 		final BindableService user = new UserServiceImpl(state, mode, timestamp, crossServerService); // TODO: remove
 		                                                                                              // crossServerService
