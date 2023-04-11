@@ -1,13 +1,11 @@
 package pt.tecnico.distledger.server;
 
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
-import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
 
 import pt.tecnico.distledger.server.domain.ServerState;
 import pt.tecnico.distledger.server.grpc.CrossServerService;
 import pt.tecnico.distledger.server.grpc.DistLedgerCrossServerServiceStubBuilder;
 import pt.tecnico.distledger.sharedutils.ServerFrontend;
-import pt.tecnico.distledger.namingserver.ServerNamingServerService;
 
 import io.grpc.BindableService;
 import io.grpc.Server;
@@ -71,9 +69,9 @@ public class ServerMain {
 		System.out.println("Press enter to shutdown");
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
+		scanner.close();
 
 		frontend.shutdown();
-
 		server.shutdown();
 	}
 

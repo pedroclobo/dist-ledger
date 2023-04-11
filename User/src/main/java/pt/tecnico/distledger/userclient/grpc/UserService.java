@@ -3,12 +3,8 @@ package pt.tecnico.distledger.userclient.grpc;
 import pt.ulisboa.tecnico.distledger.contract.user.UserDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.user.UserServiceGrpc;
 
-import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
-
 import pt.tecnico.distledger.sharedutils.Frontend;
 import pt.tecnico.distledger.sharedutils.VectorClock;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
 
 public class UserService {

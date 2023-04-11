@@ -41,7 +41,6 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 			                                                       .getLedgerList()) {
 				Operation operation = Operation.fromProtobuf(op);
 
-				// TODO: check if this is correct
 				if (!timestamp.getReplicaTS()
 				              .GE(operation.getTS())) {
 					state.addOperationToLedger(operation);

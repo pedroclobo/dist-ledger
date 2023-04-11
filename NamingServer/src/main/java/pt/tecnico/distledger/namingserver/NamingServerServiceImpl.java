@@ -5,7 +5,6 @@ import pt.tecnico.distledger.namingserver.domain.ServerEntry;
 
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerServiceGrpc;
-import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.*;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Server;
 
 import io.grpc.stub.StreamObserver;
