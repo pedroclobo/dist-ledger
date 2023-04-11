@@ -5,7 +5,6 @@ import pt.tecnico.distledger.server.domain.operation.CreateOp;
 import pt.tecnico.distledger.server.domain.operation.Operation;
 import pt.tecnico.distledger.server.domain.operation.TransferOp;
 import pt.tecnico.distledger.server.domain.exceptions.AccountAlreadyExistsException;
-import pt.tecnico.distledger.server.domain.exceptions.AccountHasBalanceException;
 import pt.tecnico.distledger.server.domain.exceptions.AccountNotFoundException;
 import pt.tecnico.distledger.server.domain.exceptions.CreateBrokerException;
 import pt.tecnico.distledger.server.domain.exceptions.InsufficientBalanceException;

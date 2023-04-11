@@ -1,6 +1,5 @@
 package pt.tecnico.distledger.server.domain.operation;
 
-import pt.tecnico.distledger.server.domain.ServerState;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 import pt.tecnico.distledger.sharedutils.VectorClock;
 

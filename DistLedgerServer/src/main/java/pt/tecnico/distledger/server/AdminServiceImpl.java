@@ -3,12 +3,8 @@ package pt.tecnico.distledger.server;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.*;
-import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.Operation;
 
 import pt.tecnico.distledger.server.domain.ServerState;
-import pt.tecnico.distledger.server.domain.operation.*;
-import pt.tecnico.distledger.server.ServerMode;
-import pt.tecnico.distledger.server.ServerMode.Mode;
 import pt.tecnico.distledger.server.grpc.CrossServerService;
 
 import io.grpc.stub.StreamObserver;
@@ -21,7 +17,6 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	private ServerMode mode;
 	private ServerTimestamp timestamp;
 	private CrossServerService crossServerService;
-	private String qualifier;
 
 	public AdminServiceImpl(ServerState state, ServerMode mode, ServerTimestamp timestamp,
 	    CrossServerService crossServerService) {

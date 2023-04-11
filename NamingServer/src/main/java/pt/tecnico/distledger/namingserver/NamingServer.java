@@ -34,6 +34,7 @@ public class NamingServer {
 		System.out.println("Press enter to shutdown");
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
+		scanner.close();
 
 		// Do not exit the main thread. Wait until server is terminated.
 		server.shutdown();

@@ -2,9 +2,6 @@ package pt.tecnico.distledger.sharedutils;
 
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class VectorClock {
 	private int timestamps[];
 

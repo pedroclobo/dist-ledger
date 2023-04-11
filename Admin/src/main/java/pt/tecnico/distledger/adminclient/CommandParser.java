@@ -96,6 +96,7 @@ public class CommandParser {
 				System.err.println(e.getMessage());
 			}
 		}
+		scanner.close();
 	}
 
 	/**

@@ -6,14 +6,10 @@ import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.DeactivateRe
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateRequest;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.getLedgerStateResponse;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.GossipRequest;
-import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.GossipResponse;
-import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.LookupResponse;
 
 import pt.tecnico.distledger.sharedutils.ClientFrontend;
 
 import io.grpc.StatusRuntimeException;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
 
 /**
  * The AdminService class provides the gRPC stubs for the AdminService.

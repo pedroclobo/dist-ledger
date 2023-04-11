@@ -8,7 +8,6 @@ import pt.tecnico.distledger.server.domain.operation.*;
 import pt.tecnico.distledger.server.grpc.CrossServerService;
 
 import pt.tecnico.distledger.server.exceptions.ServerUnavailableException;
-import pt.tecnico.distledger.server.exceptions.ReadOnlyServerException;
 
 import pt.tecnico.distledger.sharedutils.VectorClock;
 

@@ -1,7 +1,6 @@
 package pt.tecnico.distledger.server.grpc;
 
 import pt.ulisboa.tecnico.distledger.contract.distledgerserver.DistLedgerCrossServerServiceGrpc;
-import pt.ulisboa.tecnico.distledger.contract.distledgerserver.CrossServerDistLedger.*;
 
 import pt.tecnico.distledger.sharedutils.StubBuilder;
 

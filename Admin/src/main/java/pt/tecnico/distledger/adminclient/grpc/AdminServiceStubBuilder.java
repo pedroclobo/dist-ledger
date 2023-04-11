@@ -1,6 +1,5 @@
 package pt.tecnico.distledger.adminclient.grpc;
 
-import pt.ulisboa.tecnico.distledger.contract.admin.AdminDistLedger.*;
 import pt.ulisboa.tecnico.distledger.contract.admin.AdminServiceGrpc;
 
 import pt.tecnico.distledger.sharedutils.StubBuilder;

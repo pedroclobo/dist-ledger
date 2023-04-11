@@ -1,6 +1,5 @@
 package pt.tecnico.distledger.sharedutils;
 
-import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions.*;
 import pt.ulisboa.tecnico.distledger.contract.namingserver.NamingServerDistLedger.*;
 
 import pt.tecnico.distledger.namingserver.NamingServerService;
