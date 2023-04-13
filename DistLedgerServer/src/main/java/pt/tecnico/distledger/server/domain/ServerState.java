@@ -55,10 +55,20 @@ public class ServerState {
 		return this.accounts.get(account);
 	}
 
+	public synchronized boolean OperationInLedger(Operation operation) {
+		for (Operation op : this.ledger) {
+			if (op.getTS()
+			      .equals(operation.getTS())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public synchronized void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
 
-		// Check if operation becomes stable
+		// Check if operation can be executed
 		VectorClock valueTS = timestamp.getValueTS();
 		if (valueTS.GE(operation.getPrev())) {
 			operation.setStable();
