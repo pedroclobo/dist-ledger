@@ -41,8 +41,10 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 			                                                       .getLedgerList()) {
 				Operation operation = Operation.fromProtobuf(op);
 
+				// Check if op isn't already in ledger
 				if (!timestamp.getReplicaTS()
-				              .GE(operation.getTS())) {
+				              .GE(operation.getTS())
+				    && !state.OperationInLedger(operation)) {
 					state.addOperationToLedger(operation);
 				}
 			}

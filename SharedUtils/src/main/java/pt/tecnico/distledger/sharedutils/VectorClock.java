@@ -52,6 +52,15 @@ public class VectorClock {
 		return true;
 	}
 
+	public boolean equals(VectorClock other) {
+		for (int i = 0; i < SIZE; i++) {
+			if (this.getTS(i) != other.getTS(i)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	public DistLedgerCommonDefinitions.VectorClock toProtobuf() {
 		DistLedgerCommonDefinitions.VectorClock.Builder ts = DistLedgerCommonDefinitions.VectorClock.newBuilder();
 
