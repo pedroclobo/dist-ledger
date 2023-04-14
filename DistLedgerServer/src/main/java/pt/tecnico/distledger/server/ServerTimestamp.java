@@ -50,4 +50,13 @@ public class ServerTimestamp {
 	public synchronized void mergeValueTS(VectorClock other) {
 		valueTS.merge(other);
 	}
+
+	public String toStringPretty() {
+		String serverId = "           ";
+		for (int i = 0; i < serverIdx; i++) {
+			serverId += "   ";
+		}
+		serverId += qualifier;
+		return serverId + "\nReplicaTS " + replicaTS + "\nValueTS   " + valueTS;
+	}
 }
