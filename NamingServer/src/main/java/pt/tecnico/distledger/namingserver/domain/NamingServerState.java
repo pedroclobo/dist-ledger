@@ -55,7 +55,7 @@ public class NamingServerState {
 
 			services.put(serviceName, serviceEntry);
 		}
-		debug(String.format("Added server with service='%s', qualifier='%s' and host:port='%s:%d'", serviceName,
+		debug(String.format("Added server with qualifier='%s', service='%s' and host:port='%s:%d'", serviceName,
 		    qualifier, host, port));
 	}
 

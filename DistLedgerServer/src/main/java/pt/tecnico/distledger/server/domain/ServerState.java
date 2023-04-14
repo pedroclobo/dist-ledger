@@ -26,16 +26,15 @@ public class ServerState {
 	private static boolean DEBUG_FLAG = false;
 
 	public ServerState(ServerTimestamp timestamp) {
-		DEBUG_FLAG = System.getProperty("debug") != null;
-		debug("ServerState initialized");
-
 		this.timestamp = timestamp;
-
 		this.ledger = new ArrayList<>();
 		this.accounts = new HashMap<>();
 
 		// initialize broker account
 		this.accounts.put("broker", 1000);
+
+		DEBUG_FLAG = System.getProperty("debug") != null;
+		debug("ServerState initialized");
 	}
 
 	public synchronized List<Operation> getLedger() {
@@ -44,7 +43,7 @@ public class ServerState {
 
 	public synchronized void setLedger(List<Operation> ledger) {
 		this.ledger = ledger;
-		debug("Ledger changed to " + ledger.toString());
+		debug("Ledger changed to:%n" + ledger.toString());
 	}
 
 	public synchronized int getAccountBalance(String account) {
@@ -67,6 +66,7 @@ public class ServerState {
 
 	public synchronized void addOperationToLedger(Operation operation) {
 		this.ledger.add(operation);
+		debug("Added operation to ledger: " + operation.toString());
 
 		// Check if operation can be executed
 		VectorClock valueTS = timestamp.getValueTS();
@@ -74,7 +74,9 @@ public class ServerState {
 			operation.setStable();
 			executeOperation(operation);
 			timestamp.mergeValueTS(operation.getTS());
+			debug("+ operation executed");
 		}
+		debug("" + timestamp.toStringPretty());
 	}
 
 	public synchronized void executeOperation(Operation operation) {
@@ -128,6 +130,7 @@ public class ServerState {
 	}
 
 	public synchronized void recomputeStability() {
+		debug("Recomputing operations in ledger:");
 		for (Operation op : ledger) {
 			if (timestamp.getValueTS()
 			             .GE(op.getPrev())
@@ -135,8 +138,11 @@ public class ServerState {
 				op.setStable();
 				executeOperation(op);
 				timestamp.mergeValueTS(op.getTS());
+				debug("+ executed " + op.toString());
+				debug("" + timestamp.toStringPretty());
 			}
 		}
+		debug("Recomputation completed");
 	}
 
 	/** Helper method to print debug messages. */

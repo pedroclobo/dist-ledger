@@ -14,6 +14,12 @@ import static io.grpc.Status.INVALID_ARGUMENT;
 
 public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.DistLedgerCrossServerServiceImplBase {
 
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug=true command line option.
+	 */
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
 	private ServerState state;
 	private ServerMode mode;
 	private ServerTimestamp timestamp;
@@ -34,6 +40,7 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 	public void propagateState(PropagateStateRequest request, StreamObserver<PropagateStateResponse> responseObserver) {
 		try {
 			checkIfInactive();
+			debug("--- Processing 'propagateState' request");
 
 			VectorClock otherReplicaTS = VectorClock.fromProtobuf(request.getReplicaTS());
 
@@ -50,15 +57,24 @@ public class CrossServerServiceImpl extends DistLedgerCrossServerServiceGrpc.Dis
 			}
 
 			timestamp.mergeReplicaTS(otherReplicaTS);
+			debug("\nTimeStamp after merge:\n" + timestamp.toStringPretty() + "\n");
+
 			state.recomputeStability();
 
 			PropagateStateResponse response = PropagateStateResponse.newBuilder()
 			                                                        .build();
 			responseObserver.onNext(response);
 			responseObserver.onCompleted();
+			debug("------------------------------------------\n");
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());
 		}
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }

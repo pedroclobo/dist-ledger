@@ -18,12 +18,6 @@ public class ServerMain {
 
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
 
-	/** Helper method to print debug messages. */
-	private static void debug(String debugMessage) {
-		if (DEBUG_FLAG)
-			System.err.println(debugMessage);
-	}
-
 	public static void main(String[] args) throws IOException, InterruptedException {
 		// Receive and print arguments.
 		debug(String.format("Received %d arguments", args.length));
@@ -67,6 +61,7 @@ public class ServerMain {
 		server.start();
 
 		System.out.println("Press enter to shutdown");
+		debug("\n");
 		Scanner scanner = new Scanner(System.in);
 		scanner.nextLine();
 		scanner.close();
@@ -75,4 +70,9 @@ public class ServerMain {
 		server.shutdown();
 	}
 
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
+	}
 }

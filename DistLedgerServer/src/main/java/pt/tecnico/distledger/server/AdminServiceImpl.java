@@ -13,6 +13,12 @@ import io.grpc.StatusRuntimeException;
 
 public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug=true command line option.
+	 */
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
 	private ServerState state;
 	private ServerMode mode;
 	private ServerTimestamp timestamp;
@@ -29,6 +35,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	@Override
 	public void activate(ActivateRequest request, StreamObserver<ActivateResponse> responseObserver) {
 		mode.activate();
+		debug("Server activated\n");
 
 		ActivateResponse response = ActivateResponse.newBuilder()
 		                                            .build();
@@ -39,6 +46,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	@Override
 	public void deactivate(DeactivateRequest request, StreamObserver<DeactivateResponse> responseObserver) {
 		mode.deactivate();
+		debug("Server deactivated\n");
 
 		DeactivateResponse response = DeactivateResponse.newBuilder()
 		                                                .build();
@@ -65,6 +73,7 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 	public void gossip(GossipRequest request, StreamObserver<GossipResponse> responseObserver) {
 		try {
 			String qualifier = request.getQualifier();
+			debug(String.format("Gossip to server '%s'\n", qualifier));
 
 			crossServerService.propagateState(timestamp.getReplicaTS(), state.getLedger(), qualifier);
 
@@ -76,5 +85,11 @@ public class AdminServiceImpl extends AdminServiceGrpc.AdminServiceImplBase {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());
 		}
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }

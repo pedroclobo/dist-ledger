@@ -12,18 +12,9 @@ public class CommandParser {
 
 	/**
 	 * Set flag to true to print debug messages. The flag can be set using the
-	 * -Ddebug command line option.
+	 * -Ddebug=true command line option.
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
-
-	/**
-	 * Helper method to print debug messages.
-	 */
-	private static void debug(String debugMessage) {
-		if (DEBUG_FLAG) {
-			System.err.println(debugMessage);
-		}
-	}
 
 	private static final String SPACE = " ";
 	private static final String ACTIVATE = "activate";
@@ -58,7 +49,6 @@ public class CommandParser {
 			                     .trim();
 			String cmd = line.split(SPACE)[0];
 			debug(String.format("input line: %s", line));
-			debug(String.format("command: %s", cmd));
 
 			try {
 				switch (cmd) {
@@ -79,17 +69,15 @@ public class CommandParser {
 					break;
 
 				case HELP:
-					debug("Call printUsage()");
 					this.printUsage();
 					break;
 
 				case EXIT:
 					exit = true;
-					debug("Exiting");
 					break;
 
 				default:
-					debug("Command doesn't exist");
+					System.out.println("Command '" + cmd + "' doesn't exist\n");
 					break;
 				}
 			} catch (Exception e) {
@@ -109,14 +97,11 @@ public class CommandParser {
 		String[] split = line.split(SPACE);
 
 		if (split.length != 2) {
-			debug("Call printUsage()");
 			this.printUsage();
 			return;
 		}
 		String server = split[1];
-		debug(String.format("server: %s", server));
 
-		debug("Call adminService.activate()");
 		System.out.println(adminService.activate(server));
 	}
 
@@ -130,14 +115,11 @@ public class CommandParser {
 		String[] split = line.split(SPACE);
 
 		if (split.length != 2) {
-			debug("Call printUsage()");
 			this.printUsage();
 			return;
 		}
 		String server = split[1];
-		debug(String.format("server: %s", server));
 
-		debug("Call adminService.deactivate()");
 		System.out.println(adminService.deactivate(server));
 	}
 
@@ -150,14 +132,11 @@ public class CommandParser {
 		String[] split = line.split(SPACE);
 
 		if (split.length != 2) {
-			debug("Call printUsage()");
 			this.printUsage();
 			return;
 		}
 		String server = split[1];
-		debug(String.format("server: %s", server));
 
-		debug("Call adminService.getLedgerState()");
 		System.out.printf(adminService.getLedgerState(server));
 	}
 
@@ -165,7 +144,6 @@ public class CommandParser {
 		String[] split = line.split(SPACE);
 
 		if (split.length != 3) {
-			debug("Call printUsage()");
 			this.printUsage();
 			return;
 		}
@@ -183,4 +161,12 @@ public class CommandParser {
 		    + "- getLedgerState <server>\n" + "- gossip <fromServer> <toServer>\n" + "- exit\n");
 	}
 
+	/**
+	 * Helper method to print debug messages.
+	 */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG) {
+			System.err.println(debugMessage);
+		}
+	}
 }
