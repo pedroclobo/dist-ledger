@@ -1,5 +1,8 @@
 package pt.tecnico.distledger.sharedutils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import pt.ulisboa.tecnico.distledger.contract.DistLedgerCommonDefinitions;
 
 public class VectorClock {
@@ -79,5 +82,13 @@ public class VectorClock {
 		}
 
 		return clock;
+	}
+
+	public String toString() {
+		List<Integer> tsList = new ArrayList<Integer>(SIZE);
+		for (int ts : timestamps) {
+			tsList.add(ts);
+		}
+		return tsList.toString();
 	}
 }
