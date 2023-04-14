@@ -11,15 +11,9 @@ public class UserService {
 
 	/**
 	 * Set flag to true to print debug messages. The flag can be set using the
-	 * -Ddebug command line option.
+	 * -Ddebug=true command line option.
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
-
-	/** Helper method to print debug messages. */
-	private static void debug(String debugMessage) {
-		if (DEBUG_FLAG)
-			System.err.println(debugMessage);
-	}
 
 	private Frontend<UserServiceGrpc.UserServiceBlockingStub> frontend;
 	private VectorClock prev;
@@ -37,13 +31,14 @@ public class UserService {
 			                                       .setUserId(account)
 			                                       .setPrevTS(this.prev.toProtobuf())
 			                                       .build();
-			debug("Send balance request");
+			debug(String.format("Request server '%s' to get balance of account '%s'", qualifier, account));
 			BalanceResponse response = stub.balance(request);
-			debug(String.format("Received balance response: %s", response));
+			debug(String.format("Request handled, balance = '%s'", response.getValue()));
 
 			this.prev.merge(VectorClock.fromProtobuf(response.getValueTS()));
+			debug(String.format("prev = %s", prev));
 
-			return "OK\n" + response;
+			return "OK\n" + response.getValue() + "\n";
 		} catch (StatusRuntimeException e) {
 			return e.getStatus()
 			        .getDescription()
@@ -59,13 +54,14 @@ public class UserService {
 			                                                   .setUserId(account)
 			                                                   .setPrevTS(prev.toProtobuf())
 			                                                   .build();
-			debug("Send createAccount request");
+			debug(String.format("Request server '%s' to create account '%s'", qualifier, account));
 			UpdateOperationResponse response = stub.createAccount(request);
-			debug("Received createAccount response");
+			debug("Request handled");
 
 			this.prev.merge(VectorClock.fromProtobuf(response.getTS()));
+			debug(String.format("prev = %s", prev));
 
-			return "OK\n" + response;
+			return "OK\n";
 		} catch (StatusRuntimeException e) {
 			return e.getStatus()
 			        .getDescription()
@@ -83,17 +79,25 @@ public class UserService {
 			                                             .setAmount(amount)
 			                                             .setPrevTS(prev.toProtobuf())
 			                                             .build();
-			debug("Send transferTo request");
+			debug(String.format("Request server '%s' to transfer '%d' from account '%s' to account '%s'", qualifier,
+			    amount, accountFrom, accountTo));
 			UpdateOperationResponse response = stub.transferTo(request);
-			debug("Received transferTo response");
+			debug("Request handled");
 
 			this.prev.merge(VectorClock.fromProtobuf(response.getTS()));
+			debug(String.format("prev = %s", prev));
 
-			return "OK\n" + response;
+			return "OK\n";
 		} catch (StatusRuntimeException e) {
 			return e.getStatus()
 			        .getDescription()
 			    + "\n";
 		}
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }

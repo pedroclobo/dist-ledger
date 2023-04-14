@@ -18,17 +18,9 @@ public class AdminService {
 
 	/**
 	 * Set flag to true to print debug messages. The flag can be set using the
-	 * -Ddebug command line option.
+	 * -Ddebug=true command line option.
 	 */
 	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
-
-	/**
-	 * Helper method to print debug messages.
-	 */
-	private static void debug(String debugMessage) {
-		if (DEBUG_FLAG)
-			System.err.println(debugMessage);
-	}
 
 	private ClientFrontend<AdminServiceGrpc.AdminServiceBlockingStub> frontend;
 
@@ -53,9 +45,9 @@ public class AdminService {
 
 			ActivateRequest request = ActivateRequest.newBuilder()
 			                                         .build();
-			debug("Send activate request");
+			debug(String.format("Request server '%s' to activate", qualifier));
 			stub.activate(request);
-			debug("Received activate response");
+			debug("Request handled");
 
 			return "OK\n";
 		} catch (StatusRuntimeException e) {
@@ -78,9 +70,9 @@ public class AdminService {
 
 			DeactivateRequest request = DeactivateRequest.newBuilder()
 			                                             .build();
-			debug("Send deactivate request");
+			debug(String.format("Request server '%s' to deactivate", qualifier));
 			stub.deactivate(request);
-			debug("Received deactivate response");
+			debug("Request handled");
 
 			return "OK\n";
 		} catch (StatusRuntimeException e) {
@@ -102,9 +94,9 @@ public class AdminService {
 
 			getLedgerStateRequest request = getLedgerStateRequest.newBuilder()
 			                                                     .build();
-			debug("Send getLedgerState request");
+			debug(String.format("Request server '%s' its ledger", qualifier));
 			getLedgerStateResponse response = stub.getLedgerState(request);
-			debug(String.format("Received getLedgerState response:%n%s", response));
+			debug(String.format("Received ledger:%n%s", response));
 
 			return "OK\n" + response + "\n";
 		} catch (StatusRuntimeException e) {
@@ -121,7 +113,10 @@ public class AdminService {
 			GossipRequest request = GossipRequest.newBuilder()
 			                                     .setQualifier(toServer)
 			                                     .build();
+
+			debug(String.format("Gossip request '%s' -> '%s'", fromServer, toServer));
 			stub.gossip(request);
+			debug("Request handled");
 
 			return "OK\n";
 		} catch (StatusRuntimeException e) {
@@ -129,5 +124,13 @@ public class AdminService {
 			        .getDescription()
 			    + "\n";
 		}
+	}
+
+	/**
+	 * Helper method to print debug messages.
+	 */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }

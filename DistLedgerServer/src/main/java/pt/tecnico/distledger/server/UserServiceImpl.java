@@ -16,6 +16,12 @@ import static io.grpc.Status.INVALID_ARGUMENT;
 
 public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
+	/**
+	 * Set flag to true to print debug messages. The flag can be set using the
+	 * -Ddebug=true command line option.
+	 */
+	private static final boolean DEBUG_FLAG = (System.getProperty("debug") != null);
+
 	private ServerState state;
 	private ServerMode mode;
 	private ServerTimestamp timestamp;
@@ -41,6 +47,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 		try {
 			checkIfInactive();
+			debug("--- Processing 'balance' request");
 
 			VectorClock prev = VectorClock.fromProtobuf(request.getPrevTS());
 
@@ -56,6 +63,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 				                                          .build();
 				responseObserver.onNext(response);
 				responseObserver.onCompleted();
+				debug("------------------------------------------\n");
 			} else {
 				responseObserver.onError(INVALID_ARGUMENT.withDescription("ERROR: You are too up to date!")
 				                                         .asRuntimeException());
@@ -76,6 +84,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 		try {
 			checkIfInactive();
+			debug("--- Processing 'createAccount' request");
 
 			// Increment ReplicaTS
 			timestamp.incrementReplicaTS();
@@ -99,6 +108,8 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			// Add op to Ledger and try to execute it
 			state.addOperationToLedger(op);
 
+			debug("------------------------------------------\n");
+
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());
@@ -116,6 +127,7 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 
 		try {
 			checkIfInactive();
+			debug("--- Processing 'transferTo' request");
 
 			// Increment ReplicaTS
 			timestamp.incrementReplicaTS();
@@ -139,9 +151,17 @@ public class UserServiceImpl extends UserServiceGrpc.UserServiceImplBase {
 			// Add op to Ledger and try to execute it
 			state.addOperationToLedger(op);
 
+			debug("------------------------------------------\n");
+
 		} catch (RuntimeException e) {
 			responseObserver.onError(INVALID_ARGUMENT.withDescription(e.getMessage())
 			                                         .asRuntimeException());
 		}
+	}
+
+	/** Helper method to print debug messages. */
+	private static void debug(String debugMessage) {
+		if (DEBUG_FLAG)
+			System.err.println(debugMessage);
 	}
 }
