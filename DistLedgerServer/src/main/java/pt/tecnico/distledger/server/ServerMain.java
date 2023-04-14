@@ -47,8 +47,7 @@ public class ServerMain {
 		final CrossServerService crossServerService = new CrossServerService(frontend);
 		final BindableService admin = new AdminServiceImpl(state, mode, timestamp, crossServerService);
 		final BindableService cross = new CrossServerServiceImpl(state, mode, timestamp);
-		final BindableService user = new UserServiceImpl(state, mode, timestamp, crossServerService); // TODO: remove
-		                                                                                              // crossServerService
+		final BindableService user = new UserServiceImpl(state, mode, timestamp, crossServerService);
 
 		// Create a new server to listen on port.
 		Server server = ServerBuilder.forPort(port)
